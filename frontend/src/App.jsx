@@ -1,9 +1,14 @@
-import React from 'react'
-
+import { ToastContainer } from 'react-toastify';
+import { Container } from 'react-bootstrap';
+import Layout from './layout/layout';
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   return (
     <>
-    <h1>E-learning</h1>
+    <ToastContainer/>
+   <Container className='my-2'>
+    <Layout/>
+    </Container>
     </>
   )
 }
