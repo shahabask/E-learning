@@ -11,7 +11,6 @@ function UserLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formErrors,setFormErrors]=useState({})
-//  const [isSubmit,setIsSubmit]=useState(false)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -71,10 +70,10 @@ function UserLogin() {
   }
   return (
     <div
-      className="login template d-flex justify-content-center align-items-center vh-100 "
+      className="login template d-flex justify-content-center align-items-center vh-100 background-image"
       style={{ backgroundColor: "#47abcc" }}
     >
-      <div className="form_container p-5 rounded bg-white">
+      <div className="form_container p-5 rounded">
  
         <form onSubmit={submitHandler}>
           <h3 className="text-center">Sign In</h3>
@@ -109,19 +108,19 @@ function UserLogin() {
             </button>
           </div>
           <div className="text-end mt-2">
-      <p>
-        <Link to='/forgotPassword'>Forgot Password ?</Link>
+      <p className='link'>
+        <Link style={{color:"black",textDecoration:'none'}} to='/forgotPassword'>Forgot Password ?</Link> |<Link style={{color:"black",textDecoration:'none'}} to="/register" className="ms-2">Sign up</Link>
       </p>
     
     </div>
         </form>
         <div className="links-container text-end mt-2">
-        <p>
-        
-        <span>{"Don't have an account ?"}<Link to="/register" className="ms-2">Sign up</Link></span> 
+        <p >
+        <Link style={{color:"black",textDecoration:'none'}} to='/otpLoginEmail' className="ms-2">Otp Login</Link>
+       
       </p>
       <p>
-      <Link to='/otpLoginEmail' className="ms-2">Otp Login</Link>
+     
       </p>
       </div>
     </div>

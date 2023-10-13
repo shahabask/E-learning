@@ -41,8 +41,8 @@ function ForgotPassword() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="login-form">
-        <div className="w-96 bg-white rounded-lg shadow-lg p-6 ">
-          <h1 className="text-3xl font-semibold text-black mb-4 text-center">
+        <div className="w-96 rounded-lg shadow-lg p-6 " style={{backgroundColor:'#94b991b3'}} >
+          <h1 className="text-3xl font-semibold text-black mb-4 text-center" >
             Forgot Password
           </h1>
           <form onSubmit={forgotSubmitHandler}>

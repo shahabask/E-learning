@@ -90,55 +90,41 @@ useEffect(() => {
 
   return (
     <>
-         <div className='signup template d-flex justify-content-center align-items-center vh-100 ' style={{ backgroundColor: '#bcb88a'}}>
-    <div className='form_container p-5 rounded bg-white'>
-      <form onSubmit={submitHandler}>
-        <h3 className='text-center'>Sign Up</h3>
-        <div className='mb-3'>
-          <input type="text" value={firstName} placeholder='Enter first name' onChange={(e)=>{
-              setFirstName(e.target.value)
-            }} className='form-control' />
-            <p style={{color:'red'}}>{formErrors.userName}</p>
-        </div>
-        <div className='mb-3'>
-          <input type="text" value={secondName} placeholder='Enter second name' onChange={(e)=>{
-              setSecondName(e.target.value)
-            }} className='form-control' />
-            <p style={{color:'red'}}>{formErrors.secondName}</p>
-        </div>
-        <div className='mb-3'>
-          <input type="email" value={email} placeholder='Enter Email' onChange={(e)=>{
-              setEmail(e.target.value)
-            }} className='form-control' />
-            <p style={{color:'red'}}>{formErrors.email}</p>
-        </div>
-        <div className='mb-3'>
-          <input type="password" value={password} placeholder='Enter password' onChange={(e)=>{
-              setPassword(e.target.value)
-            }} className='form-control' />
-            <p style={{color:'red'}}>{formErrors.password}</p>
-        </div>
-        <div className='mb-3'>
-          <input type="password" value={confirmPassword} placeholder='Confirm Password' onChange={(e)=>{
-              setConfirmPassword(e.target.value)
-            }} className='form-control' />
-            <p style={{color:'red'}}>{formErrors.confirmPassword}</p>
-        </div>
-        <div className='mb-2'>
-          <input type='checkbox' className='custom-control custom-checkbox' id='check' />
-          <label htmlFor='check' className='custom-input-label ms-2'>
-            Remember me
-          </label>
-        </div>
-        <div className='d-grid mt-2'>
-          <button className='btn mb-3' style={{background:"#ffc0cb"}}>Sign Up</button>
-        </div>
-        <p className='text-end mt-2'>
-           <Link to='/login' className='ms-2'>Sign In</Link>
-        </p>
-      </form>
-    </div>
+      <div className="signup template d-flex justify-content-center align-items-center vh-100 background-image" style={{ backgroundColor: '#47abcc' }}>
+  <div className="form_container p-4 p-md-5 rounded">
+    <form onSubmit={submitHandler}>
+      <h3 className="text-center">Sign Up</h3>
+      <div className="mb-3">
+        <input type="text" value={firstName} placeholder="Enter first name" onChange={(e) => setFirstName(e.target.value)} className="form-control" />
+        <p style={{ color: 'red' }}>{formErrors.userName}</p>
+      </div>
+      <div className="mb-3">
+        <input type="text" value={secondName} placeholder="Enter second name" onChange={(e) => setSecondName(e.target.value)} className="form-control" />
+        <p style={{ color: 'red' }}>{formErrors.secondName}</p>
+      </div>
+      <div className="mb-3">
+        <input type="email" value={email} placeholder="Enter Email" onChange={(e) => setEmail(e.target.value)} className="form-control" />
+        <p style={{ color: 'red' }}>{formErrors.email}</p>
+      </div>
+      <div className="mb-3">
+        <input type="password" value={password} placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} className="form-control" />
+        <p style={{ color: 'red' }}>{formErrors.password}</p>
+      </div>
+      <div className="mb-3">
+        <input type="password" value={confirmPassword} placeholder="Confirm Password" onChange={(e) => setConfirmPassword(e.target.value)} className="form-control" />
+        <p style={{ color: 'red' }}>{formErrors.confirmPassword}</p>
+      </div>
+
+      <div className="d-grid mt-2">
+        <button className="btn mb-3" style={{ background: "#ffc0cb" }}>Sign Up</button>
+      </div>
+      <p className="text-center mt-2">
+        <Link to="/login" style={{ color: "black", textDecoration: 'none' }}>Sign In</Link>
+      </p>
+    </form>
   </div>
+</div>
+
 
     </>
   )
