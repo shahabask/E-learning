@@ -10,6 +10,10 @@ const adminSchema = mongoose.Schema({
       password: {
         type: String,
         required: true,
+      },
+      otp:{
+        type:Number,
+        required:true
       }
     })
 

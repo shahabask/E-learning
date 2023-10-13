@@ -6,8 +6,7 @@ import { useDispatch,useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
 import { useTutorLoginMutation } from '../../../slices/tutorSlice/tutorApiSlice';
-import axios from 'axios';
-import { tutorUrl } from '../../utils/tutorAxios';
+import { axiosInstance } from '../../utils/tutorAxios';
 
 function TutorLogin() {
 
@@ -29,8 +28,6 @@ function TutorLogin() {
     }
   }, [navigate, tutorInfo]);
 
-const [tutorLogin]=useTutorLoginMutation()
-
   useEffect(()=>{
     if(Object.keys(formErrors).length==0&&isSubmit){
         console.log()
@@ -42,7 +39,7 @@ const [tutorLogin]=useTutorLoginMutation()
         setFormErrors(validate(email,password))
        setIsSubmit(true)
        try {
-         const res=await axios.post(`${tutorUrl}/login`,{email,password})
+         const res=await axiosInstance.post(`/login`,{email,password})
       
          dispatch(setTutorCredentials({...res.data}))
 
@@ -97,6 +94,9 @@ const [tutorLogin]=useTutorLoginMutation()
       <p className='text-end mt-2'>
       <Link to='/tutor/forgotPassword'>Forgot Password</Link> | <Link to='/tutor/register' className='ms-2'>Sign up</Link>
           </p>
+          <p className='text-end mt-2'>
+      <Link to='/tutor/otpLoginEmail' className="ms-2">Otp Login</Link>
+      </p>
     </div>
   </div>
   )

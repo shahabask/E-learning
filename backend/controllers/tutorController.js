@@ -100,5 +100,36 @@ const tutorConfirmOtp=asyncHandler(async(req,res)=>{
      res.status(200).json('success')
     }
    })
-export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,tutorConfirmOtp}
+
+   const tutorOtpLoginVerifyEmail=asyncHandler(async(req,res)=>{
+    const {email}=req.body
+    const user=await Tutor.findOne({email})
+    const token1 = Math.floor(100000 + Math.random() * 900000).toString();
+    if(user){
+      user.otp = token1;
+      await user.save();
+        sendresetmail(user.userName, email, user.otp);
+        res.status(200).json('succesfull')
+    }else{
+      res.status(400).json('Invalid Email')
+    }
+   })
+
+   const tutorOtpLogin=asyncHandler(async(req,res)=>{
+    const {state,otp}=req.body
+    const user=await Tutor.findOne({email:state})
+    if(user.otp==otp){
+        
+        res.status(201).json({
+          _id:user._id,
+          userName:user.userName,
+          email:user.email
+      })
+    }else{
+      res.status(400).json('Incorrect Otp')
+    }
+   })
+
+ 
+export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin}
 

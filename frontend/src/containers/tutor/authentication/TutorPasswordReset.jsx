@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useTutorResetPasswordMutation } from '../../../slices/tutorSlice/tutorApiSlice';
-import axiosInstance from '../../utils/tutorAxios';
+
+import {axiosInstance} from '../../utils/tutorAxios';
 
 
 function TutorPasswordReset() {
@@ -10,7 +10,7 @@ function TutorPasswordReset() {
     const [confirmpassword, setConfirmPassword] = useState("");
     const navigate = useNavigate();
     const { state } = useLocation();
-    const [ResetPassword] = useTutorResetPasswordMutation()
+ 
   
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?!\s).{6,}$/;
   

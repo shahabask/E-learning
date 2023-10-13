@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom"
 
 function AdminDashboard() {
     const navigate=useNavigate()
-  const adminInfo=useSelector((state)=>state.adminAuth)
+  const {adminInfo}=useSelector((state)=>state.adminAuth)
   useEffect(()=>{
     console.log(adminInfo)
         if(adminInfo===null){
-          navigate('/admin/login')
+          navigate('/admin/')
         }
   },[navigate,adminInfo])
   return (

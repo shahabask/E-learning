@@ -1,16 +1,10 @@
-
-
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
-import axiosInstance from '../../utils/adminAxios'
+import {axiosInstance} from '../../utils/adminAxios'
 import { useNavigate } from 'react-router-dom'
 
 function AdminForgotPassword() {
     const [email,setEmail]=useState('')
-
- 
-
-
     const navigate=useNavigate()
 
     const forgotSubmitHandler=async(e)=>{
@@ -18,13 +12,12 @@ function AdminForgotPassword() {
       
       
       try {
-      
-   
         const res=await axiosInstance.put(`/forgotPassword`,{email})
-         
-        navigate('/tutor/verifyOtp',{state:email})
-      } catch (error) {
        
+        navigate('/admin/verifyOtp',{state:email})
+        
+      } catch (error) {
+      
         toast.error(error?.response?.data?.message||error.error)
       }
     }

@@ -108,15 +108,23 @@ function UserLogin() {
               Sign In
             </button>
           </div>
-          <p className="text-end mt-2">
-          
-            <Link to='/forgotPassword'>Forgot Password</Link>
-            <Link to="/register" className="ms-2">
-              Sign up
-            </Link>
-          </p>
+          <div className="text-end mt-2">
+      <p>
+        <Link to='/forgotPassword'>Forgot Password ?</Link>
+      </p>
+    
+    </div>
         </form>
+        <div className="links-container text-end mt-2">
+        <p>
+        
+        <span>{"Don't have an account ?"}<Link to="/register" className="ms-2">Sign up</Link></span> 
+      </p>
+      <p>
+      <Link to='/otpLoginEmail' className="ms-2">Otp Login</Link>
+      </p>
       </div>
+    </div>
     </div>
   );
 }

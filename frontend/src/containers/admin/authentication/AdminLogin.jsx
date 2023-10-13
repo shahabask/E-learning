@@ -3,9 +3,10 @@ import '../../user/authentication/UserLogin.css';
 import {Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
-import {useAdminLoginMutation} from '../../../slices/adminSlice/adminApiSlice'
+
 import { setAdminCredentials } from '../../../slices/adminSlice/adminAuthSlice';
 import { toast } from 'react-toastify';
+import {axiosInstance} from '../../utils/adminAxios';
 
 function AdminLogin() {
 
@@ -17,12 +18,12 @@ function AdminLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
- const adminInfo=useSelector((state)=>state.adminAuth)
-  const [adminLogin]=useAdminLoginMutation()
+ const {adminInfo}=useSelector((state)=>state.adminAuth)
+
 
   useEffect(() => {
     if (adminInfo) {
-      navigate("/admin");
+      navigate("/admin/dashboard");
     }
   }, [navigate, adminInfo]);
 
@@ -37,10 +38,12 @@ function AdminLogin() {
        setIsSubmit(true)
        
        try {
-         const res=await adminLogin({email,password})
-           dispatch(setAdminCredentials({ ...res })) 
-           navigate('/admin');
+         const res=await axiosInstance.post('/login',{email,password})
+         console.log(res)
+           dispatch(setAdminCredentials({ ...res.data })) 
+           navigate('/admin/dashboard');
        } catch (error) {
+        console.log(error)
               toast.error(error?.data|| error.error)
        }
   };
@@ -86,7 +89,9 @@ function AdminLogin() {
         </div>
       </form>
       <p className='text-end mt-2'>
-      <Link to='/admin/forgotPassword'>Forgot Password</Link></p>
+      <Link to='/admin/forgotPassword'>Forgot Password</Link> | 
+      <Link to='/admin/otpLoginEmail' className="ms-2">Otp Login</Link>
+      </p>
     </div>
   </div>
   )

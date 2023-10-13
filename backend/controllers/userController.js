@@ -95,5 +95,33 @@ const resetPassword=asyncHandler(async(req,res)=>{
    res.status(200).json('success')
   }
  })
+ const otpLoginVerifyEmail=asyncHandler(async(req,res)=>{
+  const {email}=req.body
+  const user=await User.findOne({email})
+  const token1 = Math.floor(100000 + Math.random() * 900000).toString();
+  if(user){
+    user.otp = token1;
+    await user.save();
+      sendresetmail(user.firstName, email, user.otp);
+      res.status(200).json('succesfull')
+  }else{
+    res.status(400).json('Invalid Email')
+  }
+ })
 
-export {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword}
+ const otpLogin=asyncHandler(async(req,res)=>{
+  const {state,otp}=req.body
+  const user=await User.findOne({email:state})
+  if(user.otp==otp){
+      
+      res.status(201).json({
+        _id:user._id,
+        firstName:user.firstName,
+        email:user.email
+    })
+  }else{
+    res.status(400).json('Incorrect Otp')
+  }
+ })
+
+export {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin}

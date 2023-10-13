@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import axiosInstance from '../../utils/tutorAxios'
+import {axiosInstance} from '../../utils/tutorAxios'
 
 
 function TutorForgotPassword() {

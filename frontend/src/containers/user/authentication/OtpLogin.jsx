@@ -1,29 +1,47 @@
-
-
 import { useState } from 'react'
-import { toast } from 'react-toastify';
-
 import { useLocation, useNavigate } from 'react-router-dom';
-import {axiosInstance} from '../../utils/adminAxios';
+import { toast } from 'react-toastify';
+import axiosInstance from '../../utils/axios'
+import {axiosInstance as adminAxiosInstance} from '../../utils/adminAxios'
+import {axiosInstance as tutorAxiosInstance} from '../../utils/tutorAxios'
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../../slices/userSlice/authSlice';
+import { setAdminCredentials } from '../../../slices/adminSlice/adminAuthSlice';
+import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
 
-function AdminVerifyOtp() {
+function OtpLogin() {
     const [otp, setOtp] = useState("");
     const navigate = useNavigate();
     const { state } = useLocation();
-  
-    
-  const verifyOTPHandler = async (e) => {
+    const adminRoute = location.pathname.startsWith('/admin')
+    const tutorRoute=location.pathname.startsWith('/tutor')
+
+    const userType= adminRoute?"admin":tutorRoute?"tutor":"user"
+  const dispatch=useDispatch()
+
+    const verifyOTPHandler = async (e) => {
       e.preventDefault();
       try {
-   
-        const res = await axiosInstance.post(`/verifyOtp`,{state, otp})
-         console.log('this is res',res)``
-        navigate("/admin/resetPassword", { state:state })
+        console.log('userType',userType)
+        if(userType=="user"){
+        const res = await axiosInstance.post(`/otpLogin`,{ state, otp })
+        dispatch(setCredentials({...res.data}))
+        navigate("/")
+        }else if(userType=="admin"){
+            const res = await adminAxiosInstance.post(`/otpLogin`,{ state, otp })
+            dispatch(setAdminCredentials({...res.data}))
+            navigate("/admin/dashboard")
+        }else{
+            const res = await tutorAxiosInstance.post(`/otpLogin`,{ state, otp })
+            dispatch(setTutorCredentials({...res.data}))
+            navigate("/tutor/dashboard")
+        }
       } catch (error) {
-        console.log('this is error',error)
+        console.log(error)
         toast.error(error?.response?.data||error.error);
       }
     };
+  
   
     return (
       <div className="flex justify-center items-center h-screen">
@@ -34,7 +52,7 @@ function AdminVerifyOtp() {
             </h1>
             <form onSubmit={verifyOTPHandler}>
               <div className="mb-4">
-                <div className="flex">
+                <div className="">
                   <label htmlFor="OTP" className="block text-gray-700 mt-2 mr-2">
                     Otp
                   </label>
@@ -59,9 +77,8 @@ function AdminVerifyOtp() {
               </button>
             </form>
           </div>
-        </div>
-  
+        
+      </div>
     );
   }
-
-export default AdminVerifyOtp
+export default OtpLogin

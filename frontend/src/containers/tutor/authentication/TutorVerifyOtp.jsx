@@ -1,16 +1,14 @@
 import { useState } from "react";
 import {useNavigate ,useLocation } from 'react-router-dom';
-import { useTutorVerifyOtpMutation } from "../../../slices/tutorSlice/tutorApiSlice";
 import { toast } from "react-toastify";
-import axiosInstance from "../../utils/tutorAxios";
+import {axiosInstance} from "../../utils/tutorAxios";
 
 function TutorVerifyOtp() {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const [otpVerify] = useTutorVerifyOtpMutation();
-  // const [Forgot] = useForgotpasswordMutation();
+
 
   const verifyOTPHandler = async (e) => {
     e.preventDefault();
@@ -24,18 +22,6 @@ function TutorVerifyOtp() {
       toast.error(error?.response?.data||error.error);
     }
   };
-
-  // const resendHandler = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     console.log()
-  //     const res = await Forgot({ email:state }).unwrap();
-  //     console.log(res);
-  //     navigate("verifyOtp", { state: email });
-  //   } catch (error) {
-  //     toast.error(error.data);
-  //   }
-  // };
 
   return (
     <div className="flex justify-center items-center h-screen">

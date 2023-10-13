@@ -1,7 +1,7 @@
 
 
 import { useState } from 'react'
-import axiosInstance from '../../utils/adminAxios';
+import {axiosInstance} from '../../utils/adminAxios';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 

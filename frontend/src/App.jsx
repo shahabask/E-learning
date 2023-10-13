@@ -6,9 +6,9 @@ function App() {
   return (
     <>
     <ToastContainer/>
-   <Container className='my-2'>
+   {/* <Container className='my-2'> */}
     <Layout/>
-    </Container>
+    {/* </Container> */}
     </>
   )
 }
