@@ -24,18 +24,6 @@ function VerifyOtp() {
     }
   };
 
-  // const resendHandler = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     console.log()
-  //     const res = await Forgot({ email:state }).unwrap();
-  //     console.log(res);
-  //     navigate("verifyOtp", { state: email });
-  //   } catch (error) {
-  //     toast.error(error.data);
-  //   }
-  // };
-
   return (
     <div className="flex justify-center items-center h-screen">
 

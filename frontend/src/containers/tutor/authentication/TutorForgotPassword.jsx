@@ -31,9 +31,9 @@ function TutorForgotPassword() {
 
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen" style={{backgroundColor:'#33363d'}}>
       <div className="login-form">
-        <div className="w-96 bg-white rounded-lg shadow-lg p-6 ">
+        <div className="w-96 rounded-lg shadow-lg p-6 " style={{backgroundColor:'#ffc0cb'}}>
           <h1 className="text-3xl font-semibold text-black mb-4 text-center">
             Forgot Password
           </h1>
@@ -51,7 +51,7 @@ function TutorForgotPassword() {
           </div>
           <button
   type="submit"
-  style={{ backgroundColor: '#ffc0cb', color: 'dark-black', border: 'none', borderRadius: '0.25rem', padding: '0.625rem 1.25rem',  marginTop: '1rem', transition: 'background-color 0.3s ease', }}
+  style={{ backgroundColor: 'grey', color: 'white', border: 'none', borderRadius: '0.25rem', padding: '0.625rem 1.25rem',  marginTop: '1rem', transition: 'background-color 0.3s ease', }}
   className="btn-send-otp"
 >
   Send OTP

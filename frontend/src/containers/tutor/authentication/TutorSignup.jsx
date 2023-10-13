@@ -77,8 +77,8 @@ const {tutorInfo}=useSelector((state)=>state.tutorAuth)
   }
   return (
    <>
-   <div className='signup template d-flex justify-content-center align-items-center vh-100 ' style={{ backgroundColor: '#bcb88a' }}>
-   <div className='form_container p-5 rounded bg-white'>
+   <div className='signup template d-flex justify-content-center align-items-center vh-100 ' style={{backgroundColor:'#33363d'}}>
+   <div className='form_container p-5 rounded' style={{backgroundColor:'#ffc0cb'}}>
      <form onSubmit={submitHandler}>
        <h3 className='text-center'>Tutor SignUp</h3>
        <div className='mb-3'>
@@ -105,17 +105,11 @@ const {tutorInfo}=useSelector((state)=>state.tutorAuth)
             }} className='form-control' />
             <p style={{color:'red'}}>{formErrors.confirmPassword}</p>
        </div>
-       <div className='mb-2'>
-         <input type='checkbox' className='custom-control custom-checkbox' id='check' />
-         <label htmlFor='check' className='custom-input-label ms-2'>
-           Remember me
-         </label>
-       </div>
        <div className='d-grid mt-2'>
-         <button className='btn mb-3' style={{background:"#ffc0cb"}}>Sign Up</button>
+         <button className='btn mb-3' style={{backgroundColor: 'grey', color: 'white'}}>Sign Up</button>
        </div>
        <p className='text-end mt-2'>
-          <Link to='/tutor' className='ms-2'>Sign In</Link>
+          <Link style={{ color: 'black',textDecoration:'none'}} to='/tutor' className='ms-2'>Sign In</Link>
        </p>
      </form>
    </div>

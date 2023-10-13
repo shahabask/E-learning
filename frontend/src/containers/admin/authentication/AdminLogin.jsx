@@ -68,8 +68,8 @@ function AdminLogin() {
       return errors
   }
   return (
-    <div className='login template d-flex justify-content-center align-items-center vh-100 'style={{ backgroundColor: '#bcb88a'}}>
-    <div className='form_container p-5 rounded bg-white'>
+    <div className='login template d-flex justify-content-center align-items-center vh-100 '>
+    <div className='form_container p-5 rounded' style={{backgroundColor:'#94b991b3'}}>
       <form onSubmit={submitHandler}>
         <h3 className='text-center'>Admin Login</h3>
         <div className='mb-3'>
@@ -89,8 +89,8 @@ function AdminLogin() {
         </div>
       </form>
       <p className='text-end mt-2'>
-      <Link to='/admin/forgotPassword'>Forgot Password</Link> | 
-      <Link to='/admin/otpLoginEmail' className="ms-2">Otp Login</Link>
+      <Link style={{color:"black",textDecoration:'none'}} to='/admin/forgotPassword'>Forgot Password</Link> | 
+      <Link style={{color:"black",textDecoration:'none'}} to='/admin/otpLoginEmail' className="ms-2">Otp Login</Link>
       </p>
     </div>
   </div>

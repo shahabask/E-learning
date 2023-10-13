@@ -71,8 +71,8 @@ function TutorLogin() {
       return errors
   }
   return (
-    <div className='login template d-flex justify-content-center align-items-center vh-100 'style={{ backgroundColor: '#bcb88a'}}>
-    <div className='form_container p-5 rounded bg-white'>
+    <div className='login template d-flex justify-content-center align-items-center vh-100 ' style={{backgroundColor:'#33363d'}}>
+    <div className='form_container p-5 rounded' style={{backgroundColor:'#ffc0cb'}}>
       <form onSubmit={submitHandler}>
         <h3 className='text-center'>Tutor Login</h3>
         <div className='mb-3'>
@@ -88,14 +88,14 @@ function TutorLogin() {
           <p style={{color:'red'}}>{formErrors.password}</p>
         </div>
         <div className='d-grid'>
-          <button className='btn mb-3' style={{background:"#ffc0cb"}}>Sign In</button>
+          <button className='btn mb-3' style={{backgroundColor: 'grey', color: 'white'}}>Sign In</button>
         </div>
       </form>
       <p className='text-end mt-2'>
-      <Link to='/tutor/forgotPassword'>Forgot Password</Link> | <Link to='/tutor/register' className='ms-2'>Sign up</Link>
+      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/forgotPassword'>Forgot Password</Link> | <Link to='/tutor/register' style={{color:"black",textDecoration:'none'}} className='ms-2'>Sign up</Link>
           </p>
           <p className='text-end mt-2'>
-      <Link to='/tutor/otpLoginEmail' className="ms-2">Otp Login</Link>
+      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/otpLoginEmail' className="ms-2">Otp Login</Link>
       </p>
     </div>
   </div>
