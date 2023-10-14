@@ -25,6 +25,8 @@ import AdminVerifyOtp from '../admin/authentication/AdminVerifyOtp.jsx'
 import AdminPasswordReset from '../admin/authentication/AdminPasswordReset.jsx'
 import OtpLoginEmail from '../user/authentication/OtpLoginEmail.jsx'
 import OtpLogin from '../user/authentication/OtpLogin.jsx'
+import UserManagement from '../admin/UserManagement.jsx'
+import TutorManagement from '../admin/TutorManagement.jsx'
 
 
 function Router() {
@@ -54,8 +56,11 @@ function Router() {
          <Route path='otpLogin' element={<OtpLogin/>}/>
    </Route>
 
-   <Route path='/admin/dashboard' exact element={<AdminPrivateRoute/>}>
-   <Route path='' element={<AdminDashboard/>}/>
+   <Route path='/admin/home' exact element={<AdminPrivateRoute/>}>
+   <Route path='' index element={<AdminDashboard/>}/>
+   <Route path='userManagement' element={<UserManagement/>}/>
+   <Route path='tutorManagement' element={<TutorManagement/>}/>
+  <Route path='logout' />
    </Route>
 
 

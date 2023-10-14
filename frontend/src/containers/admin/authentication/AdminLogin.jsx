@@ -23,7 +23,7 @@ function AdminLogin() {
 
   useEffect(() => {
     if (adminInfo) {
-      navigate("/admin/dashboard");
+      navigate("/admin/home");
     }
   }, [navigate, adminInfo]);
 
@@ -41,7 +41,7 @@ function AdminLogin() {
          const res=await axiosInstance.post('/login',{email,password})
          console.log(res)
            dispatch(setAdminCredentials({ ...res.data })) 
-           navigate('/admin/dashboard');
+           navigate('/admin/home');
        } catch (error) {
         console.log(error)
               toast.error(error?.data|| error.error)

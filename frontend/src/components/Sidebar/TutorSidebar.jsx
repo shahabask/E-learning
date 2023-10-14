@@ -5,22 +5,23 @@ import { GrSchedulePlay } from 'react-icons/gr';
 import  { useState } from 'react';
 import '../../Components/Sidebar/TutorSidebar.css';
 import TutorHeader from '../Header/TutorHeader';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { TutorLogout } from '../../slices/tutorSlice/tutorAuthSlice';
 
 
 
-function TutorSidebar() {
+function TutorSidebar({ toggleSidebar }) {
   const [isIconsOnly, setIsIconsOnly] = useState(false);
 
   const toggleIconsOnly = () => {
     setIsIconsOnly(!isIconsOnly);
+    toggleSidebar("tutor");
   };
-  
+  const dispatch=useDispatch()
   const {tutorInfo}=useSelector((state)=>state.tutorAuth)
   const handleLogout = () => {
-    // Add logic for logging out
-    console.log('Logout clicked');
-  };
+    dispatch(TutorLogout())
+   };
   
   return (
     <>

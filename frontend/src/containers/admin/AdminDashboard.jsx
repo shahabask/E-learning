@@ -6,9 +6,9 @@ function AdminDashboard() {
     const navigate=useNavigate()
   const {adminInfo}=useSelector((state)=>state.adminAuth)
   useEffect(()=>{
-    console.log(adminInfo)
+
         if(adminInfo===null){
-          navigate('/admin/')
+          navigate('/admin')
         }
   },[navigate,adminInfo])
   return (
