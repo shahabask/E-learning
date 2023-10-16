@@ -69,7 +69,7 @@ function AdminLogin() {
   }
   return (
     <div className='login template d-flex justify-content-center align-items-center vh-100 '>
-    <div className='form_container p-5 rounded' style={{backgroundColor:'#94b991b3'}}>
+    <div className='form_container p-5 rounded'>
       <form onSubmit={submitHandler}>
         <h3 className='text-center'>Admin Login</h3>
         <div className='mb-3'>

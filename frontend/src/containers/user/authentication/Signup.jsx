@@ -41,8 +41,12 @@ useEffect(() => {
     e.preventDefault();
         setFormErrors(validate(firstName,secondName,email,password,confirmPassword))
        setIsSubmit(true)
-       
+   console.log(formErrors)
+       if (Object.keys(formErrors).length === 0){
+
+    
     try{
+
              const res= await signUp({firstName,secondName,email,password}).unwrap()
           
              dispatch(setCredentials({...res}))
@@ -52,6 +56,7 @@ useEffect(() => {
 
         toast.error(err?.data||err?.error)
     }
+  }
   };
 
   const validate=(firstName,secondName,email,password,confirmPassword)=>{
@@ -90,7 +95,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="signup template d-flex justify-content-center align-items-center vh-100 background-image" style={{ backgroundColor: '#47abcc' }}>
+      <div className="signup template d-flex justify-content-center align-items-center vh-100 background-image">
   <div className="form_container p-4 p-md-5 rounded">
     <form onSubmit={submitHandler}>
       <h3 className="text-center">Sign Up</h3>

@@ -6,7 +6,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentActive, setCurrentActive] = useState(null);
 const location=useLocation()
-const login=location.pathname.startsWith('/login') ?true:location.pathname.startsWith('/register') ? true:false
+// const login=location.pathname.startsWith('/login') ?true:location.pathname.startsWith('/register') ? true:false
   const handleMobileMenuClick = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -17,17 +17,17 @@ const login=location.pathname.startsWith('/login') ?true:location.pathname.start
 
   return (
     <>
-      <nav>
+      <nav className='navbar'>
         <a href="#">
           <img src={img} alt="Logo" />
         </a>
         <div>
-       { !login &&  <ul id="navbar" className={mobileMenuOpen ? "active" : ""}>
+       {  <ul id="navbar" className={mobileMenuOpen ? "active" : ""}>
             {["Home", "Aboutus", "Courses", "Service", "Contact"].map(
               (link, index) => (
                 <li key={index}>
                   <a
-                    href="#"
+                    href=""
                     className={index === currentActive ? "active-link" : ""}
                     onClick={() => {
                       handleClick(index);

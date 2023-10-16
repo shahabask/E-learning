@@ -50,7 +50,7 @@ const adminForgotPassword=asyncHandler(async(req,res)=>{
 const adminConfirmOtp=asyncHandler(async(req,res)=>{
   
     const {state,otp}=req.body
-    console.log('otp',otp)
+  
     const user=await Admin.findOne({email:state})
 
      if(user.otp==otp){

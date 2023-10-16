@@ -32,7 +32,7 @@ function Layout() {
     return (
       <>
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar/>)}
+       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar className='navbar'/>)}
        
        <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
       <Router/>
@@ -43,7 +43,7 @@ function Layout() {
     return (
       <>
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar/>)}
+       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar className='navbar'/>)}
        
        <div className={tutorInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
       <Router/>
@@ -54,7 +54,7 @@ function Layout() {
     return (
       <>
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar/>)}
+       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar />)}
        
        {/* <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} > */}
       <Router/>

@@ -71,7 +71,7 @@ function UserLogin() {
   return (
     <div
       className="login template d-flex justify-content-center align-items-center vh-100 background-image"
-      style={{ backgroundColor: "#47abcc" }}
+    
     >
       <div className="form_container p-5 rounded">
  

@@ -71,7 +71,7 @@ function TutorLogin() {
       return errors
   }
   return (
-    <div className='login template d-flex justify-content-center align-items-center vh-100 ' style={{backgroundColor:'#33363d'}}>
+    <div className='login template d-flex justify-content-center align-items-center vh-100 '>
     <div className='form_container p-5 rounded' style={{backgroundColor:'#ffc0cb'}}>
       <form onSubmit={submitHandler}>
         <h3 className='text-center'>Tutor Login</h3>
