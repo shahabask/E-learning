@@ -124,3 +124,9 @@
       display: flex;
     }
   }
+
+  .active-link {
+    background-color: #4D2C5E !important;
+    color: black !important;
+  }
+  

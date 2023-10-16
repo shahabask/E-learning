@@ -4,14 +4,7 @@
 
 
 function Home() {
-//   let {userInfo}=useSelector((state)=>state.auth)
-//  const navigate=useNavigate()
-//   useEffect(()=>{
-//     if(!userInfo){
-//       navigate('/login')
-//     }
-     
-//   },[navigate,userInfo])
+
 
   return (
     <>

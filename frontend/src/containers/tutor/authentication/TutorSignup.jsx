@@ -22,8 +22,8 @@ function TutorSignup() {
 const [tutorRegister]=useTutorRegisterMutation()
 const {tutorInfo}=useSelector((state)=>state.tutorAuth)
   useEffect(() => {
-    if (tutorInfo) {
-      navigate("/tutor/dashboard");
+    if (tutorInfo){
+      navigate("/tutor/dashboard")
     }
   }, [navigate, tutorInfo]);
 

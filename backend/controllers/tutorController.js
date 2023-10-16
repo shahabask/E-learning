@@ -7,7 +7,7 @@ const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
     const tutor=await Tutor.findOne({email:email})
-    
+    if(!user.isBlocked){
     if(tutor&& (await tutor.matchPassword(password))){
         generateTutorToken(res,tutor._id)
         res.status(201).json({
@@ -19,6 +19,9 @@ const tutorAuth=asyncHandler(async(req,res)=>{
         res.status(400).json('Invalid email or password')
         // throw new Error('invalid username or password')
     } 
+  }else{
+    res.status(400).json(`access denied`)
+  }
 })
 
 

@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 
 function Layout() {
 
-  const location=useLocation()
+  const location=useLocation( )
   const tutor=location.pathname.startsWith("/tutor")
   const admin=location.pathname.startsWith("/admin")
   // const [isSidebarOpen,SetIsSidebarOpen]=useState()

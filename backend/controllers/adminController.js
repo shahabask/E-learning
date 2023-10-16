@@ -2,7 +2,8 @@ import asyncHandler from 'express-async-handler'
 import Admin from '../models/adminModel.js'
 import generateAdminToken from '../utils/generateAdminToken.js'
 import sendresetmail from '../utils/nodeMailer.js'
-
+import User from '../models/userModel.js'
+import Tutor from '../models/tutorModel.js'
 const adminAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -98,4 +99,7 @@ const adminConfirmOtp=asyncHandler(async(req,res)=>{
   }
  })
 
-export {adminLogout,adminAuth,adminForgotPassword,adminConfirmOtp,adminResetPassword,adminOtpLoginVerifyEmail,adminOtpLogin}
+
+
+export {adminLogout,adminAuth,adminForgotPassword,adminConfirmOtp,adminResetPassword,adminOtpLoginVerifyEmail,
+  adminOtpLogin}

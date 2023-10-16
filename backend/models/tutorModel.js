@@ -35,6 +35,10 @@ const tutorSchema = mongoose.Schema({
       otp:{
         type:Number,
         default:null
+      },
+      isBlocked:{
+        type:Boolean,
+        default:false
       }
     },
    

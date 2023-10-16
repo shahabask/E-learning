@@ -23,3 +23,24 @@
     }
   }
   
+  .custom-button-inactive {
+    background-color: #e49438c8; /* Change this to your desired background color */
+    border: none;
+    color: white; /* Change this to your desired text color */
+    padding: 3px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .custom-button-active {
+    background-color: rgb(180, 180, 244); /* Change this to your desired background color */
+    border: none;
+    color: white; /* Change this to your desired text color */
+    padding: 3px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .custom-button:hover {
+    background-color: #0056
+  }

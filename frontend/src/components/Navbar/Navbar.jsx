@@ -1,11 +1,12 @@
 import{ useState } from "react";
 import "./Navbar.css";
 import img from "../../assets/E-learning.svg";
-
+import { useLocation } from "react-router-dom"
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentActive, setCurrentActive] = useState(null);
-
+const location=useLocation()
+const login=location.pathname.startsWith('/login') ?true:location.pathname.startsWith('/register') ? true:false
   const handleMobileMenuClick = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -21,7 +22,7 @@ const Navbar = () => {
           <img src={img} alt="Logo" />
         </a>
         <div>
-          <ul id="navbar" className={mobileMenuOpen ? "active" : ""}>
+       { !login &&  <ul id="navbar" className={mobileMenuOpen ? "active" : ""}>
             {["Home", "Aboutus", "Courses", "Service", "Contact"].map(
               (link, index) => (
                 <li key={index}>
@@ -46,7 +47,7 @@ const Navbar = () => {
                 <i className="fas fa-user"></i>
               </a>
             </li>
-          </ul>
+          </ul> } 
         </div>
         <div id="mobile" onClick={handleMobileMenuClick}>
           <i
