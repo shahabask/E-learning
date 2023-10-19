@@ -27,6 +27,9 @@ import OtpLoginEmail from '../user/authentication/OtpLoginEmail.jsx'
 import OtpLogin from '../user/authentication/OtpLogin.jsx'
 import UserManagement from '../admin/UserManagement.jsx'
 import TutorManagement from '../admin/TutorManagement.jsx'
+import ErrorPage from '../../components/ErrorPage.jsx'
+import Footer from '../user/home/Footer.jsx'
+import CategoryManagement from '../admin/CategoryManagement.jsx'
 
 
 function Router() {
@@ -36,6 +39,7 @@ function Router() {
 
    <Route path='/' exact  element={<LoginScreens/>}>
    <Route path='' index  element={<Home/>}/>
+
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
          <Route path='/forgotPassword' element={<ForgotPassword/>}/>
@@ -60,7 +64,8 @@ function Router() {
    <Route path='' index element={<AdminDashboard/>}/>
    <Route path='userManagement' element={<UserManagement/>}/>
    <Route path='tutorManagement' element={<TutorManagement/>}/>
-  <Route path='logout' />
+   <Route path='categoryManagement' element={<CategoryManagement/>}/>
+  {/* <Route path='logout' /> */}
    </Route>
 
 
@@ -81,7 +86,7 @@ function Router() {
    <Route path='/tutor/dashboard' exact element={<TutorPrivateRoute/>}>
    <Route path='' exact element={<TutorDashboard/>}/>
    </Route>
-   
+   <Route path="*" element={<ErrorPage/>} />
     </Routes>
    
   )

@@ -2,32 +2,33 @@ import asyncHandler from 'express-async-handler';
 import Tutor from '../models/tutorModel.js';
 import generateTutorToken from '../utils/generateTutorToken.js';
 import sendresetmail from '../utils/nodeMailer.js';
-
+import jwt from 'jsonwebtoken'
 const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
     const tutor=await Tutor.findOne({email:email})
-    if(!user.isBlocked){
+    
     if(tutor&& (await tutor.matchPassword(password))){
-        generateTutorToken(res,tutor._id)
+      if(!tutor.isBlocked){
+       const tutorToken=await generateTutorToken(res,tutor._id)
         res.status(201).json({
-            _id:tutor._id,
-            userName:tutor.userName,
-            email:tutor.email
+         token:tutorToken
         })
+      }else{
+        res.status(400).json(`access denied`)
+      }
     }else{
         res.status(400).json('Invalid email or password')
         // throw new Error('invalid username or password')
     } 
-  }else{
-    res.status(400).json(`access denied`)
-  }
+ 
 })
 
 
 const registerTutor=asyncHandler(async(req,res)=>{
 
     const {userName,email,password}=req.body
+    console.log('working')
     const tutorExists= await Tutor.findOne({email:email})
     if(tutorExists){
         res.status(400).json('tutor already exists')
@@ -41,18 +42,37 @@ const registerTutor=asyncHandler(async(req,res)=>{
     })
  
     if(tutor){
-        generateTutorToken(res,tutor._id)
+     const token=await   generateTutorToken(res,tutor._id)
+
         res.status(201).json({
-            _id:tutor._id,
-            userName:tutor.userName,
-            email:tutor.email
+         token:token
         })
     }else{
-        res.status(400)
+        res.status(400).json('invalid tutor data')
+        console.log('not working')
         throw new Error('invalid tutor data')
     }
 
 })
+
+const tutorDetails = asyncHandler(async (req, res) => {
+  const token = req.query.token;
+  try {
+
+    const user= await jwt.verify(token, process.env.JWT_SECRET);
+
+    const isBlocked = await Tutor.findOne({ _id: user.tutorId }).select('isBlocked');
+    
+    if (isBlocked) {
+      res.status(200).json({ isBlocked: true });
+    } else {
+      res.status(200).json({ isBlocked: false });
+    }
+  } catch (err) {
+    console.error('Error in processing the request:', err);
+    res.status(500).json({ error: 'An error occurred while processing the request' });
+  }
+});
 
 const logoutTutor=asyncHandler(async(req,res)=>{
     res.cookie('tutorJwt','',{
@@ -134,5 +154,5 @@ const tutorConfirmOtp=asyncHandler(async(req,res)=>{
    })
 
  
-export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin}
+export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails}
 

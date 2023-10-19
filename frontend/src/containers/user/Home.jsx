@@ -1,35 +1,32 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
+// import * as React from 'react';
+// import AppBar from '@mui/material/AppBar';
+// import Button from '@mui/material/Button';
+// import CameraIcon from '@mui/icons-material/PhotoCamera';
+import Typography from '@mui/material/Typography';
+// import ComputerIcon from '@mui/icons-material/Computer';
+// import WorkIcon from '@mui/icons-material/Work';
+// import SchoolIcon from '@mui/icons-material/School';
+import exam from '../../assets/exam 1.svg' 
+import onlineTest from '../../assets/online-test 1.svg' 
+import certificaton from '../../assets/certification 1.svg' 
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
+// import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
+// import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+// import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import Footer from './home/Footer';
+import Banner from './home/Banner';
+import './home/Home.css'
 
 
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 const cards = [1, 2, 3];
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -40,54 +37,115 @@ function Home() {
 return (
   <ThemeProvider theme={defaultTheme}>
   <CssBaseline />
-  {/* <AppBar position="relative">
-    <Toolbar>
-      <CameraIcon sx={{ mr: 2 }} />
-      <Typography variant="h6" color="inherit" noWrap>
-        Album layout
-      </Typography>
-    </Toolbar>
-  </AppBar> */}
+  <div className="home-background" > {/* Apply the CSS class here */}
   <main>
     {/* Hero unit */}
+    <Banner />
+
     <Box
-      sx={{
-     
-        bgcolor: 'lavender',
-        pt: 8,
-        pb: 6,
-        width: '80%', // Set the width to 80%
-        margin: '0 auto', 
-        marginTop: '80px'
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#4D2C5E',
+    padding: 5,
+    margin: 17,
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+    }}
+  >
+    <div
+      style={{
+        flex: '1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
-      <Container maxWidth="sm">
-        <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="text.primary"
-          gutterBottom
-        >
-          Album layout
-        </Typography>
-        <Typography variant="h5" align="center" color="text.secondary" paragraph>
-          Something short and leading about the collection below—its contents,
-          the creator, etc. Make it short and sweet, but not too short so folks
-          don&apos;t simply skip over it entirely.
-        </Typography>
-        <Stack
-          sx={{ pt: 4 }}
-          direction="row"
-          spacing={2}
-          justifyContent="center"
-        >
-          {/* <Button variant="contained">Main call to action</Button>
-          <Button variant="outlined">Secondary action</Button> */}
-        </Stack>
-      </Container>
-    </Box>
-    <Container sx={{ py: 8 }} maxWidth="md">
+      <div
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          padding: 8,
+          borderRadius: '10%',
+          display: 'inline-block',
+        }}
+      >
+        <img
+          src={onlineTest}
+          alt="Computer"
+          style={{ width: 48, height: 48, marginRight: 8, borderRadius: '10%'}}
+        />
+      </div>
+      <Typography variant="h6">Learn the latest skill</Typography>
+      <Typography variant="body2">Add more skill to your resume</Typography>
+    </div>
+
+    <div
+      style={{
+        flex: '1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          padding: 8,
+          borderRadius: '10%',
+          display: 'inline-block',
+        }}
+      >
+        <img
+          src={exam}
+          alt="Career"
+          style={{ width: 48, height: 48, marginRight: 8, borderRadius: '10%' }}
+        />
+      </div>
+      <Typography variant="h6">Get ready for the career</Typography>
+      <Typography variant="body2">Be prepared for having a high package job</Typography>
+    </div>
+
+    <div
+      style={{
+        flex: '1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          padding: 8,
+          borderRadius: '10%',
+          display: 'inline-block',
+        }}
+      >
+        <img
+          src={certificaton}
+          alt="Certificate"
+          style={{ width: 48, height: 48, marginRight: 8, borderRadius: '10%' }}
+        />
+      </div>
+      <Typography variant="h6">Earn a certificate</Typography>
+      <Typography variant="body2">Announce your achievement through your certificate</Typography>
+    </div>
+  </div>
+</Box>
+
+    <Container sx={{ py: 8 }} maxWidth="md" >
       {/* End hero unit */}
       <Grid container spacing={4}>
         {cards.map((card) => (
@@ -112,33 +170,18 @@ return (
                   content.
                 </Typography>
               </CardContent>
-              {/* <CardActions>
-                <Button size="small">View</Button>
-                <Button size="small">Edit</Button>
-              </CardActions> */}
+             
             </Card>
           </Grid>
         ))}
       </Grid>
     </Container>
   </main>
-  {/* Footer */}
-  <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer" id='footer'>
-    <Typography variant="h6" align="center" gutterBottom>
-      Footer
-    </Typography>
-    <Typography
-      variant="subtitle1"
-      align="center"
-      color="text.secondary"
-      component="p"
-    >
-      Something here to give the footer a purpose!
-    </Typography>
-    <Copyright />
-  </Box>
-  {/* End footer */}
+  </div>
+
 </ThemeProvider>
+
+
 );
 }
 

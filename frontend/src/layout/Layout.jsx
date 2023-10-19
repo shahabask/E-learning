@@ -7,16 +7,21 @@ import { useLocation } from "react-router-dom"
 import './Layout.css'
 import { useState } from "react"
 import { useSelector } from "react-redux"
+import Footer from "../containers/user/home/Footer"
 
 function Layout() {
 
   const location=useLocation( )
   const tutor=location.pathname.startsWith("/tutor")
   const admin=location.pathname.startsWith("/admin")
-  // const [isSidebarOpen,SetIsSidebarOpen]=useState()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const {adminInfo}=useSelector((state)=>state.adminAuth)
   const {tutorInfo}=useSelector((state)=>state.tutorAuth)
+
+  function checkIfErrorPage() {
+    const errorRoutes = ['/error', '/404', '/500']; // Add the error route paths here
+    return errorRoutes.includes(window.location.pathname);
+  }
   const toggleSidebar = (sidebarType) => {
     setIsSidebarOpen((prevIsSidebarOpen) => {
       // Check the sidebarType to identify which sidebar is making the update
@@ -28,13 +33,13 @@ function Layout() {
       return prevIsSidebarOpen;
     });
   };
-  if(admin){
+
+ if(admin){
     return (
       <>
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar className='navbar'/>)}
-       
-       <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
+       <AdminSidebar toggleSidebar={toggleSidebar}/>
+      <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
       <Router/>
       </div>
       </>
@@ -43,7 +48,7 @@ function Layout() {
     return (
       <>
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar className='navbar'/>)}
+       <TutorSidebar toggleSidebar={toggleSidebar}/>
        
        <div className={tutorInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
       <Router/>
@@ -53,12 +58,10 @@ function Layout() {
   }else{
     return (
       <>
+     {  <Navbar />}
       
-       {tutor?(<TutorSidebar toggleSidebar={toggleSidebar}/>):admin?(<AdminSidebar toggleSidebar={toggleSidebar}/>):(<Navbar />)}
-       
-       {/* <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} > */}
-      <Router/>
-      {/* </div> */}
+        <Router/>
+        <Footer/>
       </>
         )
   }

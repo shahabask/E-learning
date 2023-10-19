@@ -7,6 +7,8 @@ import '../../Components/Sidebar/AdminSidebar.css';
 import { NavLink } from 'react-router-dom'
 
 import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar, FaEnvelope,  FaSignOutAlt } from 'react-icons/fa';
+import { MdCategory } from 'react-icons/md'
+
 import AdminHeader from '../Header/AdminHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminLogout } from '../../slices/adminSlice/adminAuthSlice';
@@ -52,6 +54,12 @@ function AdminSidebar({ toggleSidebar }) {
                 <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Courses</span>
               </li> </NavLink> 
+              <NavLink to='/admin/home/categoryManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
+  <li>
+    <MdCategory className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
+    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Category Management</span>
+  </li>
+</NavLink>
               <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
                  <FaMoneyBillAlt className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Subscription</span> 

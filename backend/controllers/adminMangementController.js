@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import User from "../models/userModel.js"
 import Tutor from "../models/tutorModel.js"
+import Category from '../models/categoryModel.js'
 
 const adminLoadUsers=asyncHandler(async(req,res)=>{
     
@@ -32,4 +33,13 @@ const adminLoadUsers=asyncHandler(async(req,res)=>{
         const user=await Tutor.updateOne({_id:userId},{$set:{isBlocked:isBlocked}})
        
      })
-   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor}
+
+     const loadCategory=asyncHandler(async(req,res)=>{
+             const category=await Category.find({})
+             if(category){
+res.status(200).json({category})
+             }else{
+             res.status(400).json('no category found')
+             }
+     })
+   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory}

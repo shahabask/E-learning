@@ -3,6 +3,7 @@ import { Link,useNavigate  } from 'react-router-dom';
 import '../../user/authentication/Signup.css';
 import { useState ,useEffect} from 'react';
 import { useDispatch,useSelector} from 'react-redux';
+import { axiosInstance as tutorAxiosInstance } from '../../utils/tutorAxios';
 import { toast } from 'react-toastify';
 import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
 import { useTutorRegisterMutation } from '../../../slices/tutorSlice/tutorApiSlice';
@@ -36,16 +37,19 @@ const {tutorInfo}=useSelector((state)=>state.tutorAuth)
     e.preventDefault();
         setFormErrors(validate(userName,email,password,confirmPassword))
        setIsSubmit(true)
-         console.log(userName,email,password)
+       
+         if (Object.keys(formErrors).length === 0){
        try {
-        const res=await tutorRegister({userName,email,password}).unwrap()  
-                dispatch(setTutorCredentials({...res}))
+        const res=await tutorAxiosInstance.post(`/register`,{userName,email,password}) 
+                dispatch(setTutorCredentials({...res.data}))
                 navigate('/tutor/dashboard')
        } catch (error) {
+        console.log(error?.data)
+        console.log('error',error)
         toast.error(error?.data || error.error)
        }
        
-    
+      }
   };
 
   const validate=(userName,email,password,confirmPassword)=>{

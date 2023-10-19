@@ -27,7 +27,7 @@ function VerifyOtp() {
   return (
     <div className="flex justify-center items-center h-screen">
 
-        <div className="w-96 rounded-lg shadow-lg p-6 " style={{backgroundColor:'#94b991b3'}}>
+        <div className="w-96 rounded-lg shadow-lg p-6 ">
           <h1 className="text-3xl font-semibold mb-4 text-center">
             Verify OTP
           </h1>

@@ -6,16 +6,16 @@ import User from '../models/userModel.js'
 import Tutor from '../models/tutorModel.js'
 const adminAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
-
+console.log('working')
     const admin=await Admin.findOne({email:email})
 
     if(admin&& (await admin.matchPassword(password))){
-        generateAdminToken(res,admin._id)
+      const token=await  generateAdminToken(res,admin._id)
         res.status(201).json({
-            _id:admin._id,
-            email:admin.email
+           token:token
         })
     }else{
+      console.log('not working')
         res.status(400).json('Invalid email or password')
         // throw new Error('invalid username or password')
     } 

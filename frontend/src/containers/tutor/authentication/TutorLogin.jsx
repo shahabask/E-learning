@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
-import { useTutorLoginMutation } from '../../../slices/tutorSlice/tutorApiSlice';
+// import { useTutorLoginMutation } from '../../../slices/tutorSlice/tutorApiSlice';
 import { axiosInstance } from '../../utils/tutorAxios';
 
 function TutorLogin() {
@@ -72,7 +72,7 @@ function TutorLogin() {
   }
   return (
     <div className='login template d-flex justify-content-center align-items-center vh-100 '>
-    <div className='form_container p-5 rounded' style={{backgroundColor:'#ffc0cb'}}>
+    <div className='form_container p-5 rounded'>
       <form onSubmit={submitHandler}>
         <h3 className='text-center'>Tutor Login</h3>
         <div className='mb-3'>
