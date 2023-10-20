@@ -42,4 +42,22 @@ res.status(200).json({category})
              res.status(400).json('no category found')
              }
      })
-   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory}
+
+     const addCategory=asyncHandler(async(req,res)=>{
+      const { categoryName } = req.body; // Assuming categoryName is sent as part of the form data
+      
+
+          const checkIdentical=await Category.findOne({categoryName:categoryName})
+          if(!checkIdentical){
+
+            const category=await Category.create({categoryName:categoryName})
+            if(!category) {
+                 res.status(400).json(`category can't be inserted`)
+            }else{
+                res.status(200).json('category added successfully')
+            }
+          }else{
+            res.status(400).json('category already exist')
+          }
+     })
+   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory,addCategory}

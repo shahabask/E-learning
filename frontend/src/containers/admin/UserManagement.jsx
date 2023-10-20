@@ -121,14 +121,14 @@ export default function UserManagement() {
       />
     </div>
 
-    {rows.map((row) => (
-  <DetailsModal
-    key={row._id}
-    isOpen={openModals[row._id] || false}
-    onClose={() => closeDetailsModal(row._id)}
-    details={row.details}  // Pass the user-specific details
-  />
-))}
+    {/* {rows.map((row) => (
+  // <DetailsModal
+  //   key={row._id}
+  //   isOpen={openModals[row._id] || false}
+  //   onClose={() => closeDetailsModal(row._id)}
+  //   details={row.details}  // Pass the user-specific details
+  // />
+))} */}
   </>
   );
 }

@@ -50,7 +50,8 @@ function AdminSidebar({ toggleSidebar }) {
                <FaChalkboardTeacher className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Tutor Management</span>
               </li></NavLink>
-              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
+              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
+                
                 <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Courses</span>
               </li> </NavLink> 

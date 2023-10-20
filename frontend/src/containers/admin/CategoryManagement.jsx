@@ -1,37 +1,51 @@
 import { DataGrid } from '@mui/x-data-grid';
-import { FaUnlock, FaLock, FaEdit } from 'react-icons/fa'
+import {  FaEdit, FaBan, FaLock, FaUnlock } from 'react-icons/fa'
 import './UserManagement.css'
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../utils/adminAxios';
 
-import DetailsModal from './DetailsModal';
+import CategoryAddModal from './modal/CategoryAddModal';
+import { toast } from 'react-toastify';
 
 
 export default function CategoryManagement() {
 
-  
-  // const [buttonClicked,setButtonClicked] = useState(false)
+    const ImageCellRenderer = ({ value }) => (
+        <img src={value} alt="Category Image" style={{ width: '100%', height: 'auto' }} />
+      );
+
   const columns = [
     {field: 'index',headerName: 'Index',width: 20,},
-    { field: 'category', headerName: 'Category', width: 130},
-   
-    // { field: 'isBlocked', headerName: 'Active', width: 130 ,renderCell: (params) => (
-    //   <div className={`pill ${params.row.isBlocked ? 'inactive' : 'active'}`}>
-    //   {params.row.isBlocked ? 'Inactive' : 'Active'}
-    // </div>
-    // ),},
+    { field: 'categoryName', headerName: 'Category', width: 130},
+    { field: 'image', headerName: 'Image', width: 130, renderCell: ImageCellRenderer },
+    
     {
       field: 'update',
       headerName: 'Update',
-      width: 100,  
+      width: 130,  
       renderCell: (params) => {  return(
         
-        <button className={`custom-button${params.row.isBlocked ?'-inactive':'-active' }`} onClick={(e) => handleEditClick(e,params.row._id)}>
+        <button className={`custom-button-active' }`} onClick={(e) => handleEditClick(e,params.row._id)}>
           {<FaEdit size={18} />}
         </button>
       )},
     },
-    
+    { field: 'isBlocked', headerName: 'Active', width: 130 ,renderCell: (params) => (
+      <div className={`pill ${params.row.isBlocked ? 'inactive' : 'active'}`}>
+      {params.row.isBlocked ? 'Inactive' : 'Active'}
+    </div>
+    ),},
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 130,  
+      renderCell: (params) => {  return(
+        
+        <button className={`custom-button${params.row.isBlocked ?'-inactive':'-active' }`} onClick={(e) => handleBlockClick(e,params.row._id,params.row.isBlocked)}>
+          {params.row.isBlocked ?<FaLock size={18} /> :  <FaUnlock size={18} /> }
+        </button>
+      )},
+    },
    
     // {
     //   field: 'details',
@@ -49,9 +63,20 @@ export default function CategoryManagement() {
   
   ];
  const [edited,setEdited]=useState(false)
- 
+ const [added,setAdded]=useState(false)
+
+
+ const handleBlockClick=async(e,categoryId)=>{
+   try {
+    console.log(e,categoryId)
+    const res=await axiosInstance.post('/blockCategory') 
+    
+  } catch (error) {
+    console.log(error)
+  }
+ }
   const handleEditClick = async (e, categoryId) => {
-    e.stopPropagation();
+    
     try {
           
          const response=await axiosInstance.post('/editCategory',{categoryId})
@@ -66,7 +91,7 @@ export default function CategoryManagement() {
 
     fetchData();
     // setBlocked(!blocked)
-  }, [edited])
+  }, [edited,added])
 //   const handleDetailsClick = (e, row) => {
 //     e.stopPropagation();
 //     const userId = row._id;
@@ -77,7 +102,22 @@ export default function CategoryManagement() {
 //     }));
 //   };
 
-
+const handleAddCategory = async (formData) => {
+  try {
+    const response = await axiosInstance.post('/addCategory', formData);
+    if (response.data === 'category added successfully') {
+      toast.success('category added successfully')
+      setAdded(!added)
+      return null;
+    }
+    toast.error(response.data)
+    return response.data; // You can return any message from the server
+  } catch (error) {
+    toast.error(error?.response?.data||error.error)
+    
+    return 'An error occurred during category addition'; // Handle server error
+  }
+};
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get('/loadCategory');
@@ -94,37 +134,42 @@ export default function CategoryManagement() {
     const [rows,setRows]=useState([])
   
 
-  return (
-    <>
-
-<div className="relative">
-  <button
-    className="absolute top-0 right-0 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2"
-    onClick={() => {
-      // Handle the "Add Category" button click here
-      // You can open a modal or navigate to a page for adding a category
-    }}
-  >
-    Add Category
-  </button>
-  <div className="data-grid-container">
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      getRowId={(row) => row._id}
-      initialState={{
-        pagination: {
-          paginationModel: { page: 0, pageSize: 5 },
-        },
-      }}
-      pageSizeOptions={[5, 10]}
-      checkboxSelection
-    />
-  </div>
-</div>
-
-
+    const [isAddModalOpen, setAddModalOpen] = useState(false);
    
-  </>
-  );
+
+      
+//         e.preventDefault();
+//        SetFormError(validate(categoryName,image)) 
+//       console.log('Adding category:', categoryName);
+//       console.log('Image:', image);
+//    const checkError=validate(categoryName,image)
+//  try {
+//   if(Object.keys(checkError).length==0){
+//     const formData = new FormData();
+//             formData.append("categoryName", categoryName);
+//             formData.append("image", image);
+//             setAddModalOpen(false);
+//     const res=await axiosInstance.post('/addCategory',formData)
+   
+//    return null
+//   }else{
+//      return formError
+//   }
+//  } catch (error) {
+//     console.log('consoled error of axios',error)
+//  }
+   
+      // Close the modal after adding the category
+    //  
+    // };
+    
+    return (
+      <div className="data-grid-container">
+        <button onClick={() => setAddModalOpen(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+          Add Category
+        </button>
+        <DataGrid rows={rows} columns={columns} getRowId={(row) => row._id} pageSizeOptions={[5, 10]} checkboxSelection />
+        <CategoryAddModal isOpen={isAddModalOpen} onRequestClose={() => setAddModalOpen(false)} onAddCategory={handleAddCategory} />
+      </div>
+    );
 }
