@@ -38,40 +38,40 @@ function AdminSidebar({ toggleSidebar }) {
               {isIconsOnly ? '☰' : '✖'}
             </div>
             <ul>
-            <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>    <li>
+            <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>    <li>
               <FaHome className="sidebar-icon" />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Dashboard</span>
               </li> </NavLink> 
-              <NavLink to='/admin/home/userManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
+              <NavLink to='/admin/userManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
                <FaUser className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>User Management</span>
               </li> </NavLink>  
-              <NavLink to='/admin/home/tutorManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
+              <NavLink to='/admin/tutorManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
                <FaChalkboardTeacher className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Tutor Management</span>
               </li></NavLink>
-              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
+              <NavLink to='/admin/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
                 
                 <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Courses</span>
               </li> </NavLink> 
-              <NavLink to='/admin/home/categoryManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
+              <NavLink to='/admin/categoryManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
   <li>
     <MdCategory className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
     <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Category Management</span>
   </li>
 </NavLink>
-              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
+              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
                  <FaMoneyBillAlt className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Subscription</span> 
               </li></NavLink> 
     
               {/* New li tags with corresponding icons */}
-              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
+              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
                 <FaChartBar className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Sales Report</span> 
               </li></NavLink> 
-              <NavLink to='/admin/home' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
+              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
                 <FaEnvelope className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Messages</span>
               </li></NavLink> 

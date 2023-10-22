@@ -10,28 +10,28 @@ function TutorPrivateRoute() {
     
     const {tutorInfo}=useSelector((state)=>state.tutorAuth)
     
-    const fetchData=async(tutorInfo)=>{
-        const tutor=await axiosInstance.get('/tutorDetails',{ params: {
-          token: tutorInfo.token
+    // const fetchData=async(tutorInfo)=>{
+    //     const tutor=await axiosInstance.get('/tutorDetails',{ params: {
+    //       token: tutorInfo.token
        
-        },
-      }
+    //     },
+    //   }
     
-      )
-      const isBlocked=tutor.data.isBlocked
-      return isBlocked
-    }
-    if(tutorInfo){
-      useEffect(()=>{
+    //   )
+    //   const isBlocked=tutor.data.isBlocked
+    //   return isBlocked
+    // }
+   
+    //   useEffect(()=>{
         
-      if(tutorInfo){
-        fetchData(tutorInfo)
-      }
-      },[])
+    //   if(tutorInfo){
+    //     fetchData(tutorInfo)
+    //   }
+    //   },[])
       
-    }
+
     
-  return tutorInfo? <Outlet/> : <Navigate to='/tutor' replace/>
+  return tutorInfo? <Outlet/> : <Navigate to='/tutor/login' replace/>
 }
 
 export default TutorPrivateRoute

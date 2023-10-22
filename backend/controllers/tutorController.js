@@ -152,7 +152,11 @@ const tutorConfirmOtp=asyncHandler(async(req,res)=>{
       res.status(400).json('Incorrect Otp')
     }
    })
-
+const loadCourseData=asyncHandler(async(req,res)=>{
+     
+})
  
-export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails}
+export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
+        tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
+        loadCourseData}
 

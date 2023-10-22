@@ -92,10 +92,10 @@ function TutorLogin() {
         </div>
       </form>
       <p className='text-end mt-2'>
-      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/forgotPassword'>Forgot Password</Link> | <Link to='/tutor/register' style={{color:"black",textDecoration:'none'}} className='ms-2'>Sign up</Link>
+      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/login/forgotPassword'>Forgot Password</Link> | <Link to='/tutor/login/register' style={{color:"black",textDecoration:'none'}} className='ms-2'>Sign up</Link>
           </p>
           <p className='text-end mt-2'>
-      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/otpLoginEmail' className="ms-2">Otp Login</Link>
+      <Link style={{color:"black",textDecoration:'none'}} to='/tutor/login/otpLoginEmail' className="ms-2">Otp Login</Link>
       </p>
     </div>
   </div>

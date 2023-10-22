@@ -20,8 +20,8 @@ export default function CategoryManagement() {
     { field: 'image', headerName: 'Image', width: 130, renderCell: ImageCellRenderer },
     
     {
-      field: 'update',
-      headerName: 'Update',
+      field: 'edit',
+      headerName: 'Edit',
       width: 130,  
       renderCell: (params) => {  return(
         
@@ -30,7 +30,7 @@ export default function CategoryManagement() {
         </button>
       )},
     },
-    { field: 'isBlocked', headerName: 'Active', width: 130 ,renderCell: (params) => (
+    { field: 'active', headerName: 'Status', width: 130 ,renderCell: (params) => (
       <div className={`pill ${params.row.isBlocked ? 'inactive' : 'active'}`}>
       {params.row.isBlocked ? 'Inactive' : 'Active'}
     </div>
@@ -47,16 +47,7 @@ export default function CategoryManagement() {
       )},
     },
    
-    // {
-    //   field: 'details',
-    //   headerName: 'Details',
-    //   width: 100,
-    //   renderCell: (params) => (
-    //     <button className="button-pill" onClick={(e) => handleDetailsClick(e,params.row)}>
-    //       View
-    //     </button>
-    //   ),
-    // },
+
     
    
   
@@ -92,15 +83,7 @@ export default function CategoryManagement() {
     fetchData();
     // setBlocked(!blocked)
   }, [edited,added])
-//   const handleDetailsClick = (e, row) => {
-//     e.stopPropagation();
-//     const userId = row._id;
-//     setModalDetails(row.details);
-//     setOpenModals((prevOpenModals) => ({
-//       ...prevOpenModals,
-//       [userId]: true,
-//     }));
-//   };
+
 
 const handleAddCategory = async (formData) => {
   try {
@@ -138,30 +121,7 @@ const handleAddCategory = async (formData) => {
    
 
       
-//         e.preventDefault();
-//        SetFormError(validate(categoryName,image)) 
-//       console.log('Adding category:', categoryName);
-//       console.log('Image:', image);
-//    const checkError=validate(categoryName,image)
-//  try {
-//   if(Object.keys(checkError).length==0){
-//     const formData = new FormData();
-//             formData.append("categoryName", categoryName);
-//             formData.append("image", image);
-//             setAddModalOpen(false);
-//     const res=await axiosInstance.post('/addCategory',formData)
-   
-//    return null
-//   }else{
-//      return formError
-//   }
-//  } catch (error) {
-//     console.log('consoled error of axios',error)
-//  }
-   
-      // Close the modal after adding the category
-    //  
-    // };
+
     
     return (
       <div className="data-grid-container">

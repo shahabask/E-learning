@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import User from "../models/userModel.js"
 import Tutor from "../models/tutorModel.js"
 import Category from '../models/categoryModel.js'
+import Course from '../models/courseModel.js'
 
 const adminLoadUsers=asyncHandler(async(req,res)=>{
     
@@ -44,13 +45,14 @@ res.status(200).json({category})
      })
 
      const addCategory=asyncHandler(async(req,res)=>{
-      const { categoryName } = req.body; // Assuming categoryName is sent as part of the form data
-      
+      const { categoryName,subCategories } = req.body; // Assuming categoryName is sent as part of the form data
+          
 
           const checkIdentical=await Category.findOne({categoryName:categoryName})
           if(!checkIdentical){
 
-            const category=await Category.create({categoryName:categoryName})
+            const category=await Category.create({categoryName:categoryName,
+              subCategories:subCategories})
             if(!category) {
                  res.status(400).json(`category can't be inserted`)
             }else{
@@ -60,4 +62,39 @@ res.status(200).json({category})
             res.status(400).json('category already exist')
           }
      })
-   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory,addCategory}
+     const addCourse=asyncHandler(async(req,res)=>{
+
+
+      })
+
+      const courseAddData=asyncHandler(async(req,res)=>{
+              const categories= await Category.find({active:true}).select('-active') 
+            
+              const tutors=await Tutor.find({})
+
+              if(categories && tutors){
+                res.status(200).json({categories,tutors})
+              }
+
+      })
+
+      const validateCourse=asyncHandler(async(req,res)=>{
+        const { course } = req.body;
+
+
+//  
+
+   
+if (matches) {
+ 
+  res.status(200).json('category found')
+} else {
+  res.status(200).json('not category found')
+}
+     
+      
+
+     
+      
+      })
+   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory,addCategory,addCourse,courseAddData,validateCourse}

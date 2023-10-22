@@ -7,6 +7,7 @@ import '../../Components/Sidebar/TutorSidebar.css';
 import TutorHeader from '../Header/TutorHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { TutorLogout } from '../../slices/tutorSlice/tutorAuthSlice';
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -31,27 +32,27 @@ function TutorSidebar({ toggleSidebar }) {
           {isIconsOnly ? '☰' : '✖'}
         </div>
         <ul>
-          <li>
+        <NavLink to='/tutor' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
             <FaHome className="sidebar-icon" />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Dashboard</span>
-          </li>
-          <li>
+          </li></NavLink> 
+          <NavLink to='/tutor/liveClasses' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
             <RiLiveLine className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Live class</span>
-          </li>
-          <li>
+          </li></NavLink> 
+          <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <GrSchedulePlay className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Shedules</span>
-          </li>
-          <li>
+          </li></NavLink> 
+          <NavLink to='/tutor/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Courses</span>
-          </li>
-          <li>
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Course Management</span>
+          </li></NavLink> 
+          <NavLink to='/tutor/message' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <FaEnvelope className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Messages</span>
-          </li>
-          <li className="logout-button" onClick={handleLogout}>
+          </li></NavLink> 
+           <li className="logout-button" onClick={handleLogout}>
             <FaSignOutAlt className="sidebar-icon" />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Logout</span>
           </li>

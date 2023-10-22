@@ -14,7 +14,7 @@ const tutorSchema = mongoose.Schema({
       
       specification:{
         type:Array,
-        required:false
+        default:[]
       },
       details:{
         type:String,
@@ -22,7 +22,7 @@ const tutorSchema = mongoose.Schema({
       },
       currentCourses:{
         type:Array,
-        required:false
+        default:[]
       },
       password: {
         type: String,
@@ -39,7 +39,8 @@ const tutorSchema = mongoose.Schema({
       isBlocked:{
         type:Boolean,
         default:false
-      }
+      },
+
     },
    
     {

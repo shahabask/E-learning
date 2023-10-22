@@ -21,8 +21,8 @@ function TutorPasswordReset() {
           if(password===confirmpassword){
             const res =await axiosInstance.put(`/resetPassword`,{ state, password })
             // const res = await ResetPassword({ state, password }).unwrap();
-            toast('Password successfully changed')
-            navigate("/tutor");
+            toast.success('Password successfully changed')
+            navigate("/tutor/login");
           }else{
             toast.error('Please check confirm password')
           }

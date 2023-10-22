@@ -12,9 +12,14 @@ const categorySchema = mongoose.Schema({
         type:Boolean,
         default:true
      },
+     subCategories:{
+      type:Array,
+      default:[]
+     }
     //  image: {
     //   type: String,
     // },
+ 
     })
 
 

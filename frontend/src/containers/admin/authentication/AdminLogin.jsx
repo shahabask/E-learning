@@ -23,7 +23,7 @@ function AdminLogin() {
 
   useEffect(() => {
     if (adminInfo) {
-      navigate("/admin/home");
+      navigate("/admin");
     }
   }, [navigate, adminInfo]);
 
@@ -41,7 +41,7 @@ function AdminLogin() {
          const res=await axiosInstance.post('/login',{email,password})
          console.log(res)
            dispatch(setAdminCredentials({ ...res.data })) 
-           navigate('/admin/home');
+           navigate('/admin');
        } catch (error) {
         console.log(error)
               toast.error(error?.data|| error.error)
@@ -88,10 +88,10 @@ function AdminLogin() {
           <button className='btn mb-3' style={{background:"#ffc0cb"}}>Sign In</button>
         </div>
       </form>
-      <p className='text-end mt-2'>
+      {/* <p className='text-end mt-2'>
       <Link style={{color:"black",textDecoration:'none'}} to='/admin/forgotPassword'>Forgot Password</Link> | 
       <Link style={{color:"black",textDecoration:'none'}} to='/admin/otpLoginEmail' className="ms-2">Otp Login</Link>
-      </p>
+      </p> */}
     </div>
   </div>
   )

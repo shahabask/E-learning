@@ -16,7 +16,7 @@ function TutorVerifyOtp() {
  
       const res = await axiosInstance.post(`/verifyOtp`,{state,otp})
        
-      navigate("/tutor/resetPassword", { state: state });
+      navigate("/tutor/login/resetPassword", { state: state });
     } catch (error) {
       console.log(error)
       toast.error(error?.response?.data||error.error);

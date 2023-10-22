@@ -1,7 +1,7 @@
 import express from 'express'
 import { adminAuth,adminLogout,adminForgotPassword,adminConfirmOtp,adminResetPassword,
   adminOtpLoginVerifyEmail,adminOtpLogin} from '../controllers/adminController.js'
-  import {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory ,addCategory} from '../controllers/adminMangementController.js'
+  import {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory ,addCategory,addCourse,courseAddData,validateCourse } from '../controllers/adminMangementController.js'
   
   const adminRouter=express.Router()
   
@@ -37,5 +37,7 @@ adminRouter.get('/loadTutors',adminLoadTutors)
 adminRouter.put('/blockUnblockUser',blockUnblockUser)
 adminRouter.put('/blockUnblockTutor',blockUnblockTutor)
 adminRouter.get('/loadCategory',loadCategory)
-
+adminRouter.post('/addCourse',addCourse)
+adminRouter.get('/courseAddData',courseAddData)
+adminRouter.post('/validateCourse',validateCourse)
 export default  adminRouter

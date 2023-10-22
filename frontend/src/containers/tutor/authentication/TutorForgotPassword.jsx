@@ -21,7 +21,7 @@ function TutorForgotPassword() {
    
         const res=await axiosInstance.put(`/forgotPassword`,{email})
          
-        navigate('/tutor/verifyOtp',{state:email})
+        navigate('/tutor/login/verifyOtp',{state:email})
       } catch (error) {
        
         toast.error(error?.response?.data?.message||error.error)

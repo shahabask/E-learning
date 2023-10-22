@@ -113,7 +113,7 @@ const {tutorInfo}=useSelector((state)=>state.tutorAuth)
          <button className='btn mb-3' style={{backgroundColor: 'grey', color: 'white'}}>Sign Up</button>
        </div>
        <p className='text-end mt-2'>
-          <Link style={{ color: 'black',textDecoration:'none'}} to='/tutor' className='ms-2'>Sign In</Link>
+          <Link style={{ color: 'black',textDecoration:'none'}} to='/tutor/login' className='ms-2'>Sign In</Link>
        </p>
      </form>
    </div>

@@ -30,6 +30,8 @@ import TutorManagement from '../admin/TutorManagement.jsx'
 import ErrorPage from '../../components/ErrorPage.jsx'
 import Footer from '../user/home/Footer.jsx'
 import CategoryManagement from '../admin/CategoryManagement.jsx'
+import CourseManagement from '../admin/CourseManagement.jsx'
+import CourseManagementTutor from '../tutor/CourseManagementTutor.jsx'
 
 
 function Router() {
@@ -51,25 +53,26 @@ function Router() {
 
 
    
-   <Route path='/admin' exact element={<AdminLoginScreens/>}>
+   <Route path='/admin/login' exact element={<AdminLoginScreens/>}>
    <Route path='' element={<AdminLogin/>}/>
-   <Route path='forgotPassword' element={<AdminForgotPassword/>}/>
+   {/* <Route path='forgotPassword' element={<AdminForgotPassword/>}/>
    <Route path='verifyOtp' element={<AdminVerifyOtp/>}/>
    <Route path='resetPassword' element={<AdminPasswordReset/>}/>
    <Route path='otpLoginEmail' element={<OtpLoginEmail/>}/>
-         <Route path='otpLogin' element={<OtpLogin/>}/>
+         <Route path='otpLogin' element={<OtpLogin/>}/> */}
    </Route>
 
-   <Route path='/admin/home' exact element={<AdminPrivateRoute/>}>
+   <Route path='/admin' exact element={<AdminPrivateRoute/>}>
    <Route path='' index element={<AdminDashboard/>}/>
    <Route path='userManagement' element={<UserManagement/>}/>
    <Route path='tutorManagement' element={<TutorManagement/>}/>
    <Route path='categoryManagement' element={<CategoryManagement/>}/>
+   <Route path='courseManagement' element={<CourseManagement/>}/>
   {/* <Route path='logout' /> */}
    </Route>
 
 
-   <Route path="/tutor" element={<TutorLoginScreens />}>
+   <Route path="/tutor/login" element={<TutorLoginScreens />}>
   <Route index element={<TutorLogin />} />
   <Route path="forgotPassword" element={<TutorForgotPassword/>} />
   <Route path="verifyOtp" element={<TutorVerifyOtp/>}/>
@@ -83,8 +86,12 @@ function Router() {
 
 
 
-   <Route path='/tutor/dashboard' exact element={<TutorPrivateRoute/>}>
-   <Route path='' exact element={<TutorDashboard/>}/>
+
+
+   <Route path='/tutor' exact element={<TutorPrivateRoute/>}>
+   <Route path='dashboard' exact element={<TutorDashboard/>}/>
+   <Route path='courseManagement' exact element={<CourseManagementTutor/>}/>
+     
    </Route>
    <Route path="*" element={<ErrorPage/>} />
     </Routes>
