@@ -16,5 +16,5 @@ tutorRouter.post('/otpLoginVerifyEmail',tutorOtpLoginVerifyEmail)
 tutorRouter.post('/otpLogin',tutorOtpLogin)
 tutorRouter.get('/courseData',tutorauthcheck,loadCourseData)
 tutorRouter.post('/addCourse',tutorauthcheck,addCourse)
-tutorRouter.get('//loadCourses',tutorauthcheck,loadCourses)
+tutorRouter.get('/loadCourses',tutorauthcheck,loadCourses)
 export default  tutorRouter

@@ -19,17 +19,18 @@ export default function AddCourse({
   const [course, setCourse] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory,setSelectedSubCategory]=useState('')
+  const [description,setDescription]=useState('')
   const [categoryError, setCategoryError] = useState('');
   const [subCategoryError,setSubCategoryError]=useState('')
   const [courseError, setCourseError] = useState('');
-
+  const [descriptionError,setDescriptionError]=useState('')
   
    
 useEffect(()=>{
   
     const categoryNames = categories.map((category) => category.categoryName);
     setCategoryName(categoryNames);
-     console.log('categoryNamesModal',categoryName)
+    //  console.log('categoryNamesModal',categoryName)
  
 
 },[categories])
@@ -39,7 +40,7 @@ useEffect(()=>{
    setSubCategories( categories
   .filter((category) => category.categoryName === selectedCategory)
   .map((category) => category.subCategories)); 
-    console.log('subCategories',subCategories)
+    
   }
 },[selectedCategory])
 
@@ -52,6 +53,7 @@ useEffect(()=>{
     setCategoryError('');
     setSubCategoryError('');
     setCourseError('');
+    setDescriptionError('')
 
     // Validate selections
     if (!selectedCategory) {
@@ -66,14 +68,18 @@ useEffect(()=>{
     setSubCategoryError('subCategory is required')
     return; 
   }
-
+ 
+  if(!description){
+    setDescriptionError('Description is required')
+    return;
+  }
     // If all selections are valid, proceed to add the course
     try {
       const formData = new FormData();
       formData.append('course', course);
       formData.append('subCategory',selectedSubCategory)
       formData.append('category', selectedCategory);
-
+       formData.append('description',description)
 
       const response = await onAddCourse(formData);
 
@@ -81,6 +87,7 @@ useEffect(()=>{
         setSelectedCategory('');
         setSelectedSubCategory('')
         setCourse('');
+        setDescription('');
         onRequestClose();
       }
     } catch (error) {
@@ -135,7 +142,13 @@ useEffect(()=>{
 />
         <span style={{ color: 'red' }} className="error-message">{courseError}</span>
        
-       
+        <input
+  type="text"
+  placeholder="Enter Course Description"
+  value={description}
+  onChange={(e) => setDescription(e.target.value)}
+/>
+        <span style={{ color: 'red' }} className="error-message">{descriptionError}</span>
       <button onClick={handleAddCourse} className="add-button-modal">
         Add
       </button>

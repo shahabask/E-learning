@@ -193,7 +193,7 @@ const category=await  Category.aggregate([
 })
  
 const addCourse=asyncHandler(async(req,res)=>{
-  const {course,category,subCategory}=req.body
+  const {course,category,subCategory,description}=req.body
   
    const categoryDetails=await Category.findOne({categoryName:category})
 
@@ -206,7 +206,8 @@ const addCourse=asyncHandler(async(req,res)=>{
          course:course,
          category:categoryId,
          tutor:tutorId,
-         subCategory:subCategory
+         subCategory:subCategory,
+         description:description
     }
    )
    if(createCourse){
@@ -235,23 +236,25 @@ const loadCourses=asyncHandler(async(req,res)=>{
     {
       $project: {
         _id: 1, // Include the Course _id if needed
+        course:1,
         subCategory: 1, 
         videos: 1,
-        
+        description:1,
         'categoryInfo.categoryName': 1,
       },
     },
     {
       $group: {
         _id: '$_id', // Group by Course _id
-        categoryName: { $push: '$categoryInfo' }, // Group the categoryInfo back into an array
-        
+        categoryName: { $first: '$categoryInfo.categoryName' }, // Group the categoryInfo back into an array
+        course: { $first: '$course' },
+        description: { $first: '$description' },
         subCategory: { $first: '$subCategory' },
         videos: { $first: '$videos' },
       },
     },])
 
-    console.log('myCourses',myCourses)
+    // console.log('myCourses',myCourses)
     if(myCourses.length>0){
       res.status(200).json(myCourses)
     }else{
