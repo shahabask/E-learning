@@ -3,6 +3,8 @@ import Tutor from '../models/tutorModel.js';
 import generateTutorToken from '../utils/generateTutorToken.js';
 import sendresetmail from '../utils/nodeMailer.js';
 import jwt from 'jsonwebtoken'
+import Category from '../models/categoryModel.js';
+import Course from '../models/courseModel.js';
 const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -12,7 +14,7 @@ const tutorAuth=asyncHandler(async(req,res)=>{
       if(!tutor.isBlocked){
        const tutorToken=await generateTutorToken(res,tutor._id)
         res.status(201).json({
-         token:tutorToken
+         tutorToken
         })
       }else{
         res.status(400).json(`access denied`)
@@ -153,10 +155,110 @@ const tutorConfirmOtp=asyncHandler(async(req,res)=>{
     }
    })
 const loadCourseData=asyncHandler(async(req,res)=>{
-     
+const tutorSpecifications= req.user.specification
+tutorSpecifications.push('ui designing')
+
+ if(tutorSpecifications.length==0){
+    res.status(400).json('update profile')
+ }else{
+const category=await  Category.aggregate([
+    {
+      $match: {
+        subCategories: {
+          $in:tutorSpecifications
+        }
+      }
+    },
+    {
+      $project: {
+        categoryName: 1,
+        active: 1,
+        
+        subCategories: {
+          $filter: {
+            input: "$subCategories",
+            as: "subCategory",
+            cond: {
+              $in: ["$$subCategory", tutorSpecifications]
+            }
+          }
+        }
+      }
+    }])
+ 
+    res.status(200).json([...category])
+ }
+ res.status(200).json('success')
+  
 })
  
+const addCourse=asyncHandler(async(req,res)=>{
+  const {course,category,subCategory}=req.body
+  
+   const categoryDetails=await Category.findOne({categoryName:category})
+
+   const categoryId=categoryDetails._id
+   
+   const tutorId=req.user._id
+   
+   const createCourse=await Course.create(
+    {
+         course:course,
+         category:categoryId,
+         tutor:tutorId,
+         subCategory:subCategory
+    }
+   )
+   if(createCourse){
+    res.status(200).json('course successfully created')
+   }else{
+    res.status(400).json(`couldn't create course`)
+   }
+
+})
+
+
+const loadCourses=asyncHandler(async(req,res)=>{
+  const tutorId=req.user._id
+  const myCourses=await Course.aggregate([{$match:{tutor:tutorId}},
+    {
+      $lookup: {
+        from: 'categories', // The name of the Category collection
+        localField: 'category',
+        foreignField: '_id',
+        as: 'categoryInfo',
+      },
+    },
+    {
+      $unwind: '$categoryInfo', // Unwind the categoryInfo array
+    },
+    {
+      $project: {
+        _id: 1, // Include the Course _id if needed
+        subCategory: 1, 
+        videos: 1,
+        
+        'categoryInfo.categoryName': 1,
+      },
+    },
+    {
+      $group: {
+        _id: '$_id', // Group by Course _id
+        categoryName: { $push: '$categoryInfo' }, // Group the categoryInfo back into an array
+        
+        subCategory: { $first: '$subCategory' },
+        videos: { $first: '$videos' },
+      },
+    },])
+
+    console.log('myCourses',myCourses)
+    if(myCourses.length>0){
+      res.status(200).json(myCourses)
+    }else{
+      res.status(200).json('no course found')
+    }
+})
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData}
+        loadCourseData,addCourse,loadCourses}
 

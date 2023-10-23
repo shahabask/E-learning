@@ -10,11 +10,12 @@ export default function AddCourse({
   onRequestClose,
   onAddCourse,
   categories,
-  subCategories,
+ 
  
 }) {
   // const [formError, setFormError] = useState({});
-//   const [categoryName, setCategoryName] = useState('');
+  const [categoryName, setCategoryName] = useState([]);
+ const [subCategories,setSubCategories]=useState([])
   const [course, setCourse] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory,setSelectedSubCategory]=useState('')
@@ -24,9 +25,23 @@ export default function AddCourse({
 
   
    
-
+useEffect(()=>{
   
+    const categoryNames = categories.map((category) => category.categoryName);
+    setCategoryName(categoryNames);
+     console.log('categoryNamesModal',categoryName)
+ 
 
+},[categories])
+  
+useEffect(()=>{
+  if(selectedCategory){
+   setSubCategories( categories
+  .filter((category) => category.categoryName === selectedCategory)
+  .map((category) => category.subCategories)); 
+    console.log('subCategories',subCategories)
+  }
+},[selectedCategory])
 
   
 
@@ -93,9 +108,9 @@ export default function AddCourse({
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           <option value="">Select Category</option>
-          {categories && categories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.categoryName}
+          {categoryName && categoryName.map((categoryName,index) => (
+            <option key={index} value={categoryName}>
+              {categoryName}
             </option>
           ))}
         </select>

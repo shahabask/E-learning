@@ -1,35 +1,32 @@
 import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+import Tutor from "../models/tutorModel.js";
 const secret = process.env.JWT_SECRET;
 
 
-const authcheck =  async (req, res, next) => {
+const tutorauthcheck =  async (req, res, next) => {
 
-
-  // Retrieve the token from the "Authorization" header
   const token = req.headers.authorization;
-
+  
   if (token) {
     try {
       // Remove the "Bearer " prefix from the token (if present)
       const tokenWithoutBearer = token.replace("Bearer ", "");
-
-      // Verify the token
+      
       const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
 
       // Fetch user details and attach to the request
-      req.user = await User.findById(decoded.userId).select('-password');
+      req.user = await Tutor.findById(decoded.tutorId).select('-password');
 
       next();
     } catch (error) {
-      console.error(error);
+      console.log(error);
       res.status(401).json(error)
       
     }
   } else {
-    res.status(401).json(error)
-    
+    res.status(401).json('error')
+    console.log('error occured')
   }
 };
 
-export default authcheck;
+export default tutorauthcheck;

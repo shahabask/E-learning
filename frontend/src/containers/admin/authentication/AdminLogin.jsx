@@ -3,7 +3,7 @@ import '../../user/authentication/UserLogin.css';
 import {Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
-
+import axios from 'axios';
 import { setAdminCredentials } from '../../../slices/adminSlice/adminAuthSlice';
 import { toast } from 'react-toastify';
 import {axiosInstance} from '../../utils/adminAxios';
@@ -38,7 +38,7 @@ function AdminLogin() {
        setIsSubmit(true)
        
        try {
-         const res=await axiosInstance.post('/login',{email,password})
+         const res=await axios.post('http://localhost:5000/api/admin/login',{email,password})
          console.log(res)
            dispatch(setAdminCredentials({ ...res.data })) 
            navigate('/admin');

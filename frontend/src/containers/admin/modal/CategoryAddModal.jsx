@@ -20,7 +20,7 @@ export default function CategoryAddModal({
     e.preventDefault();
     const errors = validate(categoryName);
     setFormError(errors);
-
+console.log('ON HANDLE')
     if (Object.keys(errors).length === 0) {
       try {
         const categoryData = {

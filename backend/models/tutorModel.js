@@ -20,10 +20,6 @@ const tutorSchema = mongoose.Schema({
         type:String,
         required:false
       },
-      currentCourses:{
-        type:Array,
-        default:[]
-      },
       password: {
         type: String,
         required: true,

@@ -18,6 +18,10 @@ const courseSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
            ref: 'Tutor' 
      },
+     subCategory:{
+      type:String,
+      required:true
+     },
      videos:{
         type:Array,
         default:[]

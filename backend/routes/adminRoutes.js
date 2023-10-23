@@ -2,7 +2,7 @@ import express from 'express'
 import { adminAuth,adminLogout,adminForgotPassword,adminConfirmOtp,adminResetPassword,
   adminOtpLoginVerifyEmail,adminOtpLogin} from '../controllers/adminController.js'
   import {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory ,addCategory,addCourse,courseAddData,validateCourse } from '../controllers/adminMangementController.js'
-  
+  import adminauthcheck from '../middleware/adminMiddleware.js'
   const adminRouter=express.Router()
   
   import multer from 'multer';

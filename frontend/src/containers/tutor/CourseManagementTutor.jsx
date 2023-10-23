@@ -2,6 +2,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { FaEdit } from 'react-icons/fa';
 import './CourseManagementTutor.css'
 import { axiosInstance } from '../utils/adminAxios';
+import { axiosInstance as tutorAxiosInstance } from '../utils/tutorAxios.js';
 import { useEffect, useState } from 'react';
 import AddCourse from './modal/AddCourse'
 import { toast} from 'react-toastify';
@@ -23,11 +24,12 @@ function CourseManagementTutor() {
   ]
 const rows=[]
 const [isModalOpen, setModalOpen] = useState(false);
-const [categories,setCategories]=useState('')
-const [subCategories,setSubCategories]=useState('')
+const [categories,setCategories]=useState([])
+const [isCourseAdded,setIsCourseAdded]=useState(false)
   
 const openModal = () => {
   setModalOpen(true);
+  setIsCourseAdded(false)
 };
 
 const closeModal = () => {
@@ -36,26 +38,35 @@ const closeModal = () => {
 
 const handleAddCourse = async (formData) => {
   try {
-    const response = await axiosInstance.post('/addCourse', formData);
-     
+    const response = await tutorAxiosInstance.post('/addCourse', formData);
+     toast.success(response.data)
+     setModalOpen(false)
+     setIsCourseAdded(true)
   } catch (error) {
+    toast.error(error?.response?.data||error.error)
     console.log(error)
   }
 };
 
-const handleEditClick=()=>{
-
+const fetchCourses=async()=>{
+  const courses=await tutorAxiosInstance.get('/loadCourses')
+    
 }
 useEffect(()=>{
- fetchCourseData()
+  fetchCourses()
+},[isCourseAdded])
+useEffect(()=>{
+ fetchModalCourseData()
+
 },[])
 
-const fetchCourseData=async()=>{
+const fetchModalCourseData=async()=>{
   try{
-    const  courseData= await axiosInstance.get('/courseData')
-    console.log(courseData.data.categories,courseData.data.categories.subCategories) 
-    setCategories(courseData.data.categories)
-    setSubCategories()
+    const  courseData= await tutorAxiosInstance.get('/courseData')
+    setCategories([...courseData.data])
+
+    
+    
    
   }catch(error){
     toast.error(error.error)
@@ -88,7 +99,7 @@ const fetchCourseData=async()=>{
   </div>
   <AddCourse isOpen={isModalOpen}
       onRequestClose={closeModal}
-      onAddCourse={handleAddCourse} categories={categories} subCategories={subCategories}/>
+      onAddCourse={handleAddCourse} categories={categories} />
       
     </>
   )

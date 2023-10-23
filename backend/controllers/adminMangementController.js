@@ -47,10 +47,10 @@ res.status(200).json({category})
      const addCategory=asyncHandler(async(req,res)=>{
       const { categoryName,subCategories } = req.body; // Assuming categoryName is sent as part of the form data
           
-
+      console.log('its backend')
           const checkIdentical=await Category.findOne({categoryName:categoryName})
           if(!checkIdentical){
-
+        
             const category=await Category.create({categoryName:categoryName,
               subCategories:subCategories})
             if(!category) {

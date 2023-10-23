@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+import Admin from "../models/adminModel.js";
 const secret = process.env.JWT_SECRET;
 
 
-const authcheck =  async (req, res, next) => {
+const adminauthcheck =  async (req, res, next) => {
 
 
   // Retrieve the token from the "Authorization" header
@@ -18,7 +18,7 @@ const authcheck =  async (req, res, next) => {
       const decoded = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
 
       // Fetch user details and attach to the request
-      req.user = await User.findById(decoded.userId).select('-password');
+      req.user = await Admin.findById(decoded.adminId).select('-password');
 
       next();
     } catch (error) {
@@ -32,4 +32,4 @@ const authcheck =  async (req, res, next) => {
   }
 };
 
-export default authcheck;
+export default adminauthcheck;

@@ -69,7 +69,7 @@ export default function CategoryManagement() {
   const handleEditClick = async (e, categoryId) => {
     
     try {
-          
+        
          const response=await axiosInstance.post('/editCategory',{categoryId})
           setEdited(!edited) 
   
@@ -87,7 +87,11 @@ export default function CategoryManagement() {
 
 const handleAddCategory = async (formData) => {
   try {
+    console.log(
+      'frontend'
+    )
     const response = await axiosInstance.post('/addCategory', formData);
+    console.log('successfull')
     if (response.data === 'category added successfully') {
       toast.success('category added successfully')
       setAdded(!added)
