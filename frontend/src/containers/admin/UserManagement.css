@@ -100,3 +100,24 @@
   background-color: rgb(188, 188, 249);
   color: black;
 }
+
+.add-button-container {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.add-button {
+  background-color: rgb(48, 122, 224);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px; /* Adjust the button size as needed */
+  height: 60px; /* Adjust the button size as needed */
+  font-size: 30px; /* Adjust the font size as needed */
+  cursor: pointer;
+  outline: none;
+}
+
+.add-button:hover {
+  background-color: rgb(30, 78, 236); /* Change the color on hover if desired */
+}

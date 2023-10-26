@@ -1,7 +1,8 @@
 import express from 'express'
 import { adminAuth,adminLogout,adminForgotPassword,adminConfirmOtp,adminResetPassword,
   adminOtpLoginVerifyEmail,adminOtpLogin} from '../controllers/adminController.js'
-  import {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory ,addCategory,addCourse,courseAddData,validateCourse } from '../controllers/adminMangementController.js'
+  import {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory ,addCategory,addCourse,validateCourse
+  ,loadCourses,blockUnblockCourse,editCategory,blockUnblockCategory } from '../controllers/adminMangementController.js'
   import adminauthcheck from '../middleware/adminMiddleware.js'
   const adminRouter=express.Router()
   
@@ -37,7 +38,10 @@ adminRouter.get('/loadTutors',adminLoadTutors)
 adminRouter.put('/blockUnblockUser',blockUnblockUser)
 adminRouter.put('/blockUnblockTutor',blockUnblockTutor)
 adminRouter.get('/loadCategory',loadCategory)
+adminRouter.get('/loadCourses',loadCourses)
 adminRouter.post('/addCourse',addCourse)
-adminRouter.get('/courseAddData',courseAddData)
+adminRouter.patch('/blockUnblockCourse',blockUnblockCourse)
 adminRouter.post('/validateCourse',validateCourse)
+adminRouter.post('/editCategory',editCategory)
+adminRouter.patch('/blockUnblockCategory',blockUnblockCategory)
 export default  adminRouter

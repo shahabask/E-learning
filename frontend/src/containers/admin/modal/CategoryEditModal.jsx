@@ -1,37 +1,45 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
-
-import "./CategoryAdd.css";
+// import "./CategoryEditModal.css";
 
 Modal.setAppElement("#root");
 
-export default function CategoryAddModal({
+export default function CategoryEditModal({
   isOpen,
   onRequestClose,
-  onAddCategory,
+  onEditCategory,
+  categoryData, // Data of the category being edited
 }) {
   const [formError, setFormError] = useState({});
-  // const [image,setImage]=useState(null)
   const [categoryName, setCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([""]);
+ useEffect(()=>{
+    console.log('categoryData',categoryData)
+    if(categoryData[0]){
+        setCategoryName(categoryData[0].categoryName)
+    
+        setSubCategories(categoryData[0].subCategories)
+    }
+    
 
-  const handleAddCategory = async (e) => {
+ },[categoryData])
+  
+  const handleEditCategory = async (e) => {
     e.preventDefault();
     const errors = validate(categoryName);
     setFormError(errors);
 
     if (Object.keys(errors).length === 0) {
       try {
-        const categoryData = {
+        const updatedCategoryData = {
+          _id:categoryData[0]._id,
           categoryName,
           subCategories,
         };
-        const response = await onAddCategory(categoryData);
+        const response = await onEditCategory(updatedCategoryData);
 
         if (response === null) {
-          setCategoryName("");
-          setSubCategories([""]);
           setFormError({});
           onRequestClose();
         }
@@ -42,30 +50,32 @@ export default function CategoryAddModal({
   };
 
   const handleAddCourseField = () => {
-    setSubCategories([...subCategories, ""]); // Add a new empty course field
+    setSubCategories([...subCategories, ""]);
   };
+
   const handleDeleteCourseField = (index) => {
-    const updatedsubCategories = [...subCategories];
-    updatedsubCategories.splice(index, 1); // Remove the course at the specified index
-    setSubCategories(updatedsubCategories);
+    const updatedSubCategories = [...subCategories];
+    updatedSubCategories.splice(index, 1);
+    setSubCategories(updatedSubCategories);
   };
+
   const handleCourseChange = (index, value) => {
-    const updatedsubCategories = [...subCategories];
-    updatedsubCategories[index] = value;
-    setSubCategories(updatedsubCategories);
+    const updatedSubCategories = [...subCategories];
+    updatedSubCategories[index] = value;
+    setSubCategories(updatedSubCategories);
   };
-  const validate = (categoryName) => {
+
+  const validate = (categoryName,subCategories) => {
     const errors = {};
 
     if (!categoryName) {
-      errors.categoryName = "category name is required";
+      errors.categoryName = "Category name is required";
     } else if (categoryName.length < 3) {
-      errors.categoryName = "Enter alteast 3 character";
+      errors.categoryName = "Enter at least 3 characters";
     }
-    // if(!image){
-    //   errors.image='image is required'
-
-    // }
+    if(subCategories.length==0){
+        errors.subCategories='Atleast add one subCategory'
+    }
     return errors;
   };
 
@@ -73,7 +83,7 @@ export default function CategoryAddModal({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      contentLabel="Add Category Modal"
+      contentLabel="Edit Category Modal"
       className="custom-modal"
       overlayClassName="custom-overlay"
     >
@@ -83,7 +93,7 @@ export default function CategoryAddModal({
             <FaTimes />
           </div>
         </div>
-        <h2 style={{ marginTop: "20px", fontSize: 30 }}>Add Category</h2>
+        <h2 style={{ marginTop: "20px", fontSize: 30 }}>Edit Category</h2>
         <input
           type="text"
           placeholder="Category Name"
@@ -93,15 +103,14 @@ export default function CategoryAddModal({
         <span className="error-message">
           {formError?.categoryName ? formError.categoryName : ""}
         </span>
-        {/* Section for adding subCategories */}
         <div>
           <h4>Subcategories</h4>
-          {subCategories.map((course, index) => (
+          {subCategories.map((subCategory, index) => (
             <div key={index}>
               <input
                 type="text"
                 placeholder="Subcategory"
-                value={course}
+                value={subCategory}
                 onChange={(e) => handleCourseChange(index, e.target.value)}
               />
               <span
@@ -113,13 +122,12 @@ export default function CategoryAddModal({
             </div>
           ))}
           <button onClick={handleAddCourseField} className="add-course-button">
-            Add more 
+            Add more
           </button>
         </div>
-        {/* End of subCategories section */}
         <div className="buttonDiv">
-          <button onClick={handleAddCategory} className="add-button">
-            Add
+          <button onClick={handleEditCategory} className="edit-button">
+            Edit
           </button>
         </div>
       </div>

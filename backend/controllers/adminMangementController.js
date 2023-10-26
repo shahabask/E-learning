@@ -6,7 +6,7 @@ import Course from '../models/courseModel.js'
 
 const adminLoadUsers=asyncHandler(async(req,res)=>{
     
-    const users=await User.find({},'email firstName secondName _id isBlocked')
+    const users=await User.find({},'email firstName secondName _id isBlocked subscription')
   
      if(users){
       res.status(201).json({users})
@@ -67,16 +67,16 @@ res.status(200).json({category})
 
       })
 
-      const courseAddData=asyncHandler(async(req,res)=>{
-              const categories= await Category.find({active:true}).select('-active') 
+      // const courseAddData=asyncHandler(async(req,res)=>{
+      //         const categories= await Category.find({active:true}).select('-active') 
             
-              const tutors=await Tutor.find({})
+      //         const tutors=await Tutor.find({})
 
-              if(categories && tutors){
-                res.status(200).json({categories,tutors})
-              }
+      //         if(categories && tutors){
+      //           res.status(200).json({categories,tutors})
+      //         }
 
-      })
+      // })
 
       const validateCourse=asyncHandler(async(req,res)=>{
         const { course } = req.body;
@@ -91,10 +91,89 @@ if (matches) {
 } else {
   res.status(200).json('not category found')
 }
-     
-      
+     })
 
-     
+      const loadCourses=  asyncHandler(async(req,res)=>{
+        // const courses=await Course.find({})
+        const courses=await Course.aggregate([{$lookup:{
+           from: 'categories', // The name of the Category collection
+        localField: 'category',
+        foreignField: '_id',
+        as: 'categoryInfo'}},
+        {$unwind:'$categoryInfo'},
+        {$lookup:{
+          from: 'tutors', // The name of the Category collection
+       localField: 'tutor',
+       foreignField: '_id',
+       as: 'tutorInfo'}},
+       {$unwind:'$tutorInfo'},
+        {
+          $project:{
+            _id:1,
+            course:1,
+            subCategory:1,
+            videos:1,
+            isActive:1,
+            'categoryInfo.categoryName': 1,
+            'tutorInfo.userName':1,
+          }
+        },
+        {
+          $group:{
+            _id:"$_id",
+            categoryName: { $first: '$categoryInfo.categoryName' }, // Group the categoryInfo back into an array
+        course: { $first: '$course' },
+        subCategory: { $first: '$subCategory' },
+        videos: { $first: '$videos' },
+        isActive:{$first: '$isActive' },
+        tutor:{$first: '$tutorInfo.userName' },
+        
+          }
+        }
+
+      ])
+
+        if(courses){
+            res.status(200).json({courses})
+        }else{
+           res.status(200).json('no course found')
+        }
       
       })
-   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,loadCategory,addCategory,addCourse,courseAddData,validateCourse}
+
+
+      const blockUnblockCourse=asyncHandler(async(req,res)=>{
+        const {courseId,isActive}=req.body
+        const blockUnblockCourse=await Course.findOneAndUpdate({_id:courseId},{isActive:isActive})
+
+        if(blockUnblockCourse){
+          res.status(200).json('successfull')
+        }else{
+          res.status(400).json(`can't update`)
+        }
+      })
+
+      const editCategory=asyncHandler(async(req,res)=>{
+        const {_id,categoryName,subCategories}=req.body
+        const category=await Category.updateOne({_id:_id},{categoryName:categoryName,subCategories:subCategories})
+        if(category){
+          res.status(200).json('edited successfully')
+        }else{
+          res.status(500).json('server error')
+        }
+      })
+
+      const blockUnblockCategory=asyncHandler(async(req,res)=>{
+        const {categoryId,isBlocked}=req.body 
+        console.log(isBlocked,'checking')
+        const category=await Category.updateOne({_id:categoryId},{active:isBlocked})
+        if(category){
+          res.status(200).json('successfull')
+        }else{
+          res.status(500).json('server error')
+        }
+      })
+   export {adminLoadUsers,adminLoadTutors,blockUnblockUser,blockUnblockTutor,
+    loadCategory,addCategory,addCourse,validateCourse,loadCourses,blockUnblockCourse,editCategory,
+    blockUnblockCategory}
+    

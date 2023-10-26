@@ -25,7 +25,7 @@ function TutorManagement() {
       renderCell: (params) => {  return(
         
         <button className={`custom-button${params.row.isBlocked ?'-inactive':'-active' }`} onClick={(e) => handleBlockClick(e,params.row._id,params.row.isBlocked)}>
-          {params.row.isBlocked ?<FaLock size={18} /> :  <FaUnlock size={18} /> }
+          {params.row.isBlocked ? <FaUnlock size={18} />:   <FaLock size={18} />}
         </button>
       )},
     },

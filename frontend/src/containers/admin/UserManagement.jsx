@@ -16,7 +16,7 @@ export default function UserManagement() {
     { field: 'email', headerName: 'Email', width: 130},
     { field: 'firstName', headerName: 'First name', width: 90 },
     { field: 'secondName', headerName: 'Last name', width: 90 },
-    { field: 'subscribtion', headerName: 'Subscribtion', width: 130 },
+    { field: 'subscription', headerName: 'Subscribtion', width: 130 },
     { field: 'phoneNo', headerName: 'Phone No', width: 130 },
     { field: 'category', headerName: 'Category', width: 130 },
     { field: 'isBlocked', headerName: 'Active', width: 130 ,renderCell: (params) => (
@@ -31,7 +31,7 @@ export default function UserManagement() {
       renderCell: (params) => {  return(
         
         <button className={`custom-button${params.row.isBlocked ?'-inactive':'-active' }`} onClick={(e) => handleBlockClick(e,params.row._id,params.row.isBlocked)}>
-          {params.row.isBlocked ?<FaLock size={18} /> :  <FaUnlock size={18} /> }
+          {params.row.isBlocked ? <FaUnlock size={18} />:  <FaLock size={18} /> }
         </button>
       )},
     },

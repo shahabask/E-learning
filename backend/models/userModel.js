@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
       isBlocked:{
         type:Boolean,
         default:false
+      },
+      subscription:{
+        type:String,
+        default:'Free'
       }
     },
    

@@ -29,6 +29,10 @@ const courseSchema = mongoose.Schema({
      description:{
       type:String,
       required:true
+     },
+     isActive:{
+      type:Boolean,
+      default:true
      }
      
 
