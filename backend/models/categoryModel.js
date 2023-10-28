@@ -15,10 +15,11 @@ const categorySchema = mongoose.Schema({
      subCategories:{
       type:Array,
       default:[]
-     }
-    //  image: {
-    //   type: String,
-    // },
+     },
+     image: {
+      type: String,
+      default:null
+    },
  
     })
 

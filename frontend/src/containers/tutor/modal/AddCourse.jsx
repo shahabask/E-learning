@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { FaTimes } from 'react-icons/fa';
+import { FaImage, FaTimes, FaTrash } from 'react-icons/fa';
 import { axiosInstance } from '../../utils/adminAxios';
 
 Modal.setAppElement('#root');
@@ -24,7 +24,7 @@ export default function AddCourse({
   const [subCategoryError,setSubCategoryError]=useState('')
   const [courseError, setCourseError] = useState('');
   const [descriptionError,setDescriptionError]=useState('')
-  
+  const [selectedImage, setSelectedImage] = useState(null);
    
 useEffect(()=>{
   
@@ -80,7 +80,9 @@ useEffect(()=>{
       formData.append('subCategory',selectedSubCategory)
       formData.append('category', selectedCategory);
        formData.append('description',description)
-
+       console.log('printImg',selectedImage)
+       formData.append('image',selectedImage)
+       
       const response = await onAddCourse(formData);
 
       if (response === null) {
@@ -88,13 +90,21 @@ useEffect(()=>{
         setSelectedSubCategory('')
         setCourse('');
         setDescription('');
+        setSelectedImage(null);
         onRequestClose();
       }
     } catch (error) {
       console.log('Consoled error of axios:', error);
     }
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+  };
 
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+  };
  
 
  return (
@@ -134,6 +144,35 @@ useEffect(()=>{
           ))}
         </select>
         <span style={{ color: 'red' }} className="error-message">{subCategoryError}</span>
+        <div className="image-input">
+  {selectedImage ? (
+    <div className="image-preview-container">
+      <img
+        src={URL.createObjectURL(selectedImage)}
+        alt="Selected Image"
+        className="image-preview"
+      />
+      <div className="remove-image" onClick={handleRemoveImage}>
+        <FaTrash />
+      </div>
+    </div>
+  ) : (
+    <>
+      <label htmlFor="categoryImage" className="image-label">
+        <FaImage />
+        {/* The following input is hidden */}
+        <input
+          type="file"
+          id="categoryImage"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+        />+ Add image
+      </label>
+    </>
+  )}
+</div>
+
         <input
   type="text"
   placeholder="Enter Course Name"

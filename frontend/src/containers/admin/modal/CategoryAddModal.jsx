@@ -1,7 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
-import { FaTimes } from "react-icons/fa";
-
+import { FaTimes, FaImage, FaTrash } from "react-icons/fa"; // Import the trash icon
 import "./CategoryAdd.css";
 
 Modal.setAppElement("#root");
@@ -12,9 +11,9 @@ export default function CategoryAddModal({
   onAddCategory,
 }) {
   const [formError, setFormError] = useState({});
-  // const [image,setImage]=useState(null)
   const [categoryName, setCategoryName] = useState("");
   const [subCategories, setSubCategories] = useState([""]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
@@ -26,6 +25,7 @@ export default function CategoryAddModal({
         const categoryData = {
           categoryName,
           subCategories,
+          image: selectedImage,
         };
         const response = await onAddCategory(categoryData);
 
@@ -33,6 +33,7 @@ export default function CategoryAddModal({
           setCategoryName("");
           setSubCategories([""]);
           setFormError({});
+          setSelectedImage(null);
           onRequestClose();
         }
       } catch (error) {
@@ -42,30 +43,39 @@ export default function CategoryAddModal({
   };
 
   const handleAddCourseField = () => {
-    setSubCategories([...subCategories, ""]); // Add a new empty course field
+    setSubCategories([...subCategories, ""]);
   };
+
   const handleDeleteCourseField = (index) => {
-    const updatedsubCategories = [...subCategories];
-    updatedsubCategories.splice(index, 1); // Remove the course at the specified index
-    setSubCategories(updatedsubCategories);
+    const updatedSubCategories = [...subCategories];
+    updatedSubCategories.splice(index, 1);
+    setSubCategories(updatedSubCategories);
   };
+
   const handleCourseChange = (index, value) => {
-    const updatedsubCategories = [...subCategories];
-    updatedsubCategories[index] = value;
-    setSubCategories(updatedsubCategories);
+    const updatedSubCategories = [...subCategories];
+    updatedSubCategories[index] = value;
+    setSubCategories(updatedSubCategories);
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+  };
+
   const validate = (categoryName) => {
     const errors = {};
 
     if (!categoryName) {
-      errors.categoryName = "category name is required";
+      errors.categoryName = "Category name is required";
     } else if (categoryName.length < 3) {
-      errors.categoryName = "Enter alteast 3 character";
+      errors.categoryName = "Enter at least 3 characters";
     }
-    // if(!image){
-    //   errors.image='image is required'
 
-    // }
     return errors;
   };
 
@@ -93,6 +103,39 @@ export default function CategoryAddModal({
         <span className="error-message">
           {formError?.categoryName ? formError.categoryName : ""}
         </span>
+
+        {/* Image input with an icon */}
+      
+<div className="image-input">
+  {selectedImage ? (
+    <div className="image-preview-container">
+      <img
+        src={URL.createObjectURL(selectedImage)}
+        alt="Selected Image"
+        className="image-preview"
+      />
+      <div className="remove-image" onClick={handleRemoveImage}>
+        <FaTrash />
+      </div>
+    </div>
+  ) : (
+    <>
+      <label htmlFor="categoryImage" className="image-label">
+        <FaImage />
+        {/* The following input is hidden */}
+        <input
+          type="file"
+          id="categoryImage"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+        />+ Add image
+      </label>
+    </>
+  )}
+</div>
+
+
         {/* Section for adding subCategories */}
         <div>
           <h4>Subcategories</h4>
@@ -108,15 +151,15 @@ export default function CategoryAddModal({
                 className="delete-icon"
                 onClick={() => handleDeleteCourseField(index)}
               >
-                <FaTimes />
+                <FaTrash />
               </span>
             </div>
           ))}
           <button onClick={handleAddCourseField} className="add-course-button">
-            Add more 
+            Add more
           </button>
         </div>
-        {/* End of subCategories section */}
+
         <div className="buttonDiv">
           <button onClick={handleAddCategory} className="add-button">
             Add

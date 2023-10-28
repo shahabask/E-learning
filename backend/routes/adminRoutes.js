@@ -10,20 +10,18 @@ import { adminAuth,adminLogout,adminForgotPassword,adminConfirmOtp,adminResetPas
   import path from 'path'
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log('Middleware: Destination invoked')
-    const absolutePath = path.join(__dirname, '../../public/images'); // Create an absolute path
-    console.log('absolutePath',absolutePath)
-    cb(null, absolutePath);
+    cb(null, 'backend/public/images');
+    console.log('image is here')
   },
   filename: (req, file, cb) => {
     console.log('fileName', file.originalname);
-    cb(null, Date.now() + '-' + file.originalname);
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
   },
 });
 
 const upload = multer({ storage: storage });
 
-adminRouter.post('/addCategory', addCategory);
+adminRouter.post('/addCategory',upload.single('image') ,addCategory);
 
 
 adminRouter.post('/login',adminAuth)
@@ -42,6 +40,6 @@ adminRouter.get('/loadCourses',loadCourses)
 adminRouter.post('/addCourse',addCourse)
 adminRouter.patch('/blockUnblockCourse',blockUnblockCourse)
 adminRouter.post('/validateCourse',validateCourse)
-adminRouter.post('/editCategory',editCategory)
+adminRouter.post('/editCategory',upload.single('image'),editCategory)
 adminRouter.patch('/blockUnblockCategory',blockUnblockCategory)
 export default  adminRouter

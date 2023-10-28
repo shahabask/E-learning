@@ -13,6 +13,7 @@ function TutorManagement() {
     { field: '_id', headerName: 'ID', width: 70 },
     { field: 'email', headerName: 'Email', width: 130},
     { field: 'userName', headerName: 'User Name', width: 130 },
+    { field: 'specification', headerName: 'Specification', width: 130 },
     { field: 'isBlocked', headerName: 'Active', width: 130 ,renderCell: (params) => (
       <div className={`pill ${params.row.isBlocked ? 'inactive' : 'active'}`}>
       {params.row.isBlocked ? 'Inactive' : 'Active'}
@@ -32,16 +33,16 @@ function TutorManagement() {
     
     
     
-    {
-      field: 'details',
-      headerName: 'Details',
-      width: 100,
-      renderCell: (params) => (
-        <button className="button-pill" onClick={() => handleDetailsClick(params.row.id)}>
-          View
-        </button>
-      ),
-    },
+    // {
+    //   field: 'details',
+    //   headerName: 'Details',
+    //   width: 100,
+    //   renderCell: (params) => (
+    //     <button className="button-pill" onClick={() => handleDetailsClick(params.row.id)}>
+    //       View
+    //     </button>
+    //   ),
+    // },
     
    
   
@@ -55,27 +56,27 @@ function TutorManagement() {
     e.stopPropagation()
     try {
       isBlocked = !isBlocked;
-      setBlocked(!blocked)
+      
 
       const response = await axiosInstance.put(`/blockUnblockTutor`,{userId,isBlocked});
-      // fetchData();
-   
+      
+      setBlocked(!blocked)
     } catch (error) {
       console.error('Error blocking user:', error);
     }
   }
-  const handleDetailsClick = (details) => {
-    setModalDetails(details); // Set the details content
-    setModalOpen(true); // Open the modal
-  };
+  // const handleDetailsClick = (details) => {
+  //   setModalDetails(details); // Set the details content
+  //   setModalOpen(true); // Open the modal
+  // };
 
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get('/loadTutors');
-        console.log(res.data.tutors)
+        console.log('tutor data',res.data.tutors)
         setRows([...res.data.tutors]);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error)
       }
     };
  
@@ -83,24 +84,21 @@ function TutorManagement() {
     fetchData()
   }, [blocked])
 
-    return (
-        <>
-          <div className="data-grid-container">
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              getRowId={(row) => row._id} 
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-            />
-          </div>
-        </>
-      );
+  return (
+    <div className="container mx-auto p-4">
+      <div className="bg-white shadow-lg rounded">
+        <DataGrid style={{ maxHeight: '300px'}}
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => row._id}
+          pageSize={5}
+          checkboxSelection
+          className="w-full"
+        />
+      </div>
+    </div>
+  );
+  
             }
 
 export default TutorManagement

@@ -7,6 +7,7 @@ import { axiosInstance as tutorAxiosInstance } from '../../utils/tutorAxios';
 import { toast } from 'react-toastify';
 import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
 import { useTutorRegisterMutation } from '../../../slices/tutorSlice/tutorApiSlice';
+import axios from 'axios';
 
 function TutorSignup() {
 
@@ -40,7 +41,7 @@ const {tutorInfo}=useSelector((state)=>state.tutorAuth)
        
          if (Object.keys(formErrors).length === 0){
        try {
-        const res=await tutorAxiosInstance.post(`/register`,{userName,email,password}) 
+        const res=await axios.post(`http://localhost:5000/api/tutor/register`,{userName,email,password}) 
                 dispatch(setTutorCredentials({...res.data}))
                 navigate('/tutor/dashboard')
        } catch (error) {

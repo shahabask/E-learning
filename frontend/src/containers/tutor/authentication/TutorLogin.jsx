@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { setTutorCredentials } from '../../../slices/tutorSlice/tutorAuthSlice';
 // import { useTutorLoginMutation } from '../../../slices/tutorSlice/tutorApiSlice';
 import { axiosInstance } from '../../utils/tutorAxios';
+import axios from 'axios';
 
 function TutorLogin() {
 
@@ -22,7 +23,7 @@ function TutorLogin() {
  
 
   useEffect(() => {
-    console.log('tutorInfo',tutorInfo)
+    
     if (tutorInfo) {
       navigate("/tutor/dashboard");
     }
@@ -39,14 +40,14 @@ function TutorLogin() {
         setFormErrors(validate(email,password))
        setIsSubmit(true)
        try {
-         const res=await axiosInstance.post(`/login`,{email,password})
-      
+         const res=await axios.post(`http://localhost:5000/api/tutor/login`,{email,password})
+      console.log(res,'res')
          dispatch(setTutorCredentials({...res.data}))
 
          navigate('/tutor/dashboard')
        } catch (error) {
-        console.log(error)
-        toast.error(error?.response?.data||error.error)
+        console.log('axios error',error)
+        toast.error(error?.res?.data||error.error)
        }
     
   };

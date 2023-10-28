@@ -194,9 +194,9 @@ const category=await  Category.aggregate([
  
 const addCourse=asyncHandler(async(req,res)=>{
   const {course,category,subCategory,description}=req.body
-  
+  const imagePath = req.file.path
    const categoryDetails=await Category.findOne({categoryName:category})
-
+ console.log('are you sure')
    const categoryId=categoryDetails._id
    
    const tutorId=req.user._id
@@ -207,7 +207,8 @@ const addCourse=asyncHandler(async(req,res)=>{
          category:categoryId,
          tutor:tutorId,
          subCategory:subCategory,
-         description:description
+         description:description,
+         image:imagePath
     }
    )
    if(createCourse){
@@ -240,6 +241,7 @@ const loadCourses=asyncHandler(async(req,res)=>{
         subCategory: 1, 
         videos: 1,
         description:1,
+        image:1,
         'categoryInfo.categoryName': 1,
       },
     },
@@ -250,6 +252,7 @@ const loadCourses=asyncHandler(async(req,res)=>{
         course: { $first: '$course' },
         description: { $first: '$description' },
         subCategory: { $first: '$subCategory' },
+        image:{$first:'$image'},
         videos: { $first: '$videos' },
       },
     },])
@@ -261,7 +264,22 @@ const loadCourses=asyncHandler(async(req,res)=>{
       res.status(200).json('no course found')
     }
 })
+
+const editCourse=asyncHandler(async(req,res)=>{
+  const {id,course,description,image}=req.body
+  let imagePath = req?.file?.path
+  imagePath=imagePath?imagePath: `backend\\public\\images\\${image}`
+ 
+  
+  const updateCourse=await Course.updateOne({_id:id},{course:course,description:description,image:imagePath})
+  if(updateCourse){
+    res.status(200).json('edited successfully')
+  }else{
+    console.log('cant do that ')
+    res.status(500).json(`couldn't update`)
+  }
+})
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData,addCourse,loadCourses}
+        loadCourseData,addCourse,loadCourses,editCourse}
 

@@ -14,7 +14,7 @@ const tutorSchema = mongoose.Schema({
       
       specification:{
         type:Array,
-        default:[]
+        default:['not updated']
       },
       details:{
         type:String,

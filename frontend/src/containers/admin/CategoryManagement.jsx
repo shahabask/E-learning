@@ -7,16 +7,36 @@ import { axiosInstance } from '../utils/adminAxios';
 import CategoryAddModal from './modal/CategoryAddModal';
 import { toast } from 'react-toastify';
 import CategoryEditModal from './modal/CategoryEditModal';
+import axios from 'axios';
 
 
 export default function CategoryManagement() {
 
-    const ImageCellRenderer = ({ value }) => (
-        <img src={value} alt="Category Image" style={{ width: '100%', height: 'auto' }} />
+  function ImageCellRenderer(params) {
+    const { value } = params;
+    
+    if (value) {
+    const imagePath = `${value.replace(/\\/g, '/')}`;
+
+    const modifiedImagePath = imagePath
+    ? `http://localhost:5000/${imagePath.replace(/^backend\/public\//, '')}`
+    : '';
+   
+
+    return (  
+      <div style={{borderRadius:'2px' ,width: '80px', height: '40px',alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+      <img
+        src={modifiedImagePath}
+          alt="Image" // Provide an alternative text for the image
+          style={{ width: '80px', height: '40px' }} // Adjust the width and height as needed
+        /></div>
       );
+    }
+    return <div>No Image</div>;
+  }
 
   const columns = [
-    {field: 'Index',headerName: 'Index',width: 20,},
+    {field: 'index',headerName: 'Index',width: 20,},
     { field: 'categoryName', headerName: 'Category', width: 130},
     { field: 'image', headerName: 'Image', width: 130, renderCell: ImageCellRenderer },
     {field: 'subCategories', headerName: 'SubCategories', width: 130},
@@ -84,13 +104,17 @@ export default function CategoryManagement() {
     
    })
    setCategoryData(editCategoryData)
-   console.log('categoryData',categoryData)
+  
   };
  const  handEditCategory=async (formData) => {
  
   try {
         
-    const response=await axiosInstance.post('/editCategory',formData)
+    const response=await axios.post('http://localhost:5000/api/admin/editCategory',formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data', 
+      },})
+      
     if(response.data=='edited successfully'){
       toast.success('category edited successfully')
       setEdited(!edited) 
@@ -107,14 +131,17 @@ export default function CategoryManagement() {
 
 
     fetchData();
-    // setBlocked(!blocked)
+   
   }, [edited,added,blocked])
 
 
 const handleAddCategory = async (formData) => {
   try {
-    
-    const response = await axiosInstance.post('/addCategory', formData);
+     
+    const response = await axios.post('http://localhost:5000/api/admin/addCategory', formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data', 
+      },})
    
     if (response.data === 'category added successfully') {
       toast.success('category added successfully')
@@ -153,17 +180,37 @@ const handleAddCategory = async (formData) => {
 
     
     return (
-      <div className="container">
-      
-        <div className="add-button-container" >
-        <button onClick={() => setAddModalOpen(true)} className="add-button text-white ">
-         +
-        </button></div>
-        <div className="data-grid-container">
-        <DataGrid rows={rows} columns={columns} getRowId={(row) => row._id} pageSizeOptions={[5, 10]} checkboxSelection />
-        <CategoryAddModal isOpen={isAddModalOpen} onRequestClose={() => setAddModalOpen(false)} onAddCategory={handleAddCategory} />
-        <CategoryEditModal isOpen={isEditModalOpen} onRequestClose={() => setEditModalOpen(false)} onEditCategory={handEditCategory} categoryData={categoryData}/>
-      </div>
+      <div className="container mx-auto py-6 px-4">
+        <div className="flex justify-between items-center">
+          <div className="text-2xl font-bold">Category Management</div>
+          <button
+            onClick={() => setAddModalOpen(true)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            +
+          </button>
+        </div>
+        <div className="mt-4 bg-white rounded shadow-lg">
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            getRowId={(row) => row._id}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        </div>
+        <CategoryAddModal
+          isOpen={isAddModalOpen}
+          onRequestClose={() => setAddModalOpen(false)}
+          onAddCategory={handleAddCategory}
+        />
+        <CategoryEditModal
+          isOpen={isEditModalOpen}
+          onRequestClose={() => setEditModalOpen(false)}
+          onEditCategory={handEditCategory}
+          categoryData={categoryData}
+        />
       </div>
     );
+    
 }

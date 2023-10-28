@@ -16,7 +16,7 @@ const adminLoadUsers=asyncHandler(async(req,res)=>{
   
    const adminLoadTutors=asyncHandler(async(req,res)=>{
 
-    const tutors=await Tutor.find({},'email userName _id isBlocked')
+    const tutors=await Tutor.find({},'email userName _id isBlocked specification')
     if(tutors){
       res.status(201).json({tutors})
     }
@@ -46,13 +46,14 @@ res.status(200).json({category})
 
      const addCategory=asyncHandler(async(req,res)=>{
       const { categoryName,subCategories } = req.body; // Assuming categoryName is sent as part of the form data
-          
-      console.log('its backend')
+      const imagePath = req.file.path
+      
+      console.log('its backend image',imagePath)
           const checkIdentical=await Category.findOne({categoryName:categoryName})
           if(!checkIdentical){
         
             const category=await Category.create({categoryName:categoryName,
-              subCategories:subCategories})
+              subCategories:subCategories,image:imagePath})
             if(!category) {
                  res.status(400).json(`category can't be inserted`)
             }else{
@@ -67,22 +68,10 @@ res.status(200).json({category})
 
       })
 
-      // const courseAddData=asyncHandler(async(req,res)=>{
-      //         const categories= await Category.find({active:true}).select('-active') 
-            
-      //         const tutors=await Tutor.find({})
-
-      //         if(categories && tutors){
-      //           res.status(200).json({categories,tutors})
-      //         }
-
-      // })
+    
 
       const validateCourse=asyncHandler(async(req,res)=>{
         const { course } = req.body;
-
-
-//  
 
    
 if (matches) {
@@ -154,8 +143,10 @@ if (matches) {
       })
 
       const editCategory=asyncHandler(async(req,res)=>{
-        const {_id,categoryName,subCategories}=req.body
-        const category=await Category.updateOne({_id:_id},{categoryName:categoryName,subCategories:subCategories})
+        const {_id,categoryName,subCategories,image}=req.body
+        let imagePath = req?.file?.path
+        imagePath=imagePath?imagePath: `backend\\public\\images\\${image}` 
+        const category=await Category.updateOne({_id:_id},{categoryName:categoryName,subCategories:subCategories,image:imagePath})
         if(category){
           res.status(200).json('edited successfully')
         }else{

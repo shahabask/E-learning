@@ -20,10 +20,11 @@ const token =tutorInfo.tutorToken
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-  
+      
       return config;
     },
     (error) => {
+      console.error('Axios Request Interceptor Error:', error)
       return Promise.reject(error);
     }
   );

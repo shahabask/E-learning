@@ -104,31 +104,20 @@ export default function UserManagement() {
     const [rows,setRows]=useState([])
   
 
-  return (
-    <>
-    <div className="data-grid-container">
-      <DataGrid
+return (
+  <div className="container mx-auto py-6 px-4">
+    <div className="bg-white rounded shadow-lg">
+      <DataGrid style={{height:'500px'}}
         rows={rows}
         columns={columns}
         getRowId={(row) => row._id}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
+        pageSize={5}
         checkboxSelection
+        className="w-full"
       />
     </div>
+ 
+  </div>
+);
 
-    {/* {rows.map((row) => (
-  // <DetailsModal
-  //   key={row._id}
-  //   isOpen={openModals[row._id] || false}
-  //   onClose={() => closeDetailsModal(row._id)}
-  //   details={row.details}  // Pass the user-specific details
-  // />
-))} */}
-  </>
-  );
 }

@@ -6,18 +6,21 @@ import tutorRoutes from './routes/tutorRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
-
+import path from 'path'
 
 
 
 const app = express()
-app.use(cors())
 dotenv.config()
+
+app.use(cors())
+connectDB()
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-connectDB()
-const port =process.env.PORT || 5000
+
+app.use(express.static('backend/public'));
+const port = 5000
 
 
 app.use('/api',userRoutes)

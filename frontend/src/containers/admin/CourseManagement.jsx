@@ -67,31 +67,21 @@ useEffect(()=>{
     setRows([...response.data.courses])
    
  }
-  return (
-    
-    <>
-     <div className="container">
-
-     <div className="data-grid-container">
+ return (
+  <div className="container mx-auto py-6 px-4">
+    <div className="text-2xl font-bold mb-4">Course Management</div>
+    <div className="bg-white rounded shadow-lg">
       <DataGrid
         rows={rows}
         columns={columns}
         getRowId={(row) => row._id}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
+        pageSize={5}
         checkboxSelection
       />
- 
+    </div>
   </div>
-  </div>
+);
 
-      
-    </>
-  )
 }
 
 export default CourseManagement

@@ -7,12 +7,39 @@ import { useEffect, useState } from 'react';
 import AddCourse from './modal/AddCourse'
 import { toast} from 'react-toastify';
 import EditCourse from './modal/EditCourse';
+import axios from 'axios';
 function CourseManagementTutor() {
+
+  //image rendering function in table
+  function ImageCellRenderer(params) {
+    const { value } = params;
+    
+    if (value) {
+    const imagePath = `${value.replace(/\\/g, '/')}`;
+
+    const modifiedImagePath = imagePath
+    ? `http://localhost:5000/${imagePath.replace(/^backend\/public\//, '')}`
+    : '';
+
+
+    return (  
+      <div style={{borderRadius:'2px' ,width: '80px', height: '40px',alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+      <img
+        src={modifiedImagePath}
+          alt="Image" // Provide an alternative text for the image
+          style={{ width: '80px', height: '40px' }} // Adjust the width and height as needed
+        /></div>
+      );
+    }
+    return <div>No Image</div>;
+  }
+  //columns for table
   const columns = [
     {field: '_id',headerName: 'Course Id',width: 160,},
     { field: 'course', headerName: 'Course', width: 150},
     { field: 'categoryName', headerName: 'Category', width: 130},
     {field:'description',headerName:'Description',width:150},
+    { field: 'image', headerName: 'Image', width: 130, renderCell: ImageCellRenderer },
     {
       headerName: 'Videos',
       field: 'videos', // The field itself doesn't matter here
@@ -30,54 +57,100 @@ function CourseManagementTutor() {
         </button>
       )},}
   ]
+  //state
   const [rows,setRows]=useState([])
 const [isModalOpen, setModalOpen] = useState(false);
 const [categories,setCategories]=useState([])
 const [isCourseAdded,setIsCourseAdded]=useState(false)
-//  const [isEditModalOpen,setIsEditModalOpen] =useState(false)
- 
+ const [isEditModalOpen,setIsEditModalOpen] =useState(false)
+ const [editCourseData,setEditCourseData]=useState('')
+ const [edited,setEdited] =useState(false)
+
+ // open modal for addModal
 const openModal = () => {
   setModalOpen(true);
   setIsCourseAdded(false)
 };
-
+// close modal for addModal
 const closeModal = () => {
   setModalOpen(false);
 };
 
+//function to add course to the server
 const handleAddCourse = async (formData) => {
   try {
-    const response = await tutorAxiosInstance.post('/addCourse', formData);
+    const response = await tutorAxiosInstance.post('addCourse', formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data', 
+      },});
+    
      toast.success(response.data)
      setModalOpen(false)
      setIsCourseAdded(true)
   } catch (error) {
     toast.error(error?.response?.data||error.error)
-    console.log(error)
+    console.log(error,'hope it is errro')
   }
 };
+
+//function to open modal for editing
 const handleEditClick=(e,id)=>{
   e.stopPropagation();
- console.log('id',id)
+  setIsEditModalOpen(true)
+ const courseToEdit=rows.filter((course)=>{
+  if(course._id==id){
+      return course
+  }
+ })
+console.log('edit',courseToEdit)
+ setEditCourseData(courseToEdit)
 }
+
+//fetch courses to list in the table
 useEffect(()=>{
   fetchCourses()
-},[isCourseAdded])
+},[isCourseAdded,edited])
+//fetchCourse function definition
 const fetchCourses=async()=>{
+  
+  try {
+    
+ 
   const courses=await tutorAxiosInstance.get('/loadCourses')
   setRows([...courses.data]);
-  console.log(courses.data,'courseData')
+  
+} catch (error) {
+  toast.error(error?.courses?.data||error.error)  
 }
-useEffect(()=>{
-  fetchCourses()
-  console.log('fetch course working')
-},[isCourseAdded])
+}
+
+//fetchModalCourseData for
 
 useEffect(()=>{
  fetchModalCourseData()
 
 },[])
-  
+  const handleEditCourse=async(formData)=>{
+    try {
+      
+    
+    const response=await tutorAxiosInstance.patch('/editCourse',formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data', 
+      },})
+      
+    if(response.data=='edited successfully'){
+      toast.success('course edited successfully')
+      setEdited(!edited) 
+      return null;
+    } 
+  } catch (error) {
+      toast.error(error?.response?.data||error.error)
+    }
+    
+  }
+
+
 const fetchModalCourseData=async()=>{
   try{
     const  courseData= await tutorAxiosInstance.get('/courseData')
@@ -93,39 +166,40 @@ const fetchModalCourseData=async()=>{
 
 
   return (
-    
-    <>
-     <div className="container">
-    <div className="add-button-container" >
-      <button className="add-button" onClick={openModal}>+</button>
-    </div>
-     <div className="data-grid-container">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => row._id}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
+    <div className="container mx-auto py-6 px-4">
+      <div className="flex justify-between items-center">
+        <div className="text-2xl font-bold">Course Management</div>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={openModal}
+        >
+          Add Course
+        </button>
+      </div>
+      <div className="mt-4 bg-white rounded shadow-lg">
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => row._id}
+          pageSize={5}
+          checkboxSelection
+        />
+      </div>
+      <AddCourse
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        onAddCourse={handleAddCourse}
+        categories={categories}
       />
- 
-  </div>
-  </div>
-  <AddCourse isOpen={isModalOpen}
-      onRequestClose={closeModal}
-      onAddCourse={handleAddCourse} categories={categories} />
-      {/* <EditCourse
-  isOpen={isModalOpen}
-  onRequestClose={() => setEditModalOpen(false)}
-  onEditCourse={handleEditCourse} // Implement the function to update the course data
-  courseData={editCourseData} // Pass the data for editing
-/> */}
-    </>
-  )
+      <EditCourse
+        isOpen={isEditModalOpen}
+        onRequestClose={() => setIsEditModalOpen(false)}
+        onEditCourse={handleEditCourse}
+        courseData={editCourseData}
+      />
+    </div>
+  );
+  
 }
 
 export default CourseManagementTutor

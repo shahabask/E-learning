@@ -84,4 +84,55 @@
   background-color: #ff7b0086; /* Change color on hover if desired */
 }
 
+.image-input {
+  margin-top: 20px;
+  border: 1px solid #ccc; /* Add a border around the section */
+  padding: 20px; /* Add some padding to the section */
+  border-radius: 5px; /* Add rounded corners to the border */
+  background-color: #f9f9f9; /* Set a background color */
+}
+
+.image-input label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333; /* Text color for the label */
+}
+
+.image-input label svg {
+  margin-right: 5px; /* Spacing between the icon and text */
+}
+/* Container for the added image */
+.image-preview-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Style for the added image */
+.image-preview {
+  width: 40px; /* Set the width of the image preview */
+  height: 40px; /* Set the height of the image preview */
+  border: 1px solid #ccc; /* Add a border around the preview */
+  border-radius: 5px; /* Rounded corners for the preview */
+  margin-right: 10px; /* Spacing between the preview and the button */
+  overflow: hidden; /* Hide overflow if the image is larger than the container */
+}
+
+/* Style for the file input */
+.image-input input[type="file"]::before {
+  content: 'Upload Image';
+  display: block;
+  background-color: #007BFF;
+  color: #fff;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
+
+.image-input input[type="file"]::before:hover {
+  background-color: #0056DA;
+}
 
