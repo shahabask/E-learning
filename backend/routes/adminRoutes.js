@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-adminRouter.post('/addCategory',upload.single('image') ,addCategory);
+
 
 
 adminRouter.post('/login',adminAuth)
@@ -40,6 +40,8 @@ adminRouter.get('/loadCourses',loadCourses)
 adminRouter.post('/addCourse',addCourse)
 adminRouter.patch('/blockUnblockCourse',blockUnblockCourse)
 adminRouter.post('/validateCourse',validateCourse)
+adminRouter.post('/addCategory',upload.single('image') ,addCategory);    
 adminRouter.post('/editCategory',upload.single('image'),editCategory)
 adminRouter.patch('/blockUnblockCategory',blockUnblockCategory)
+
 export default  adminRouter

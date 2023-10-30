@@ -32,6 +32,10 @@ import Footer from '../user/home/Footer.jsx'
 import CategoryManagement from '../admin/CategoryManagement.jsx'
 import CourseManagement from '../admin/CourseManagement.jsx'
 import CourseManagementTutor from '../tutor/CourseManagementTutor.jsx'
+import TutorProfile from '../tutor/profile/TutorProfile.jsx'
+import CourseCategoryPage from '../user/courses/CourseCategoryPage.jsx'
+import UserPrivateRoute from '../../components/user/UserPrivateRoute.jsx'
+import Profile from '../user/profile/Profile.jsx'
 
 
 function Router() {
@@ -41,7 +45,8 @@ function Router() {
 
    <Route path='/' exact  element={<LoginScreens/>}>
    <Route path='' index  element={<Home/>}/>
-
+   <Route path='/courses'  element={<CourseCategoryPage/>}/>
+   <Route path='/profile' element={<Profile/>}/>
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
          <Route path='/forgotPassword' element={<ForgotPassword/>}/>
@@ -51,6 +56,10 @@ function Router() {
          <Route path='/otpLogin' element={<OtpLogin/>}/>
    </Route>
 
+
+    {/* <Route path='/' exact element={<UserPrivateRoute/>}>
+
+    </Route> */}
 
    
    <Route path='/admin/login' exact element={<AdminLoginScreens/>}>
@@ -90,7 +99,8 @@ function Router() {
 
    <Route path='/tutor' exact element={<TutorPrivateRoute/>}>
    <Route path='dashboard' exact element={<TutorDashboard/>}/>
-   <Route path='courseManagement' exact element={<CourseManagementTutor/>}/>
+   <Route path='profile' element={<TutorProfile/>}/>  
+   <Route path='courseManagement'  element={<CourseManagementTutor/>}/>
      
    </Route>
    <Route path="*" element={<ErrorPage/>} />

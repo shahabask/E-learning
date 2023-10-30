@@ -1,5 +1,6 @@
 import express from 'express'
-import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin} from '../controllers/userController.js'
+import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
+    courseCategoryListing} from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
 
 
@@ -13,4 +14,5 @@ router.post('/verifyOtp',confirmOtp)
 router.post('/resetPassword',resetPassword)
 router.post('/otpLoginVerifyEmail',otpLoginVerifyEmail)
 router.post('/otpLogin',otpLogin)
+router.get('/courseCategoryList',courseCategoryListing)
 export default  router

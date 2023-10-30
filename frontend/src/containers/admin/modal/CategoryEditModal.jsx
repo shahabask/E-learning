@@ -98,88 +98,112 @@ export default function CategoryEditModal({
     ? `http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
     : '';
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Edit Category Modal"
-      className="custom-modal"
-      overlayClassName="custom-overlay"
-    >
-      <div className="modal-content">
-        <div className="header">
-          <div className="close-icon" onClick={onRequestClose}>
-            <FaTimes />
+<Modal
+  isOpen={isOpen}
+  onRequestClose={onRequestClose}
+  contentLabel="Edit Category Modal"
+  className="custom-modal mt-16"
+  overlayClassName="custom-overlay"
+>
+  <div className="modal-content bg-white rounded-lg shadow-lg p-4">
+    <div className="header">
+      <div className="close-icon" onClick={onRequestClose}>
+        <FaTimes className="text-gray-500 hover:text-red-500 cursor-pointer" />
+      </div>
+    </div>
+    <h2 className="text-2xl font-bold mt-2">Edit Category</h2>
+    <input
+      type="text"
+      placeholder="Category Name"
+      value={categoryName}
+      onChange={(e) => setCategoryName(e.target.value)}
+      className="w-full border rounded p-2 mt-2"
+    />
+    <span className="text-red-500">
+      {formError?.categoryName ? formError.categoryName : ""}
+    </span>
+
+    <div className="image-input mt-2">
+      {selectedImage ? (
+        <div className="image-preview-container">
+          {imagePath ? (
+            <img
+              src={modifiedImagePath}
+              alt="Category Image"
+              className="image-preview"
+            />
+          ) : (
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="Selected Image"
+              className="image-preview"
+            />
+          )}
+          <div
+            className="remove-image text-red-500 cursor-pointer"
+            onClick={handleRemoveImage}
+          >
+            <FaTrash />
           </div>
         </div>
-        <h2 style={{ marginTop: "20px", fontSize: 30 }}>Edit Category</h2>
-        <input
-          type="text"
-          placeholder="Category Name"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-        />
-        <span className="error-message">
-          {formError?.categoryName ? formError.categoryName : ""}
-        </span>
-
-        {/* Image input with an icon */}
-        <div className="image-input">
-          {selectedImage ? (
-            <div className="image-preview-container">
-              {imagePath ? ( // Display category image if available
-        <img src={modifiedImagePath} alt="Category Image" className="image-preview"/>
-      ) : ( // Display the selected image if no category image is available
-        <img src={URL.createObjectURL(selectedImage)} alt="Selected Image" className="image-preview"/>
+      ) : (
+        <>
+          <label
+            htmlFor="categoryImage"
+            className="image-label bg-blue-500 text-white p-2 rounded cursor-pointer"
+          >
+            <FaImage className="mr-2" />
+            Upload Image
+            <input
+              type="file"
+              id="categoryImage"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+          </label>
+        </>
       )}
-              <div className="remove-image" onClick={handleRemoveImage}>
-                <FaTrash />
-              </div>
-            </div>
-          ) : (
-            <>
-              <label htmlFor="categoryImage" className="image-label">
-                <FaImage />
-                <input
-                  type="file"
-                  id="categoryImage"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                />
-              </label>
-            </>
-          )}
-        </div>
+    </div>
 
-        <div>
-          <h4>Subcategories</h4>
-          {subCategories.map((subCategory, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                placeholder="Subcategory"
-                value={subCategory}
-                onChange={(e) => handleCourseChange(index, e.target.value)}
-              />
-              <span
-                className="delete-icon"
-                onClick={() => handleDeleteCourseField(index)}
-              >
-                <FaTrash />
-              </span>
-            </div>
-          ))}
-          <button onClick={handleAddCourseField} className="add-course-button">
-            Add more
-          </button>
+    <div>
+      <h4 className="text-lg font-semibold mt-2">Subcategories</h4>
+      {subCategories.map((subCategory, index) => (
+        <div key={index} className="flex items-center mt-2">
+          <input
+            type="text"
+            placeholder="Subcategory"
+            value={subCategory}
+            onChange={(e) => handleCourseChange(index, e.target.value)}
+            className="w-full border rounded p-2"
+          />
+          <span
+            className="delete-icon text-red-500 cursor-pointer ml-2"
+            onClick={() => handleDeleteCourseField(index)}
+          >
+            <FaTrash />
+          </span>
         </div>
+      ))}
+      <button
+        onClick={handleAddCourseField}
+        className="add-course-button bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer"
+      >
+        Add more
+      </button>
+    </div>
 
-        <div className="buttonDiv">
-          <button onClick={handleEditCategory} className="edit-button">
-            Edit
-          </button>
-        </div>
-      </div>
-    </Modal>
+    <div className="buttonDiv mt-2">
+      <button
+        onClick={handleEditCategory}
+        className="edit-button bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+      >
+        Edit
+      </button>
+    </div>
+  </div>
+</Modal>
+
+
   );
 }

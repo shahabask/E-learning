@@ -81,91 +81,103 @@ export default function CategoryAddModal({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Add Category Modal"
-      className="custom-modal"
-      overlayClassName="custom-overlay"
-    >
-      <div className="modal-content">
-        <div className="header">
-          <div className="close-icon" onClick={onRequestClose}>
-            <FaTimes />
-          </div>
-        </div>
-        <h2 style={{ marginTop: "20px", fontSize: 30 }}>Add Category</h2>
-        <input
-          type="text"
-          placeholder="Category Name"
-          value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
-        />
-        <span className="error-message">
-          {formError?.categoryName ? formError.categoryName : ""}
-        </span>
-
-        {/* Image input with an icon */}
-      
-<div className="image-input">
-  {selectedImage ? (
-    <div className="image-preview-container">
-      <img
-        src={URL.createObjectURL(selectedImage)}
-        alt="Selected Image"
-        className="image-preview"
-      />
-      <div className="remove-image" onClick={handleRemoveImage}>
-        <FaTrash />
+  isOpen={isOpen}
+  onRequestClose={onRequestClose}
+  contentLabel="Add Category Modal"
+  className="custom-modal"
+  overlayClassName="custom-overlay"
+>
+  <div className="modal-content p-4">
+    <div className="header">
+      <div className="close-icon" onClick={onRequestClose}>
+        <FaTimes className="text-gray-500 hover:text-red-500 cursor-pointer" />
       </div>
     </div>
-  ) : (
-    <>
-      <label htmlFor="categoryImage" className="image-label">
-        <FaImage />
-        {/* The following input is hidden */}
-        <input
-          type="file"
-          id="categoryImage"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ display: "none" }}
-        />+ Add image
-      </label>
-    </>
-  )}
-</div>
+    <h2 className="text-3xl font-bold mt-4">Add Category</h2>
+    <input
+      type="text"
+      placeholder="Category Name"
+      value={categoryName}
+      onChange={(e) => setCategoryName(e.target.value)}
+      className="w-full border rounded p-2 mt-2"
+    />
+    <span className="text-red-500">
+      {formError?.categoryName ? formError.categoryName : ""}
+    </span>
 
-
-        {/* Section for adding subCategories */}
-        <div>
-          <h4>Subcategories</h4>
-          {subCategories.map((course, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                placeholder="Subcategory"
-                value={course}
-                onChange={(e) => handleCourseChange(index, e.target.value)}
-              />
-              <span
-                className="delete-icon"
-                onClick={() => handleDeleteCourseField(index)}
-              >
-                <FaTrash />
-              </span>
-            </div>
-          ))}
-          <button onClick={handleAddCourseField} className="add-course-button">
-            Add more
-          </button>
+    <div className="image-input mt-4">
+      {selectedImage ? (
+        <div className="image-preview-container">
+          <img
+            src={URL.createObjectURL(selectedImage)}
+            alt="Selected Image"
+            className="image-preview"
+          />
+          <div
+            className="remove-image text-red-500 cursor-pointer"
+            onClick={handleRemoveImage}
+          >
+            <FaTrash />
+          </div>
         </div>
+      ) : (
+        <>
+          <label
+            htmlFor="categoryImage"
+            className="image-label bg-blue-500 text-white p-2 rounded cursor-pointer"
+          >
+            <FaImage className="mr-2" />
+            {/* The following input is hidden */}
+            <input
+              type="file"
+              id="categoryImage"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+            />
+            Add image
+          </label>
+        </>
+      )}
+    </div>
 
-        <div className="buttonDiv">
-          <button onClick={handleAddCategory} className="add-button">
-            Add
-          </button>
+    <div>
+      <h4 className="text-lg font-semibold mt-4">Subcategories</h4>
+      {subCategories.map((course, index) => (
+        <div key={index} className="flex items-center mt-2">
+          <input
+            type="text"
+            placeholder="Subcategory"
+            value={course}
+            onChange={(e) => handleCourseChange(index, e.target.value)}
+            className="w-full border rounded p-2"
+          />
+          <span
+            className="delete-icon text-red-500 cursor-pointer ml-2"
+            onClick={() => handleDeleteCourseField(index)}
+          >
+            <FaTrash />
+          </span>
         </div>
-      </div>
-    </Modal>
+      ))}
+      <button
+        onClick={handleAddCourseField}
+        className="add-course-button bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer"
+      >
+        Add more
+      </button>
+    </div>
+
+    <div className="buttonDiv mt-4">
+      <button
+        onClick={handleAddCategory}
+        className="add-button bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+      >
+        Add
+      </button>
+    </div>
+  </div>
+</Modal>
+
   );
 }
