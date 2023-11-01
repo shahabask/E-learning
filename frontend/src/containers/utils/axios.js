@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
   // Apply the authcheck middleware to the Axios instance
   axiosInstance.interceptors.request.use(
     async (config) => {
-      const user = JSON.parse(localStorage.getItem('token'));
+      const user = JSON.parse(localStorage.getItem('userInfo'));
       const token=user.token
       
       if (token) {

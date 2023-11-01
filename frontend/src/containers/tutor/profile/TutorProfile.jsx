@@ -1,10 +1,31 @@
 
-// import "../profile/profile.css";
+import { useEffect, useState } from "react";
+import "../../../Containers/tutor/profile/Profile.css";
 import AddForm from "./AddForm";
-
+import { axiosInstance as tutorAxiosInstance } from "../../utils/tutorAxios";
 function TutorProfile() {
+ const [tutorData,setTutorData]=useState([])
+  const [showForm, setShowForm] = useState(false);
+ useEffect(()=>{
+ fetchTutor()
+
+ },[])
+ const fetchTutor=async()=>{
+  try {
+    const response=await tutorAxiosInstance.get('/loadProfile')
+  setTutorData([response.data])
+  console.log('res',response.data)
+  console.log('tutorData',tutorData)
+  } catch (error) {
+    console.log('error',error.response||error.error)
+  }
+  
+ }
+  const handleEditClick = () => {
+    setShowForm((prevShowForm) => !prevShowForm);
+  };
   return (
-    <div style={{ height: "100vh", backgroundColor: "#f2bc4f" }}>
+    <div style={{ height: "100vh", backgroundColor: "	#fcdad1" }}>
       <div className="container ">
         <div className="row gutters row-with-padding">
           <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
@@ -18,12 +39,12 @@ function TutorProfile() {
                         alt="Maxwell Admin"
                       />
                     </div>
-                    <h5 className="user-name">Yuki Hayashi</h5>
-                    <h6 className="user-email">yuki@Maxwell.com</h6>
+                    <h5 className="user-name">{tutorData[0]?.userName}</h5>
+                    <h6 className="user-email">{tutorData[0]?.email}</h6>
                   </div>
                   <div className="centered-container">
                     <div className="row-container">
-                      <div className="colum">
+                      <div className="colum" onClick={handleEditClick}>
                         <i className="fas fa-edit " style={{color:"blue"}}></i>
                         <span className="icon"style={{marginLeft:"10px"}}>Edit</span>
                       </div>
@@ -51,7 +72,7 @@ function TutorProfile() {
               </div>
             </div>
           </div>
-          <AddForm />
+          {showForm && <AddForm tutorData={tutorData}/>}
         </div>
       </div>
     </div>

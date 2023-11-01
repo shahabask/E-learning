@@ -6,7 +6,6 @@ const secret = process.env.JWT_SECRET;
 const tutorauthcheck =  async (req, res, next) => {
     
   const token = req.headers.authorization;
-  console.log('token',token)
   if (token) {
     console.log('working')
     try {
@@ -19,7 +18,7 @@ const tutorauthcheck =  async (req, res, next) => {
       // Fetch user details and attach to the request
       req.user = await Tutor.findById(decoded.tutorId).select('-password');
       // console.log('not working',req.user)
-      console.log('is it working no2',decoded)
+      
       next();
     } catch (error) {
       console.log(error,'are you here');

@@ -48,10 +48,10 @@ function TutorSidebar({ toggleSidebar }) {
             <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Course Management</span>
           </li></NavLink> 
-          <NavLink to='/tutor/message' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
+          {/* <NavLink to='/tutor/message' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <FaEnvelope className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Messages</span>
-          </li></NavLink> 
+          </li></NavLink>  */}
           <NavLink to='/tutor/profile' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
   <li>
     <FaUser className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />

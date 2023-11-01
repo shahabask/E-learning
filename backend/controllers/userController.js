@@ -157,6 +157,7 @@ const resetPassword=asyncHandler(async(req,res)=>{
       videos:1,
       image:1,
       description:1,
+      
       'categoryData.categoryName':1,
       'categoryData.image':1,
       'categoryData.subCategories':1,
@@ -178,17 +179,17 @@ const resetPassword=asyncHandler(async(req,res)=>{
         course: { $first: '$course' },
         subCategory: { $first: '$subCategory' },
         videos: { $first: '$videos' },
-        isActive:{$first: '$isActive' },
+      image:{$first:'$image'},
        description:{$first:'$description'}
   }}
 ])
-
+const categories=await Category.find({})
 // const cateogries=await Category.aggregate({$match:{active:true}},{
 //   $lookup:{from:}
 // })
-   console.log('courses',courses)
+  
    if(courses){
-    res.status(200).json({courses})
+    res.status(200).json({courses,categories})
    }else{
     res.status(500).json(`can't get the courses`)
    }

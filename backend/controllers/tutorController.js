@@ -195,6 +195,7 @@ const category=await  Category.aggregate([
 const addCourse=asyncHandler(async(req,res)=>{
   const {course,category,subCategory,description}=req.body
   const imagePath = req.file.path
+  console.log('path',req.file)
    const categoryDetails=await Category.findOne({categoryName:category})
  console.log('are you sure')
    const categoryId=categoryDetails._id
@@ -279,7 +280,20 @@ const editCourse=asyncHandler(async(req,res)=>{
     res.status(500).json(`couldn't update`)
   }
 })
+
+const profileData=asyncHandler(async(req,res)=>{
+  const userId=req.user._id;
+  console.log('userId',userId)
+  const myProfile=await Tutor.findOne({_id:userId})
+  console.log('tutor',myProfile)
+  if(myProfile){
+    res.status(200).json(myProfile)
+    console.log('comming')
+  }else{
+    res.status(500).json(`can't find`)
+  }
+})
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData,addCourse,loadCourses,editCourse}
+        loadCourseData,addCourse,loadCourses,editCourse,profileData}
 

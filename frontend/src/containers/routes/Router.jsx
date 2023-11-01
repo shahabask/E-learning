@@ -36,6 +36,7 @@ import TutorProfile from '../tutor/profile/TutorProfile.jsx'
 import CourseCategoryPage from '../user/courses/CourseCategoryPage.jsx'
 import UserPrivateRoute from '../../components/user/UserPrivateRoute.jsx'
 import Profile from '../user/profile/Profile.jsx'
+import PlanContainer from '../user/plans/Plan.jsx'
 
 
 function Router() {
@@ -47,6 +48,7 @@ function Router() {
    <Route path='' index  element={<Home/>}/>
    <Route path='/courses'  element={<CourseCategoryPage/>}/>
    <Route path='/profile' element={<Profile/>}/>
+   <Route path='/plans' element={<PlanContainer/>}/>
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
          <Route path='/forgotPassword' element={<ForgotPassword/>}/>

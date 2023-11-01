@@ -1,5 +1,10 @@
 import './profile.css';
-function AddForm() {
+function AddForm({tutorData}) {
+
+  
+const handleUpdate=()=>{
+  
+}
   return (
     <>
     <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
@@ -11,12 +16,14 @@ function AddForm() {
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div className="form-group">
-                    <label htmlFor="fullName">Full Name</label>
+                    <label htmlFor="fullName">User Name</label>
                     <input
                       type="text"
                       className="form-control"
                       id="fullName"
-                      placeholder="Enter full name"
+                      style={{ zIndex: 10 }}
+                      value={tutorData[0]?.userName}
+                      placeholder="Enter User name"
                     />
                   </div>
                 </div>
@@ -60,7 +67,7 @@ function AddForm() {
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                   <div className="form-group">
-                    <label htmlFor="Street">Dgree</label>
+                    <label htmlFor="Street">Degree</label>
                     <input
                       type="name"
                       className="form-control"
@@ -76,6 +83,7 @@ function AddForm() {
                       type="name"
                       className="form-control"
                       id="Skills"
+                      value={tutorData[0]?.specification}
                       placeholder="Enter Skills"
                     />
                   </div>
@@ -111,7 +119,7 @@ function AddForm() {
                       id="submit"
                       name="submit"
                       className="btn btn-primary mt-3"
-                    >
+                    onClick={handleUpdate}>
                       Update
                     </button>
                   </div>
