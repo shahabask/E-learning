@@ -180,7 +180,7 @@ const handleAddCategory = async (formData) => {
 
     
     return (
-      <div className="container mx-auto py-6 px-4">
+      <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
         <div className="flex justify-between items-center">
           <div className="text-2xl font-bold">Category Management</div>
           <button

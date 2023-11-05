@@ -164,7 +164,7 @@ export default function CategoryAddModal({
         onClick={handleAddCourseField}
         className="add-course-button bg-blue-500 text-white px-4 py-2 rounded mt-2 cursor-pointer"
       >
-        Add more
+        Add more 
       </button>
     </div>
 

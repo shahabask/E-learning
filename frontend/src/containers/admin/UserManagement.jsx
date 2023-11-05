@@ -105,7 +105,7 @@ export default function UserManagement() {
   
 
 return (
-  <div className="container mx-auto py-6 px-4">
+  <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
     <div className="bg-white rounded shadow-lg">
       <DataGrid style={{height:'500px'}}
         rows={rows}

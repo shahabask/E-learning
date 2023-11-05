@@ -37,6 +37,7 @@ import CourseCategoryPage from '../user/courses/CourseCategoryPage.jsx'
 import UserPrivateRoute from '../../components/user/UserPrivateRoute.jsx'
 import Profile from '../user/profile/Profile.jsx'
 import PlanContainer from '../user/plans/Plan.jsx'
+import SubCategory from '../user/courses/SubCategory.jsx'
 
 
 function Router() {
@@ -49,6 +50,7 @@ function Router() {
    <Route path='/courses'  element={<CourseCategoryPage/>}/>
    <Route path='/profile' element={<Profile/>}/>
    <Route path='/plans' element={<PlanContainer/>}/>
+   <Route path="/category/:categoryId" element={<SubCategory/>} />
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
          <Route path='/forgotPassword' element={<ForgotPassword/>}/>

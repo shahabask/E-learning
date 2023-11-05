@@ -40,7 +40,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(true);
       
        <AdminSidebar toggleSidebar={toggleSidebar}/>
       <div className={adminInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
-      <Router/>
+      <Router   />
       </div>
       </>
         )
@@ -51,7 +51,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(true);
        <TutorSidebar toggleSidebar={toggleSidebar}/>
        
        <div className={tutorInfo ? `content-container ${isSidebarOpen ? '' : 'no-left-padding'}` : ''} >
-      <Router/>
+      <Router />
       </div>
       </>
         )

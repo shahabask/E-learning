@@ -68,7 +68,7 @@ useEffect(()=>{
    
  }
  return (
-  <div className="container mx-auto py-6 px-4">
+  <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
     <div className="text-2xl font-bold mb-4">Course Management</div>
     <div className="bg-white rounded shadow-lg">
       <DataGrid

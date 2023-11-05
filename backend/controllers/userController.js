@@ -4,6 +4,7 @@ import generateToken from '../utils/generateToken.js';
 import sendresetmail from '../utils/nodeMailer.js';
 import Course from '../models/courseModel.js'
 import Category from '../models/categoryModel.js';
+import mongoose from 'mongoose';
 const authUser=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -157,7 +158,7 @@ const resetPassword=asyncHandler(async(req,res)=>{
       videos:1,
       image:1,
       description:1,
-      
+      'categoryData._id':1,
       'categoryData.categoryName':1,
       'categoryData.image':1,
       'categoryData.subCategories':1,
@@ -169,6 +170,7 @@ const resetPassword=asyncHandler(async(req,res)=>{
   },
   {$group:{
     _id:"$_id",
+    categoryId:{$first:'$categoryData._id'},
     categoryName: { $first: '$categoryData.categoryName' }, // Group the categoryInfo back into an array
     categoryImage:{$first:'$categoryData.image'},
     subCategories:{$push:'$categoryData.subCategories'},
@@ -194,5 +196,73 @@ const categories=await Category.find({})
     res.status(500).json(`can't get the courses`)
    }
  })
+
+ const loadCategoryDetails=asyncHandler(async(req,res)=>{
+  const categoryId = req.params.categoryId
+  
+
+
+  let categoryData = await Category.aggregate([
+    {
+      $match: {
+        _id:new mongoose.Types.ObjectId(categoryId),
+      },
+    },
+    {
+      $lookup: {
+        from: 'courses', // Use the correct collection name here
+        localField: '_id',
+        foreignField: 'category',
+        as: 'courseData',
+      },
+    },
+    {
+      $unwind: '$courseData',
+    },
+    {
+      $project: {
+        _id: 1,
+        categoryName: 1,
+        subCategories: 1,
+        active: 1,
+        image: 1,
+        'courseData._id': 1,
+        'courseData.course': 1,
+        'courseData.subCategory': 1,
+        'courseData.videos': 1,
+        'courseData.image': 1,
+        'courseData.description': 1,
+      },
+    },
+    {
+      $group: {
+        _id: '$courseData._id',
+        categoryName: { $first: '$categoryName' },
+        image: { $first: '$image' },
+        subCategories: { $first: '$subCategories' },
+        active: { $first: '$active' },
+        courseId: { $first: '$courseData._id' },
+        course:{$first:'$courseData.course'},
+        subCategory: { $first: '$courseData.subCategory' },
+        courseVideos: { $first: '$courseData.videos' },
+        courseImage: { $first: '$courseData.image' },
+        courseDescription: { $first: '$courseData.description' },
+      },
+    },
+  ]);
+  
+  if(categoryData.length==0){
+      categoryData=await Category.findOne({_id:categoryId})
+      categoryData=[categoryData]
+  }
+  // Handle the results in your application
+  
+   console.log('categoryData',categoryData)
+   if(categoryData){
+    res.status(200).json(categoryData)
+   }else{
+    res.status(500).json(`can't get data`)
+   }
+ })
 export {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
-  courseCategoryListing}
+  courseCategoryListing,loadCategoryDetails}

@@ -86,7 +86,7 @@ function TutorManagement() {
   }, [blocked])
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4" style={{backgroundColor:'#FDF8EE'}}>
       <div className="bg-white shadow-lg rounded">
         <DataGrid style={{ maxHeight: '300px'}}
           rows={rows}
