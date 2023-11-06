@@ -1,8 +1,7 @@
 import express from 'express'
 import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
-    courseCategoryListing,loadCategoryDetails} from '../controllers/userController.js'
+    courseCategoryListing,loadCategoryDetails,loadProfile} from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
-
 
 const router=express.Router()
 
@@ -16,7 +15,7 @@ router.post('/otpLoginVerifyEmail',otpLoginVerifyEmail)
 router.post('/otpLogin',otpLogin)
 router.get('/courseCategoryList',courseCategoryListing)
 router.get('/categoryDetails/:categoryId',loadCategoryDetails)
-
+router.get('/loadProfile',authcheck,loadProfile)
 router.post("/api/orders", async (req, res) => {
     try {
      

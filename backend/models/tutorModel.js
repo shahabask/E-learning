@@ -11,12 +11,14 @@ const tutorSchema = mongoose.Schema({
         required: true,
         unique: true,
       },
-      
+      degree:{
+        type:String
+      },
       specification:{
         type:Array,
-        default:['not updated']
+        default:[]
       },
-      details:{
+      description:{
         type:String,
         required:false
       },
@@ -24,7 +26,19 @@ const tutorSchema = mongoose.Schema({
         type: String,
         required: true,
       },
-      imagePath:{
+      address:{
+        city:{
+          type:String,
+
+        },
+          state:{
+            type:String
+          },
+          country:{
+            type:String
+          }
+      },
+      image:{
         type:String,
         default:''  
       },

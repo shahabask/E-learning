@@ -19,9 +19,12 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
       },
-      imagePath:{
+      image:{
         type:String,
         default:''  
+      },
+      phone:{
+        type:Number,
       },
       otp:{
         type:Number,

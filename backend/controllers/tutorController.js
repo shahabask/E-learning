@@ -283,17 +283,64 @@ const editCourse=asyncHandler(async(req,res)=>{
 
 const profileData=asyncHandler(async(req,res)=>{
   const userId=req.user._id;
-  console.log('userId',userId)
+
   const myProfile=await Tutor.findOne({_id:userId})
-  console.log('tutor',myProfile)
+  let subCategories = await Category.aggregate([
+    {
+      $project: {
+        _id: 0,
+        subCategories: 1,
+      },
+    },
+    {
+      $unwind: '$subCategories',
+    },
+    {
+      $group: {
+        _id: null,
+        subCategories: { $addToSet: '$subCategories' },
+      },
+    },
+    {
+      $project: {
+        _id: 0, 
+        subCategories: 1
+      },
+    },
+  ]);
+   subCategories = subCategories[0]?.subCategories?.filter((subCategory) => {
+    return !myProfile?.specification?.includes(subCategory);
+  });
+  console.log('spe',myProfile)
   if(myProfile){
-    res.status(200).json(myProfile)
-    console.log('comming')
+    res.status(200).json({myProfile,subCategories})
+ 
   }else{
     res.status(500).json(`can't find`)
   }
 })
+
+
+
+const updateProfile=asyncHandler(async(req,res)=>{
+  console.log('I am here');
+  const userId=req.user._id
+  const {userName,city,state,country,skill,description,degree,image}=req.body
+  let imagePath = req?.file?.path
+  console.log('img',image,'imagePath',imagePath)
+  imagePath=imagePath?imagePath: `backend\\public\\images\\${image}`
+  const updateTutor=await Tutor.updateOne({_id:userId},{userName,address:{city:city,state,country},specification:skill,description,image:imagePath,degree})
+console.log('updatedUser',updateTutor)
+  if(updateTutor){
+      res.status(200).json('updated')
+  }else{
+
+  }
+
+  
+})
+
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData,addCourse,loadCourses,editCourse,profileData}
+        loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile}
 

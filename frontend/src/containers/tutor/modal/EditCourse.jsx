@@ -32,8 +32,7 @@ export default function EditCourse({
     setFormError(errors);
    
     const imageFileName = selectedImage instanceof File ? selectedImage: selectedImage.replace("http://localhost:5000/images/", "")
-    
- console.log('img',imageFileName)
+
     if (Object.keys(errors).length === 0) {
       try {
         const updatedCourseData = {

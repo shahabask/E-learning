@@ -264,5 +264,16 @@ const categories=await Category.find({})
     res.status(500).json(`can't get data`)
    }
  })
+
+ const loadProfile=asyncHandler(async(req,res)=>{
+  const userId=req.user._id
+  console.log(userId,'userId')
+   const  myProfile=req.user
+   if(myProfile){
+    res.status(200).json({myProfile})
+   }else{
+    res.status(500).json(`can't get the user`)
+   }
+ })
 export {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
-  courseCategoryListing,loadCategoryDetails}
+  courseCategoryListing,loadCategoryDetails,loadProfile}

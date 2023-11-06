@@ -4,7 +4,7 @@ const secret = process.env.JWT_SECRET;
 
 
 const tutorauthcheck =  async (req, res, next) => {
-    
+
   const token = req.headers.authorization;
   if (token) {
     console.log('working')

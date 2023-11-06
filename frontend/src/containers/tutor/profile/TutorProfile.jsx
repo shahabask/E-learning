@@ -6,6 +6,7 @@ import { axiosInstance as tutorAxiosInstance } from "../../utils/tutorAxios";
 function TutorProfile() {
  const [tutorData,setTutorData]=useState([])
   const [showForm, setShowForm] = useState(false);
+  const [subcategories,setSubcategories]=useState('')
  useEffect(()=>{
  fetchTutor()
 
@@ -13,9 +14,10 @@ function TutorProfile() {
  const fetchTutor=async()=>{
   try {
     const response=await tutorAxiosInstance.get('/loadProfile')
-  setTutorData([response.data])
-  console.log('res',response.data)
-  console.log('tutorData',tutorData)
+  setTutorData([response.data.myProfile])
+  setSubcategories(response.data.subCategories)
+  console.log('res',response.data.subCategories)
+  // console.log('tutorData',tutorData)
   } catch (error) {
     console.log('error',error.response||error.error)
   }
@@ -72,7 +74,33 @@ function TutorProfile() {
               </div>
             </div>
           </div>
-          {showForm && <AddForm tutorData={tutorData}/>}
+          {showForm ? <AddForm tutorData={tutorData} subCategories={subcategories}/>:( <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+      <div className="bg-white shadow-md p-4 rounded-lg">
+        <h1 className="text-3xl font-bold mb-4">{tutorData[0]?.userName}</h1>
+        <p className="text-gray-600 text-sm mb-2">
+          {tutorData[0]?.address?.city}, {tutorData[0]?.address?.state}, {tutorData[0]?.address?.country}
+        </p>
+        <p className="text-gray-600 text-sm mb-2">{tutorData[0]?.degree}</p>
+        <div className="mb-4">
+          <p className="text-gray-700 font-semibold">Skills:{tutorData[0]?.specification?.map((item, index) => (
+  <span key={index}>
+    {item}
+    {index !== tutorData[0]?.specification.length - 1 ? ', ' : ''}
+  </span>
+))}</p>
+          <ul className="list-disc list-inside">
+            {tutorData[0]?.skills?.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="mb-4">
+          <p className="text-gray-700 font-semibold">About Me:</p>
+          <p className="text-gray-600">{tutorData[0]?.description}</p>
+        </div>
+      </div>
+    </div>
+  )}
         </div>
       </div>
     </div>

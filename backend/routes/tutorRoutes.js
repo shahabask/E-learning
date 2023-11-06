@@ -1,7 +1,7 @@
 import express from 'express'
 import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassword,
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-         loadCourseData,addCourse,loadCourses,editCourse,profileData} from '../controllers/tutorController.js'
+         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
@@ -42,4 +42,5 @@ tutorRouter.post('/addCourse',tutorauthcheck,upload.single('image'),addCourse)
 tutorRouter.get('/loadCourses',tutorauthcheck,loadCourses)
 tutorRouter.patch('/editCourse',upload.single('image'),editCourse)
 tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
+tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
 export default  tutorRouter
