@@ -23,7 +23,7 @@ const sendResetMail = (name, email, token) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+     
         // Handle the error, e.g., throw an error or return an error response.
       } else {
         console.log("Email has been sent successfully", info.response);

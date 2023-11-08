@@ -15,8 +15,7 @@ export default function Profile() {
      const response=await axiosInstance.get('/loadProfile')
    setUserData(response.data.myProfile)
 
-   console.log('res',response.data.myProfile)
-   // console.log('userData',userData)
+
    } catch (error) {
      console.log('error',error.response||error.error)
    }
@@ -25,6 +24,13 @@ export default function Profile() {
    const handleEditClick = () => {
      setShowForm((prevShowForm) => !prevShowForm);
    };
+
+
+   const imagePath = userData?.image
+  const modifiedImagePath = imagePath
+   ? `http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
+   : '';
+   console.log('img',modifiedImagePath)
    return (
      <div style={{ height: "100vh", backgroundColor: "	#fcdad1" }}>
        <div className="container ">
@@ -36,7 +42,7 @@ export default function Profile() {
                    <div className="user-profile">
                      <div className="user-avatar  with-border">
                        <img
-                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdE5vknOx-qLzTCFwcHv4c2gaQEgwV25KmSg&usqp=CAU"
+                         src={modifiedImagePath}
                          alt="Maxwell Admin"
                        />
                      </div>

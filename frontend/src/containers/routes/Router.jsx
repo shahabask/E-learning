@@ -38,6 +38,10 @@ import UserPrivateRoute from '../../components/user/UserPrivateRoute.jsx'
 import Profile from '../user/profile/Profile.jsx'
 import PlanContainer from '../user/plans/Plan.jsx'
 import SubCategory from '../user/courses/SubCategory.jsx'
+import CourseDetails from '../user/courses/CourseDetails.jsx'
+import Subscription from '../admin/Subscription.jsx'
+import Success from '../user/plans/Success.jsx'
+import Cancel from '../user/plans/Cancel.jsx'
 
 
 function Router() {
@@ -51,6 +55,7 @@ function Router() {
    <Route path='/profile' element={<Profile/>}/>
    <Route path='/plans' element={<PlanContainer/>}/>
    <Route path="/category/:categoryId" element={<SubCategory/>} />
+   <Route path='/courseDetails/:courseId' element={<CourseDetails/>}/>
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
          <Route path='/forgotPassword' element={<ForgotPassword/>}/>
@@ -58,6 +63,9 @@ function Router() {
          <Route path='/resetPassword' element={<ResetPassword/>}/>
          <Route path='/otpLoginEmail' element={<OtpLoginEmail/>}/>
          <Route path='/otpLogin' element={<OtpLogin/>}/>
+         <Route path='/success/:userId/:mode/:date' element={<Success/>}/>
+         <Route path='/cancel' element={<Cancel/>}/>
+
    </Route>
 
 
@@ -81,6 +89,7 @@ function Router() {
    <Route path='tutorManagement' element={<TutorManagement/>}/>
    <Route path='categoryManagement' element={<CategoryManagement/>}/>
    <Route path='courseManagement' element={<CourseManagement/>}/>
+   <Route path='subscription' element={<Subscription/>}/>
   {/* <Route path='logout' /> */}
    </Route>
 

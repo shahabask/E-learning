@@ -40,7 +40,7 @@ const tutorSchema = mongoose.Schema({
       },
       image:{
         type:String,
-        default:''  
+        default:null  
       },
       otp:{
         type:Number,

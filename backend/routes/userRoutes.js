@@ -1,7 +1,24 @@
 import express from 'express'
 import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
-    courseCategoryListing,loadCategoryDetails,loadProfile} from '../controllers/userController.js'
+    courseCategoryListing,loadCategoryDetails,loadProfile,updateProfile,courseDetails,loadPlans,checkout,
+    confirmPayment,loadSubsriptionDetails} from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
+
+
+import multer from 'multer';
+import path from 'path'
+const storage = multer.diskStorage({
+destination: (req, file, cb) => {
+  cb(null, 'backend/public/images');
+  
+},
+filename: (req, file, cb) => {
+ 
+  cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+},
+});
+
+const upload = multer({ storage: storage });
 
 const router=express.Router()
 
@@ -16,27 +33,10 @@ router.post('/otpLogin',otpLogin)
 router.get('/courseCategoryList',courseCategoryListing)
 router.get('/categoryDetails/:categoryId',loadCategoryDetails)
 router.get('/loadProfile',authcheck,loadProfile)
-router.post("/api/orders", async (req, res) => {
-    try {
-     
-      const { cart } = req.body;
-      const { jsonResponse, httpStatusCode } = await createOrder(cart);
-      res.status(httpStatusCode).json(jsonResponse);
-    } catch (error) {
-      console.error("Failed to create order:", error);
-      res.status(500).json({ error: "Failed to create order." });
-    }
-  });
-   
-  
-  router.post("/api/orders/:orderID/capture", async (req, res) => {
-    try {
-      const { orderID } = req.params;
-      const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
-      res.status(httpStatusCode).json(jsonResponse);
-    } catch (error) {
-      console.error("Failed to create order:", error);
-      res.status(500).json({ error: "Failed to capture order." });
-    }
-  });
+router.post('/updateProfile',authcheck,upload.single('image'),updateProfile)
+router.get('/loadCourseDetails/:courseId',authcheck,courseDetails)
+router.get('/loadPlans',authcheck,loadPlans)
+router.post('/create-checkout',authcheck,checkout)
+router.post('/confirmPayment',confirmPayment)
+router.get('/getUserDetails',authcheck,loadSubsriptionDetails)
 export default  router

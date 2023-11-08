@@ -52,7 +52,7 @@ const handleBlockClick = async (e,courseId,isActive) => {
     // fetchData();
  
   } catch (error) {
-    console.error('Error blocking user:', error);
+   
     toast.error(error?.response?.data||error.error)
   }
 };
@@ -63,7 +63,7 @@ useEffect(()=>{
 
  const fetchCourses=async()=>{
   let response=await axiosInstance.get('/loadCourses')
-  console.log('response',response.data.courses)
+
     setRows([...response.data.courses])
    
  }

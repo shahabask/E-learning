@@ -7,7 +7,7 @@ const tutorauthcheck =  async (req, res, next) => {
 
   const token = req.headers.authorization;
   if (token) {
-    console.log('working')
+   
     try {
       // Remove the "Bearer " prefix from the token (if present)
       const tokenWithoutBearer = token.replace("Bearer ", "");
@@ -17,17 +17,17 @@ const tutorauthcheck =  async (req, res, next) => {
 
       // Fetch user details and attach to the request
       req.user = await Tutor.findById(decoded.tutorId).select('-password');
-      // console.log('not working',req.user)
+
       
       next();
     } catch (error) {
-      console.log(error,'are you here');
+      
       res.status(401).json(error)
       
     }
   } else {
     res.status(401).json('error')
-    console.log('error occured')
+   
   }
 };
 

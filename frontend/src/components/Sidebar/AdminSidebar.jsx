@@ -61,7 +61,7 @@ function AdminSidebar({ toggleSidebar }) {
     <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Category Management</span>
   </li>
 </NavLink>
-              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
+              <NavLink to='/admin/subscription' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
                  <FaMoneyBillAlt className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Subscription</span> 
               </li></NavLink> 

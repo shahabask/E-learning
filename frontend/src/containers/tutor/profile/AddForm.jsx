@@ -18,7 +18,7 @@ const [description, setDescription] = useState(tutorData[0]?.description || '');
   const [selectedImage, setSelectedImage] = useState(tutorData[0]?.image||null);
 const handleUpdate=async(e)=>{
   e.preventDefault();
-  const imageFileName = selectedImage instanceof File ? selectedImage: selectedImage.replace("http://localhost:5000/images/", "")
+  const imageFileName = selectedImage instanceof File ? selectedImage: selectedImage.replace("http://localhost:5000/images/", "").replace("backend\\public\\images\\", "")
   const updatedTutorInfo = {
     userName,
     city,
@@ -41,7 +41,7 @@ const handleUpdate=async(e)=>{
       }
 
   }catch(error){
-    console.log('error',error.response)
+   
       toast.error(error?.response?.data ||error.error)
   }
   
@@ -61,7 +61,7 @@ const imagePath = tutorData[0]?.image
 const modifiedImagePath = imagePath
 ? `http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
 : '';
-console.log('im',modifiedImagePath)
+
 
 const handleAddSkill = () => {
   if (selectedSkill) {

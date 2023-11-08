@@ -18,7 +18,7 @@ function TutorVerifyOtp() {
        
       navigate("/tutor/login/resetPassword", { state: state });
     } catch (error) {
-      console.log(error)
+      log(error)
       toast.error(error?.response?.data||error.error);
     }
   };

@@ -1,7 +1,7 @@
 import express from 'express'
 import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassword,
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile} from '../controllers/tutorController.js'
+         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
@@ -14,14 +14,16 @@ destination: (req, file, cb) => {
   
 },
 filename: (req, file, cb) => {
-  console.log('fileName', file.originalname);
+ 
   cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
 },
 });
 const videoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'backend/public/videos');
+    
   },
+  
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
   },
@@ -43,4 +45,5 @@ tutorRouter.get('/loadCourses',tutorauthcheck,loadCourses)
 tutorRouter.patch('/editCourse',upload.single('image'),editCourse)
 tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
 tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
+tutorRouter.patch('/addVideo',videoUpload.array('videoUrl'),addVideo)
 export default  tutorRouter

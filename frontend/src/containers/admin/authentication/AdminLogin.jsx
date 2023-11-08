@@ -39,11 +39,11 @@ function AdminLogin() {
        
        try {
          const res=await axios.post('http://localhost:5000/api/admin/login',{email,password})
-         console.log(res)
+         
            dispatch(setAdminCredentials({ ...res.data })) 
            navigate('/admin');
        } catch (error) {
-        console.log(error)
+    
               toast.error(error?.data|| error.error)
        }
   };

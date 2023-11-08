@@ -42,12 +42,13 @@ function CourseCategoryPage() {
         <h1 className="text-3xl font-semibold mb-4">Top Courses</h1>
         <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
           {currentCourses.map((course) => (
-            <CourseCard key={course?._id} {...course} />
+            
+            <CourseCard className='m-3 p-4' key={course?._id} {...course} />
           ))}
         </div>
         {coursesData.length > itemsPerPage && (
           <button
-            className="bg-blue-500 hover-bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mx-auto my-4"
+            className="text-white shadow bg-gradient-to-r from-purple-700 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             onClick={handleLoadMoreCourses}
           >
             Load More Courses
@@ -64,7 +65,7 @@ function CourseCategoryPage() {
         </div>
         {categoriesData.length > itemsPerPage && (
           <button
-            className="btn btn-primary mx-auto my-4"
+            className="text-white shadow bg-gradient-to-r from-purple-700 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             onClick={handleLoadMoreCategories}
           >
             Load More Categories

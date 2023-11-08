@@ -22,10 +22,22 @@ const courseSchema = mongoose.Schema({
       type:String,
       required:true
      },
-     videos:{
-        type:Array,
-        default:[]
-     },
+     videos:[
+      {
+         title:{
+            type:String,
+            default:'this is title'
+         },
+         description:{
+            type:String,
+            default:'this is descrition'
+         },
+         videoUrl:{
+            type:String,
+            default:null
+         }
+      }
+     ],
      description:{
       type:String,
       required:true

@@ -6,13 +6,13 @@ import tutorRoutes from './routes/tutorRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
-import path from 'path'
+import Stripe from 'stripe'
 
-
-
+const stripe = new Stripe('sk_test_51O9tFFSDsPPMBnLnMdMtou8UwIWhDpQJl3hXgNqJCjBwaWNDXXkDcnCvRUuvGJegH2TKKMthVMz9fNNvBasBLXGi00Bg41xYtX');
 const app = express()
-dotenv.config()
 
+
+dotenv.config()
 app.use(cors())
 connectDB()
 app.use(cookieParser())

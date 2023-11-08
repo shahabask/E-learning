@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcryptjs'
+import { ObjectId } from "mongodb";
 const userSchema = mongoose.Schema({
     firstName: {
         type: String,
@@ -21,7 +22,7 @@ const userSchema = mongoose.Schema({
       },
       image:{
         type:String,
-        default:''  
+        default:null 
       },
       phone:{
         type:Number,
@@ -35,8 +36,16 @@ const userSchema = mongoose.Schema({
         default:false
       },
       subscription:{
-        type:String,
-        default:'Free'
+       mode:{
+        type:ObjectId
+       },
+       startDate:{
+        type:Date,
+        
+       },
+       endDate:{
+        type:Date
+       }
       }
     },
    

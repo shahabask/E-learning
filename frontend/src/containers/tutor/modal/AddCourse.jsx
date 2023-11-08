@@ -30,7 +30,7 @@ useEffect(()=>{
   
     const categoryNames = categories.map((category) => category.categoryName);
     setCategoryName(categoryNames);
-    //  console.log('categoryNamesModal',categoryName)
+   
  
 
 },[categories])

@@ -30,7 +30,7 @@ const tutorAuth=asyncHandler(async(req,res)=>{
 const registerTutor=asyncHandler(async(req,res)=>{
 
     const {userName,email,password}=req.body
-    console.log('working')
+    
     const tutorExists= await Tutor.findOne({email:email})
     if(tutorExists){
         res.status(400).json('tutor already exists')
@@ -51,7 +51,7 @@ const registerTutor=asyncHandler(async(req,res)=>{
         })
     }else{
         res.status(400).json('invalid tutor data')
-        console.log('not working')
+  
         throw new Error('invalid tutor data')
     }
 
@@ -71,7 +71,7 @@ const tutorDetails = asyncHandler(async (req, res) => {
       res.status(200).json({ isBlocked: false });
     }
   } catch (err) {
-    console.error('Error in processing the request:', err);
+    
     res.status(500).json({ error: 'An error occurred while processing the request' });
   }
 });
@@ -95,7 +95,7 @@ const tutorForgotPassword=asyncHandler(async(req,res)=>{
       user.otpExpiration = otpExpiration;
       await user.save();
       sendresetmail(user.userName, email, user.otp);
-      console.log('successfull')
+    
       res.status(200).json({message:"its working"});
     } else {
       res.status(400).json({message:"User not found"});
@@ -195,9 +195,9 @@ const category=await  Category.aggregate([
 const addCourse=asyncHandler(async(req,res)=>{
   const {course,category,subCategory,description}=req.body
   const imagePath = req.file.path
-  console.log('path',req.file)
+
    const categoryDetails=await Category.findOne({categoryName:category})
- console.log('are you sure')
+
    const categoryId=categoryDetails._id
    
    const tutorId=req.user._id
@@ -258,7 +258,7 @@ const loadCourses=asyncHandler(async(req,res)=>{
       },
     },])
 
-    // console.log('myCourses',myCourses)
+  
     if(myCourses.length>0){
       res.status(200).json(myCourses)
     }else{
@@ -276,7 +276,7 @@ const editCourse=asyncHandler(async(req,res)=>{
   if(updateCourse){
     res.status(200).json('edited successfully')
   }else{
-    console.log('cant do that ')
+   
     res.status(500).json(`couldn't update`)
   }
 })
@@ -311,7 +311,7 @@ const profileData=asyncHandler(async(req,res)=>{
    subCategories = subCategories[0]?.subCategories?.filter((subCategory) => {
     return !myProfile?.specification?.includes(subCategory);
   });
-  console.log('spe',myProfile)
+
   if(myProfile){
     res.status(200).json({myProfile,subCategories})
  
@@ -323,14 +323,14 @@ const profileData=asyncHandler(async(req,res)=>{
 
 
 const updateProfile=asyncHandler(async(req,res)=>{
-  console.log('I am here');
+
   const userId=req.user._id
   const {userName,city,state,country,skill,description,degree,image}=req.body
   let imagePath = req?.file?.path
-  console.log('img',image,'imagePath',imagePath)
+
   imagePath=imagePath?imagePath: `backend\\public\\images\\${image}`
   const updateTutor=await Tutor.updateOne({_id:userId},{userName,address:{city:city,state,country},specification:skill,description,image:imagePath,degree})
-console.log('updatedUser',updateTutor)
+
   if(updateTutor){
       res.status(200).json('updated')
   }else{
@@ -340,7 +340,12 @@ console.log('updatedUser',updateTutor)
   
 })
 
+const addVideo=asyncHandler(async(req,res)=>{
+ 
+  res.status(200).json('it is coming')
+})
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile}
+        loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,
+        addVideo}
 

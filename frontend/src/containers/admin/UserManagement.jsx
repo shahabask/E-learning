@@ -95,7 +95,7 @@ export default function UserManagement() {
       try {
         const res = await axiosInstance.get('/loadUsers');
         setRows([...res.data.users]);
-        console.log(res.data.users)
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       }

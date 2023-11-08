@@ -17,10 +17,10 @@ function AdminVerifyOtp() {
       try {
    
         const res = await axiosInstance.post(`/verifyOtp`,{state, otp})
-         console.log('this is res',res)
+         
         navigate("/admin/resetPassword", { state:state })
       } catch (error) {
-        console.log('this is error',error)
+       
         toast.error(error?.response?.data||error.error);
       }
     };

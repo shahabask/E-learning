@@ -163,7 +163,7 @@ const handleAddCategory = async (formData) => {
             ...category,
             index: index + 1,
           }));
-          console.log('res',res.data)
+          
           setRows([...categoryWithIndex]);
       } catch (error) {
         console.error('Error fetching data:', error);

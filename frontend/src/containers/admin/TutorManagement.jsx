@@ -74,7 +74,7 @@ function TutorManagement() {
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get('/loadTutors');
-        console.log('tutor data',res.data.tutors)
+     
         setRows([...res.data.tutors]);
       } catch (error) {
         console.error('Error fetching data:', error)

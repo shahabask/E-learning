@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import Tutor from "../models/tutorModel.js";
 import Category from "../models/categoryModel.js";
 import Course from "../models/courseModel.js";
+import Plan from "../models/plansModel.js";
 
 const loadUsers = asyncHandler(async (req, res) => {
   const users = await User.find(
@@ -54,7 +55,7 @@ const addCategory = asyncHandler(async (req, res) => {
   const { categoryName, subCategories } = req.body; // Assuming categoryName is sent as part of the form data
   const imagePath = req.file.path;
 
-  console.log("its backend image", imagePath);
+  
   const checkIdentical = await Category.findOne({ categoryName: categoryName });
   if (!checkIdentical) {
     const category = await Category.create({
@@ -170,7 +171,7 @@ const editCategory = asyncHandler(async (req, res) => {
 
 const blockCategory = asyncHandler(async (req, res) => {
   const { categoryId, isBlocked } = req.body;
-  console.log(isBlocked, "checking");
+ 
   const category = await Category.updateOne(
     { _id: categoryId },
     { active: isBlocked }
@@ -181,6 +182,32 @@ const blockCategory = asyncHandler(async (req, res) => {
     res.status(500).json("server error");
   }
 });
+const loadSubscribers=asyncHandler(async (req, res) => {
+  const subscribers=await User.find({})
+  const plans=await Plan.find({})
+  res.status(200).json({subscribers,plans})
+})
+
+const addPlan=asyncHandler(async (req, res) => {
+  const {type,price,duration,specifications}=req.body
+  
+  const checkPlans = await Plan.findOne({subscriptionMode: { $regex: new RegExp(type, 'i') }});
+
+  if(!checkPlans){
+    const plan =await Plan.create({
+      subscriptionMode: type,
+      price,
+      duration,
+      benifits:specifications
+    })
+    res.status(200).json('successfull')
+  }else{
+    res.status(409).json('plan already exist')
+  }
+
+  
+})
+
 export {
   loadUsers,
   loadTutors,
@@ -193,5 +220,8 @@ export {
   loadCourses,
   blockCourse,
   editCategory,
-  blockCategory 
+  blockCategory ,
+  addPlan,
+  loadSubscribers,
+  
 };

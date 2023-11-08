@@ -1,5 +1,5 @@
 import { DataGrid } from '@mui/x-data-grid';
-import { FaEdit } from 'react-icons/fa';
+import { FaEdit, FaPlus } from 'react-icons/fa';
 import './CourseManagementTutor.css'
 import { axiosInstance } from '../utils/adminAxios';
 import { axiosInstance as tutorAxiosInstance } from '../utils/tutorAxios.js';
@@ -8,6 +8,7 @@ import AddCourse from './modal/AddCourse'
 import { toast} from 'react-toastify';
 import EditCourse from './modal/EditCourse';
 import axios from 'axios';
+import VideoModal from './modal/VideoModal.jsx';
 function CourseManagementTutor() {
 
   //image rendering function in table
@@ -46,6 +47,16 @@ function CourseManagementTutor() {
       width: 130,
       valueGetter: (params) => params.row.videos.length, // Get the length of the 'videos' array
     },
+    {field: 'add',
+      headerName: 'Add Videos',
+      width: 130,  
+      disableSelectionOnClick: true,
+      renderCell: (params) => {  return(
+        
+        <button className={`custom-button-active' }`} onClick={(e) => handleAddVideoClick(e,params.row._id)}>
+          {<FaPlus size={18} />}
+        </button>
+      )},},
     {field: 'edit',
       headerName: 'Edit',
       width: 130,  
@@ -65,18 +76,56 @@ const [isCourseAdded,setIsCourseAdded]=useState(false)
  const [isEditModalOpen,setIsEditModalOpen] =useState(false)
  const [editCourseData,setEditCourseData]=useState('')
  const [edited,setEdited] =useState(false)
+ const [isVideoModalOpen, setVideoModalOpen] = useState(false);
+ const [videoData, setVideoData] = useState([]); 
 
- // open modal for addModal
+
+//  const openVideoModal = (video) => {
+   
+//    setVideoModalOpen(true);
+   
+
+//  };
+
+
+ const closeVideoModal = () => {
+   setVideoData([]); 
+   setVideoModalOpen(false);
+ };
+
+
+ const onSaveVideo = async(updatedVideo) => {
+  const videoUrl=updatedVideo.map((item)=>item.videoUrl)
+try{
+
+  const response=await tutorAxiosInstance.patch('/addVideo',{updatedVideo,videoUrl},{
+    headers: {
+      'Content-Type': 'multipart/form-data', 
+    },})
+toast.success('successfully added video')
+}catch(error){
+toast.error('some error')
+}
+    
+
+      
+ };
+
+
+ const onDeleteVideo = (video) => {
+
+ };
+
 const openModal = () => {
   setModalOpen(true);
   setIsCourseAdded(false)
 };
-// close modal for addModal
+
 const closeModal = () => {
   setModalOpen(false);
 };
 
-//function to add course to the server
+
 const handleAddCourse = async (formData) => {
   try {
     const response = await tutorAxiosInstance.post('addCourse', formData,{
@@ -89,11 +138,25 @@ const handleAddCourse = async (formData) => {
      setIsCourseAdded(true)
   } catch (error) {
     toast.error(error?.response?.data||error.error)
-    console.log(error,'hope it is errro')
+    
   }
 };
 
-//function to open modal for editing
+const handleAddVideoClick=(e,id)=>{
+  e.stopPropagation();
+  setVideoModalOpen(true);
+  const courseToEdit=rows.filter((course)=>{
+    if(course._id==id){
+        return course
+    }
+   })
+   
+
+   setVideoData(courseToEdit[0]?.videos);
+ 
+   
+}
+
 const handleEditClick=(e,id)=>{
   e.stopPropagation();
   setIsEditModalOpen(true)
@@ -102,7 +165,7 @@ const handleEditClick=(e,id)=>{
       return course
   }
  })
-console.log('edit',courseToEdit)
+
  setEditCourseData(courseToEdit)
 }
 
@@ -166,7 +229,7 @@ const fetchModalCourseData=async()=>{
 
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">Course Management</div>
         <button
@@ -196,6 +259,13 @@ const fetchModalCourseData=async()=>{
         onRequestClose={() => setIsEditModalOpen(false)}
         onEditCourse={handleEditCourse}
         courseData={editCourseData}
+      />
+       <VideoModal
+        isOpen={isVideoModalOpen}
+        onRequestClose={closeVideoModal}
+        videoData={videoData}
+        onSaveVideo={onSaveVideo}
+        onDeleteVideo={onDeleteVideo}
       />
     </div>
   );

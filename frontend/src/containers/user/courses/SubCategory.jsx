@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+
 import { Link, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axios';
 import { toast } from 'react-toastify';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import { Container, Navbar, Nav, Row, Col, Card, Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+
 function SubCategory() {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   // const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +24,7 @@ const [subCategoryCourses,setSubCategoryCourses]=useState([])
 useEffect(()=>{
     fetchCategoryDetails()
    setSelectedSubcategory(category[0]?.subCategory)
-   console.log('sub',selectedSubcategory) 
+
 },[])
 const fetchCategoryDetails=async()=>{
     try {
@@ -40,9 +41,9 @@ const fetchCategoryDetails=async()=>{
         return item;
       })
         setCategory([...modifiedCategory])
-        console.log('categories',category)
+      
     } catch (error) {
-      console.log('error',error)
+   
       toast.error(error?.response?.data ||error.error)  
     }
         
@@ -61,19 +62,25 @@ useEffect(()=>{
       }
      
     })
-    console.log('courses123235',coursesDetails)
+
     if(coursesDetails.length==0){
-      console.log('helo')
       setSubCategoryCourses([])
     }else{
 
       setSubCategoryCourses([...coursesDetails])
+      
     }
 },[selectedSubcategory])
 
-      // useEffect(()=>{
-      //   // console.log('modifiedImage:',modifiedImage)
-      // },[modifiedImage])
+const [isHovered, setIsHovered] = useState(false);
+
+const handleMouseEnter = () => {
+  setIsHovered(true);
+};
+
+const handleMouseLeave = () => {
+  setIsHovered(false);
+};
   return (
 
 <div style={{backgroundColor:'#FDF8EE'}}>
@@ -108,13 +115,10 @@ useEffect(()=>{
     <h3 className="font-light">SUBCATEGORIES:</h3>
     <div>
       {category[0]?.subCategories?.map((subcategory, index) => (
-        <button
-          key={index}
-          className="bg-black text-white py-2 px-4 mx-2 group-hover:scale-110"
-          onClick={() => handleSubcategoryClick(subcategory)}
-        >
-          {subcategory}
-        </button>
+        <button type="button" onClick={() => handleSubcategoryClick(subcategory)}
+         key={index} className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"> 
+         {subcategory}</button>
+ 
       ))}
     </div>
   </div>
@@ -133,23 +137,71 @@ useEffect(()=>{
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 flex justify-center items-center">
   {subCategoryCourses.length > 0
     ? subCategoryCourses.map((course, index) => (
-        <div key={index} className="mb-5">
-          <div className="border rounded-lg shadow-lg p-4">
-            <img
-              src={course.courseImage}
-              alt={`${course.course} Image`}
-              className="w-full h-auto max-h-48 mb-4" // Adjust the max height as needed
-            />
-            <h2 className="text-lg font-semibold">{course.course}</h2>
-            {/* <p className="text-gray-600">{course.courseDescription}</p> */}
-            <a
-              href="#!"
-              className="bg-primary text-white py-2 px-4 inline-block mt-4"
-            >
-              More Info
-            </a>
-          </div>
+
+      <div
+      key={index}
+      className={`relative group duration-500 cursor-pointer group overflow-hidden relative text-gray-50 h-72 w-56 rounded-2xl hover:duration-700 duration-700 ${
+        isHovered ? 'group-hover:-bottom-0' : ''
+      }`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="w-56 h-72 bg-lime-400 text-gray-800">
+        <div className="flex flex-row justify-between">
+          <svg
+            className="fill-current stroke-current w-8 h-8 p-2 hover:bg-lime-200 rounded-full m-1"
+            height="100"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 100 100"
+            width="100"
+            x="0"
+            xmlns="http://www.w3.org/2000/svg"
+            y="0"
+          >
+            <path
+              className=""
+              d="M15.8,32.9V15.8m0,0H32.9m-17.1,0L37.2,37.2m47-4.3V15.8m0,0H67.1m17.1,0L62.8,37.2m-47,29.9V84.2m0,0H32.9m-17.1,0L37.2,62.8m47,21.4L62.8,62.8M84.2,84.2V67.1m0,17.1H67.1"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="8"
+            ></path>
+          </svg>
+          <svg
+            className="fill-current stroke-current w-8 h-8 p-2 m-1 hover:bg-lime-200 rounded-full"
+            height="100"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 100 100"
+            width="100"
+            x="0"
+            xmlns="http://www.w3.org/2000/svg"
+            y="0"
+          >
+            <path
+              className="svg-stroke-primary"
+              d="M50,17.4h0M50,50h0m0,32.6h0M50,22a4.7,4.7,0,1,1,4.7-4.6A4.7,4.7,0,0,1,50,22Zm0,32.7A4.7,4.7,0,1,1,54.7,50,4.7,4.7,0,0,1,50,54.7Zm0,32.6a4.7,4.7,0,1,1,4.7-4.7A4.7,4.7,0,0,1,50,87.3Z"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="8"
+            ></path>
+          </svg>
         </div>
+      </div>
+      <div
+        className={`absolute bg-gray-50 ${isHovered ? '-bottom-0' : '-bottom-24'} w-56 p-3 flex flex-col gap-1 group-hover:-bottom-0 group-hover:duration-600 duration-500`}
+      >
+        <span className="text-lime-400 font-bold text-xs">TAILWIND</span>
+        <span className="text-gray-800 font-bold text-3xl">{course.course}</span>
+        {/* <p className="text-neutral-800">{course.courseDescription}</p> */}
+        <Link
+          to={`/courseDetails/${course.courseId}`}
+          className="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 mt-4"
+        >
+          More Info
+        </Link>
+      </div>
+    </div>
       ))
     : (
       <div className="flex justify-center items-center h-48 animate-pulse">
