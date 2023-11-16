@@ -1,4 +1,4 @@
-import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar, FaEnvelope,  FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar, FaEnvelope,  FaSignOutAlt, FaCertificate } from 'react-icons/fa';
 import { RiLiveLine } from 'react-icons/ri';
 import { GrSchedulePlay } from 'react-icons/gr';
 
@@ -40,10 +40,17 @@ function TutorSidebar({ toggleSidebar }) {
             <RiLiveLine className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Live class</span>
           </li></NavLink> 
+
           <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <GrSchedulePlay className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Shedules</span>
           </li></NavLink> 
+          <NavLink to='/tutor/quizManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
+  <li>
+    <FaCertificate className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
+    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Quiz Management</span>
+  </li>
+</NavLink>
           <NavLink to='/tutor/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
             <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Course Management</span>

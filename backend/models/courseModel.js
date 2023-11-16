@@ -22,7 +22,7 @@ const courseSchema = mongoose.Schema({
       type:String,
       required:true
      },
-     videos:[
+     videos:
       {
          title:{
             type:String,
@@ -37,7 +37,7 @@ const courseSchema = mongoose.Schema({
             default:null
          }
       }
-     ],
+     ,
      description:{
       type:String,
       required:true

@@ -5,6 +5,8 @@ import sendresetmail from '../utils/nodeMailer.js';
 import jwt from 'jsonwebtoken'
 import Category from '../models/categoryModel.js';
 import Course from '../models/courseModel.js';
+import Quizzes from '../models/quizModel.js';
+import QuestionBank from '../models/questionBankModel.js';
 const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -344,8 +346,75 @@ const addVideo=asyncHandler(async(req,res)=>{
  
   res.status(200).json('it is coming')
 })
+
+
+
+const loadQuizDetails=asyncHandler(async(req,res)=>{
+  const quizzes=await Quizzes.find({})
+  const subCategories=await Category.aggregate([
+    {
+      $unwind: "$subCategories"
+    }, {$group:
+       { _id: null, allSubCategories: { $push: "$subCategories" }}
+    },{ $project: 
+      { _id: 0,allSubCategories: 1 }
+    }
+  ])
+const questions=await QuestionBank.find({})
+  
+
+  res.status(200).json({quizzes,subCategories,questions})
+  
+})
+
+const loadQuestions=asyncHandler(async(req,res)=>{
+  const questions=await QuestionBank.find({})
+     const subCategories=await Category.aggregate([
+      {
+        $unwind: "$subCategories"
+      }, {$group:
+         { _id: null, allSubCategories: { $push: "$subCategories" }}
+      },{ $project: 
+        { _id: 0,allSubCategories: 1 }
+      }
+    ])
+
+    res.status(200).json({subCategories,questions})
+})
+
+
+const addQuestion=asyncHandler(async(req,res)=>{
+   
+   const {question,options,correctAnswer,selectedSubcategory}=req.body
+   
+   const addQuestion=await QuestionBank.create({question:question,
+    subCategory:selectedSubcategory,option1:options[0],option2:options[1],option3:options[2],option4:options[3],
+    answer:correctAnswer
+
+   })
+
+   if(addQuestion){
+    res.status(200).json('successfull')
+   }else{
+    res.status(500).json(`can't insert`)
+   }
+})
+
+const updateQuestion=asyncHandler(async(req,res)=>{
+  const {question,options,correctAnswer,selectedSubcategory}=req.body
+  const { questionId } = req.params;
+  const updateQuestion=await QuestionBank.updateOne({_id:questionId},{question:question,
+    subCategory:selectedSubcategory,option1:options[0],option2:options[1],option3:options[2],option4:options[3],
+    answer:correctAnswer})
+
+    if(updateQuestion){
+      res.status(200).json('success')
+    }else{
+      res.status(500).json(`can't update`)
+    }
+})
 export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
         tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,
-        addVideo}
+        addVideo,loadQuizDetails,loadQuestions,addQuestion,updateQuestion}
 

@@ -22,7 +22,7 @@ const Navbar = () => {
   const isHomeRoute = location.pathname === '/'
   const navLinks = [
     { id: 1, text: 'Home', path: '/' },
-    { id: 4, text: 'Service', path: '/service' },
+    { id: 4, text: 'Lives', path: '/lives' },
     { id: 3, text: 'Courses', path: '/courses' },
     { id: 2, text: 'Plans', path: '/plans' },
     { id: 5, text: 'Contact', path: '/contact' },

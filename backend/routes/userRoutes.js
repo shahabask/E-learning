@@ -39,4 +39,5 @@ router.get('/loadPlans',authcheck,loadPlans)
 router.post('/create-checkout',authcheck,checkout)
 router.post('/confirmPayment',confirmPayment)
 router.get('/getUserDetails',authcheck,loadSubsriptionDetails)
+
 export default  router

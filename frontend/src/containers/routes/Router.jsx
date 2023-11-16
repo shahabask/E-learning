@@ -42,6 +42,10 @@ import CourseDetails from '../user/courses/CourseDetails.jsx'
 import Subscription from '../admin/Subscription.jsx'
 import Success from '../user/plans/Success.jsx'
 import Cancel from '../user/plans/Cancel.jsx'
+import Lives from '../user/live/Lives.jsx'
+import TutorSchedule from '../tutor/TutorSchedule.jsx'
+import LiveManagement from '../tutor/liveClasses/LiveManagement.jsx'
+import QuizManagement from '../tutor/quiz/QuizManagement.jsx'
 
 
 function Router() {
@@ -55,6 +59,7 @@ function Router() {
    <Route path='/profile' element={<Profile/>}/>
    <Route path='/plans' element={<PlanContainer/>}/>
    <Route path="/category/:categoryId" element={<SubCategory/>} />
+   <Route path='/lives' element={<Lives/>}/>
    <Route path='/courseDetails/:courseId' element={<CourseDetails/>}/>
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
@@ -76,11 +81,7 @@ function Router() {
    
    <Route path='/admin/login' exact element={<AdminLoginScreens/>}>
    <Route path='' element={<AdminLogin/>}/>
-   {/* <Route path='forgotPassword' element={<AdminForgotPassword/>}/>
-   <Route path='verifyOtp' element={<AdminVerifyOtp/>}/>
-   <Route path='resetPassword' element={<AdminPasswordReset/>}/>
-   <Route path='otpLoginEmail' element={<OtpLoginEmail/>}/>
-         <Route path='otpLogin' element={<OtpLogin/>}/> */}
+  
    </Route>
 
    <Route path='/admin' exact element={<AdminPrivateRoute/>}>
@@ -103,6 +104,7 @@ function Router() {
   <Route path="register" element={<TutorSignup />} />
   <Route path='otpLoginEmail' element={<OtpLoginEmail/>}/>
          <Route path='otpLogin' element={<OtpLogin/>}/>
+        
   
 </Route>
 
@@ -111,10 +113,12 @@ function Router() {
 
 
    <Route path='/tutor' exact element={<TutorPrivateRoute/>}>
-   <Route path='dashboard' exact element={<TutorDashboard/>}/>
+   <Route path='' exact element={<TutorDashboard/>}/>
    <Route path='profile' element={<TutorProfile/>}/>  
+   <Route path='liveClasses' element={<LiveManagement/>}/>
    <Route path='courseManagement'  element={<CourseManagementTutor/>}/>
-     
+   <Route path='schedule'  element={<TutorSchedule/>}/>
+   <Route path='quizManagement' element={<QuizManagement/>}/>
    </Route>
    <Route path="*" element={<ErrorPage/>} />
     </Routes>

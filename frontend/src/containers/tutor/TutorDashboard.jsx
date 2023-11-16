@@ -15,7 +15,7 @@ function TutorDashboard() {
     }
   },[navigate,tutorInfo])
   return (
-    <div>TutorDashboard</div>
+    <div style={{height:'100px'}}>TutorDashboard</div>
   )
 }
 

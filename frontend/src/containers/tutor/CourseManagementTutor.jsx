@@ -45,7 +45,7 @@ function CourseManagementTutor() {
       headerName: 'Videos',
       field: 'videos', // The field itself doesn't matter here
       width: 130,
-      valueGetter: (params) => params.row.videos.length, // Get the length of the 'videos' array
+      valueGetter: (params) => params.row.videos?1:0, // Get the length of the 'videos' array
     },
     {field: 'add',
       headerName: 'Add Videos',
@@ -77,7 +77,7 @@ const [isCourseAdded,setIsCourseAdded]=useState(false)
  const [editCourseData,setEditCourseData]=useState('')
  const [edited,setEdited] =useState(false)
  const [isVideoModalOpen, setVideoModalOpen] = useState(false);
- const [videoData, setVideoData] = useState([]); 
+ const [videoData, setVideoData] = useState(''); 
 
 
 //  const openVideoModal = (video) => {
@@ -89,16 +89,16 @@ const [isCourseAdded,setIsCourseAdded]=useState(false)
 
 
  const closeVideoModal = () => {
-   setVideoData([]); 
+   setVideoData(''); 
    setVideoModalOpen(false);
  };
 
 
  const onSaveVideo = async(updatedVideo) => {
-  const videoUrl=updatedVideo.map((item)=>item.videoUrl)
+
 try{
 
-  const response=await tutorAxiosInstance.patch('/addVideo',{updatedVideo,videoUrl},{
+  const response=await tutorAxiosInstance.patch('/addVideo',{updatedVideo},{
     headers: {
       'Content-Type': 'multipart/form-data', 
     },})
@@ -106,15 +106,8 @@ toast.success('successfully added video')
 }catch(error){
 toast.error('some error')
 }
-    
-
       
- };
-
-
- const onDeleteVideo = (video) => {
-
- };
+ }
 
 const openModal = () => {
   setModalOpen(true);
@@ -138,7 +131,7 @@ const handleAddCourse = async (formData) => {
      setIsCourseAdded(true)
   } catch (error) {
     toast.error(error?.response?.data||error.error)
-    
+      
   }
 };
 
@@ -265,7 +258,7 @@ const fetchModalCourseData=async()=>{
         onRequestClose={closeVideoModal}
         videoData={videoData}
         onSaveVideo={onSaveVideo}
-        onDeleteVideo={onDeleteVideo}
+        
       />
     </div>
   );

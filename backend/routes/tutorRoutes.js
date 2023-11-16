@@ -1,7 +1,8 @@
 import express from 'express'
 import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassword,
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo} from '../controllers/tutorController.js'
+         loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo,
+         loadQuizDetails,loadQuestions,addQuestion,updateQuestion} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
@@ -46,4 +47,8 @@ tutorRouter.patch('/editCourse',upload.single('image'),editCourse)
 tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
 tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
 tutorRouter.patch('/addVideo',videoUpload.array('videoUrl'),addVideo)
+tutorRouter.get('/loadQuizDetails',loadQuizDetails)
+tutorRouter.get('/loadQuestion',loadQuestions)
+tutorRouter.post('/addQuestion',addQuestion)
+tutorRouter.put('/updateQuestion/:questionId',updateQuestion)
 export default  tutorRouter
