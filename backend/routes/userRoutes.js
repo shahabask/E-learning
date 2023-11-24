@@ -1,7 +1,8 @@
 import express from 'express'
 import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
-    courseCategoryListing,loadCategoryDetails,loadProfile,updateProfile,courseDetails,loadPlans,checkout,
-    confirmPayment,loadSubsriptionDetails} from '../controllers/userController.js'
+    courseCategoryListing,loadCategoryDetails,loadProfile,updateProfile,courseDetails,loadPlans,loadUpgradePlan,checkout,
+    confirmPayment,loadSubsriptionDetails,loadQuizzes,loadLiveDetails,loadQuizDetails,addQuizResult,
+    loadMarkSheet } from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
 
 
@@ -36,8 +37,14 @@ router.get('/loadProfile',authcheck,loadProfile)
 router.post('/updateProfile',authcheck,upload.single('image'),updateProfile)
 router.get('/loadCourseDetails/:courseId',authcheck,courseDetails)
 router.get('/loadPlans',authcheck,loadPlans)
+router.get('/loadUpgradePlan/:currentPlan',authcheck,loadUpgradePlan)
 router.post('/create-checkout',authcheck,checkout)
 router.post('/confirmPayment',confirmPayment)
 router.get('/getUserDetails',authcheck,loadSubsriptionDetails)
+router.get('/loadQuizzes',authcheck,loadQuizzes)
+router.get('/getLiveDetails',loadLiveDetails)
+router.get('/quizDetails/:quizId',loadQuizDetails)
+router.post('/addQuizResult',authcheck,addQuizResult)
+router.get('/loadMarkSheet',authcheck,loadMarkSheet)
 
 export default  router

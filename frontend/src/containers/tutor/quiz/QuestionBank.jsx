@@ -265,12 +265,14 @@ function QuestionBank() {
                       className="p-2 border border-gray-300 rounded-md w-full"
                       onChange={(e) => handleOptionChange(index, e.target.value)}
                     />
-                    <input
-                      type="checkbox"
-                      className="ml-2"
-                      checked={formData.correctAnswer === String(index)}
-                      onChange={() => handleCorrectAnswerChange(option)}
-                    />
+                   <input
+  type="checkbox"
+  className="ml-2"
+  style={{ visibility: 'visible', display: 'inline-block' }}
+  // checked={formData.correctAnswer === String(index)}
+  onChange={() => handleCorrectAnswerChange(option)}
+/>
+
                   </div>
                 ))}
               </div>
@@ -293,9 +295,6 @@ function QuestionBank() {
           </div>
         </div>
       )}
-
-      {/* Edit Question Modal */}
-
 
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

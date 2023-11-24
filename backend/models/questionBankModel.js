@@ -32,6 +32,6 @@ const questionBankSchema = mongoose.Schema({
 
 })
 
-const QuestionBank = mongoose.model('QuestionBank',questionBankSchema)
+const QuestionBank = mongoose.model('questionBank',questionBankSchema)
 
 export default QuestionBank;

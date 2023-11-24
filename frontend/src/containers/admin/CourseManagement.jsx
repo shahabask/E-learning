@@ -11,12 +11,12 @@ function CourseManagement() {
     { field: 'subCategory', headerName: 'Subcategory', width: 130},
     { field: 'categoryName', headerName: 'Category', width: 130},
     { field: 'tutor', headerName: 'Tutor', width: 130},
-    {
-      headerName: 'Videos',
-      field: 'videos', // The field itself doesn't matter here
-      width: 130,
-      valueGetter: (params) => params.row.videos.length, // Get the length of the 'videos' array
-    },
+    // {
+    //   headerName: 'Videos',
+    //   field: 'videos', // The field itself doesn't matter here
+    //   width: 130,
+    //   valueGetter: (params) => params.row.videos.length, // Get the length of the 'videos' array
+    // },
     { field: 'isActive', headerName: 'Active', width: 130 ,renderCell: (params) => (
       <div className={`pill ${params.row.isActive ? 'active': 'inactive' }`}>
       {params.row.isActive ? 'Active' : 'Inactive'}
@@ -68,7 +68,7 @@ useEffect(()=>{
    
  }
  return (
-  <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
+  <div className="container mx-auto py-6 px-4" style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
     <div className="text-2xl font-bold mb-4">Course Management</div>
     <div className="bg-white rounded shadow-lg">
       <DataGrid

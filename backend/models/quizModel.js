@@ -7,9 +7,9 @@ const quizSchema = mongoose.Schema({
     },
     questions:[{
         question:{  type:mongoose.Schema.Types.ObjectId,
-            ref: 'QuestionBank' }
-    }] ,
-    date:{
+            ref: 'questionBank' }
+    }],
+    lastDate:{
         type:Date,
     },
    time:{
@@ -29,6 +29,6 @@ const quizSchema = mongoose.Schema({
 
 
 
-const Quizzes = mongoose.model('Quizz',quizSchema)
+const Quizzes = mongoose.model('Quizze',quizSchema)
 
 export default Quizzes;

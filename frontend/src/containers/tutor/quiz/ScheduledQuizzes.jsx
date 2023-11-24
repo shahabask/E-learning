@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {axiosInstance as tutorAxiosInstance} from '../../utils/tutorAxios'
+import {axiosInstance, axiosInstance as tutorAxiosInstance} from '../../utils/tutorAxios'
+import { toast } from 'react-toastify';
+import { FaPlus,FaEye } from 'react-icons/fa'; 
 function ScheduledQuizzes() {
   const [isAddQuizModalOpen, setAddQuizModalOpen] = useState(false);
   const [selectedSubcategory, setSelectedSubcategory] = useState('');
@@ -9,28 +11,25 @@ function ScheduledQuizzes() {
   const [scheduledQuizzes,setScheduledQuizzes]=useState([])
   const [subjects,setSubjects]=useState([])
   const [questions,setQuestions]=useState([])
+  const [isQuizAdded,setQuizAdded]=useState(false)
   // Mock data for questions. Replace this with your actual data.
  useEffect(()=>{
   fetchQuizDetails()
- },[])
+
+ },[isQuizAdded])
   const fetchQuizDetails=async()=>{
     try{
       const response=await tutorAxiosInstance.get('/loadQuizDetails' )
          setScheduledQuizzes(response?.data?.quizzes)
          setSubjects(response?.data?.subCategories[0]?.allSubCategories)
          setQuestions(response?.data?.questions)
-       console.log(response?.data?.quizzes)
+     
 
     }catch(error){
          console.log('error')
     }
   }
-  // const questionData = [
-  //   { id: 1, text: 'Question 1', subcategory: 'Math' },
-  //   { id: 2, text: 'Question 2', subcategory: 'Physics' },
-  //   { id: 3, text: 'Question 3', subcategory: 'Chemistry' },
-  //   // Add more questions as needed
-  // ];
+ 
 
   const handleAddQuizClick = () => {
     setAddQuizModalOpen(true);
@@ -69,43 +68,66 @@ function ScheduledQuizzes() {
   };
 
   // Function to handle submitting the quiz
-  const handleAddQuizSubmit = () => {
+  const handleAddQuizSubmit =async (e) => {
     // Handle the submission logic here
-    console.log('Selected Subcategory:', selectedSubcategory);
-    console.log('Number of Questions:', selectedNumQuestions);
-    console.log('Selected Questions:', selectedQuestions);
-      
-    // Close the modal
-    handleAddQuizClose();
+    e.preventDefault()
+    try{
+       
+      const response=await axiosInstance.post('/addQuiz',{quizName,selectedSubcategory,selectedQuestions})
+         
+  
+         toast.success('successfull')
+         setQuizAdded(!isQuizAdded)
+         
+    }catch(error){
+         toast.error('error')
+        }
+        
+        handleAddQuizClose();
+
+  
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:'rgba(224, 176, 255, 0.2)',height: "100vh" ,}}>
+     
       <div className="flex justify-end mb-4">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-full"
+          className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
           onClick={handleAddQuizClick}
         >
+          <FaPlus className="mr-2" />
           Add Quiz
         </button>
       </div>
-      <h2 className="text-2xl font-bold mb-4">Scheduled Quizzes</h2>
+      
+      <h2 className="text-2xl font-bold mb-4 px-5 text-center">Scheduled Quizzes</h2>
 
       {/* Existing Quiz Cards */}
-      <div className="flex space-x-4">
+      <div className="flex flex-wrap justify-center gap-4 px-5">
         {/* Mock data, replace with actual quiz data */}
-      {scheduledQuizzes.map((scheduledQuiz,index)=>{
-         <div className="bg-white rounded-xl overflow-hidden shadow-md w-1/3" key={index}>
-        <div className="px-6 py-4">
-          <div className="font-bold text-xl mb-2">Name:{scheduledQuiz?.name}</div>
-          <p className="text-gray-600 text-sm mb-2">Subject: {scheduledQuiz?.subCategory}</p>
-          <p className="text-gray-600 text-sm mb-2">Time: {scheduledQuiz?.questions?.length*2} min</p>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-full">View Details</button>
-        </div>
-      </div>
-      })} 
+        {scheduledQuizzes?.map((scheduledQuiz, index) => (
+          <div
+            className="bg-white rounded-md overflow-hidden shadow-md w-64 max-w-xs cursor-pointer transition-transform duration-300 hover:scale-105"
+            key={index}
+          >
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2">Name: {scheduledQuiz?.name}</div>
+              <p className="text-gray-600 text-sm mb-2">Subject: {scheduledQuiz?.subCategory}</p>
+              <p className="text-gray-600 text-sm mb-2">
+                Time: {scheduledQuiz?.questions?.length} min
+              </p>
+              <button className=" text-black px-2 py-1 rounded-full flex items-center hover:bg-blue-200 transition-colors">
+                <FaEye className="mr-2" />
+                details
+              </button>
+            </div>
+          </div>
+        ))}
         {/* Repeat this block for other quiz cards */}
       </div>
+  
+
 
       {/* Add Quiz Modal */}
       {isAddQuizModalOpen && (

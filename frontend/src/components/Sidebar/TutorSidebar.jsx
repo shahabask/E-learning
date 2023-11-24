@@ -8,7 +8,7 @@ import TutorHeader from '../Header/TutorHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { TutorLogout } from '../../slices/tutorSlice/tutorAuthSlice';
 import { NavLink } from 'react-router-dom';
-
+import tutorSvg from '../../assets/tutor.svg'
 
 
 function TutorSidebar({ toggleSidebar }) {
@@ -27,47 +27,53 @@ function TutorSidebar({ toggleSidebar }) {
   return (
     <>
      <TutorHeader />
-    {tutorInfo && <aside className={`admin-sidebar ${isIconsOnly ? 'icons-only' : ''}`}>
+    {tutorInfo && <aside className={`admin-sidebar ${isIconsOnly ? 'icons-only' : ''}`} style={{backgroundColor:'#663399' ,borderRight: '2px solid grey' ,color:'white' }}>
         <div className="toggle-button" onClick={toggleIconsOnly}>
           {isIconsOnly ? '☰' : '✖'}
         </div>
         <ul>
-        <NavLink to='/tutor' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
-            <FaHome className="sidebar-icon" />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Dashboard</span>
+        <li className="tutor-heading">
+              {/* <img src={tutorSvg} style={{color:'white'}} alt="Tutor Icon" className={`tutor-icon ${isIconsOnly ? 'hidden' : ''}`} /> */}
+              <span className={`tutor-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Tutor</span>
+            </li>
+        <NavLink to='/tutor' className="active-link" style={{ textDecoration: 'none', color: 'white' }}> <li>
+            <FaHome className="sidebar-icon text-purple-400" />
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Dashboard</span>
           </li></NavLink> 
-          <NavLink to='/tutor/liveClasses' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
-            <RiLiveLine className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Live class</span>
+          <NavLink to='/tutor/liveClasses' className="active-link" style={{ textDecoration: 'none', color: 'white' }}> <li>
+            <RiLiveLine className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Live class</span>
           </li></NavLink> 
 
-          <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
-            <GrSchedulePlay className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Shedules</span>
+          <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none'}}>  <li>
+          <GrSchedulePlay
+      style={{ color: 'purple' }}
+      className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`}
+    />            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Shedules</span>
           </li></NavLink> 
-          <NavLink to='/tutor/quizManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
+          <NavLink to='/tutor/quizManagement' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>
   <li>
-    <FaCertificate className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Quiz Management</span>
+    <FaCertificate className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Quiz Management</span>
   </li>
 </NavLink>
-          <NavLink to='/tutor/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
-            <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Course Management</span>
+          <NavLink to='/tutor/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>  <li>
+            <FaBook className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Course Management</span>
           </li></NavLink> 
-          {/* <NavLink to='/tutor/message' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
-            <FaEnvelope className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
+          {/* <NavLink to='/tutor/message' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>  <li>
+            <FaEnvelope className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Messages</span>
           </li></NavLink>  */}
-          <NavLink to='/tutor/profile' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
+          <NavLink to='/tutor/profile' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>
   <li>
-    <FaUser className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Profile</span>
+    <FaUser className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Profile</span>
   </li>
 </NavLink>
            <li className="logout-button" onClick={handleLogout}>
-            <FaSignOutAlt className="sidebar-icon" />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Logout</span>
+            <FaSignOutAlt className="sidebar-icon text-purple-400" />
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Logout</span>
           </li>
         </ul>
       </aside> } 

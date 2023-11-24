@@ -37,8 +37,8 @@ function CourseCategoryPage() {
   const currentCategories = categoriesData.slice(indexOfFirstCategory, indexOfLastCategory);
 
   return (
-    <div className="main-component pt-16" style={{ backgroundColor: '#FDF8EE' }}>
-      <div className="text-center my-4 m-10">
+    <div className="main-component pt-16" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+      <div className="text-center my-4">
         <h1 className="text-3xl font-semibold mb-4">Top Courses</h1>
         <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
           {currentCourses.map((course) => (

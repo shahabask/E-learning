@@ -14,7 +14,7 @@ function QuizManagement() {
   return (
     <>
       <QuizNavbar onNavItemClick={handleNavItemClick} />
-      <div className="container mt-2" style={{backgroundColor:'#FDF8EE'}}>
+      <div className="" style={{backgroundColor:'#FDF8EE'}}>
         {selectedNavItem === 'Scheduled Quizzes' && <ScheduledQuizzes />}
         {selectedNavItem === 'Question Bank' && <QuestionBank />}
         {selectedNavItem === 'History' && <QuizHistory />}

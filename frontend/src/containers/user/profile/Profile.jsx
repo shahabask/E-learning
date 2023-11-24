@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import axiosInstance from '../../utils/axios.js'
 
 import EditUser from "./EditUser.jsx";
-import Quiz from "./quiz.jsx";
+import Quiz from "./Quizzes.jsx";
+import Quizzes from "./Quizzes.jsx";
+import MarkSheet from "./MarkSheet.jsx";
 export default function Profile() {
   const [userData,setUserData]=useState()
    const [showForm, setShowForm] = useState(false);
    const [showQuiz,setShowQuiz]=useState(false)
+   const [showMarkSheet,setShowMarkSheet]=useState(false)
    const [subcategories,setSubcategories]=useState('')
   useEffect(()=>{
   fetchUser()
@@ -25,10 +28,19 @@ export default function Profile() {
   }
    const handleEditClick = () => {
      setShowForm((prevShowForm) => !prevShowForm);
+     setShowQuiz(false)
+     setShowMarkSheet(false)
    };
 
   const handleQuizClick=()=>{
       setShowQuiz((prevShowQuiz)=>!prevShowQuiz)
+      setShowForm(false)
+      setShowMarkSheet(false)
+  }
+  const handleMarkSheetClick=()=>{
+    setShowMarkSheet(!showMarkSheet)
+    setShowForm(false)
+    setShowQuiz(false)
   }
    const imagePath = userData?.image
   const modifiedImagePath = imagePath
@@ -65,13 +77,13 @@ export default function Profile() {
                         Quiz
                        </span>
                        </div>
-                       {/* <div className="colum">
-                       <i className="fas fa-eye"></i>
+                       <div className="colum" onClick={handleMarkSheetClick}>
+                       <i className="fas fa-clipboard" style={{color:'green'}}></i>
                        <span className="icon"style={{marginLeft:"10px"}}>
-                          Views
+                          MarkSheet
                        </span>
                        </div>
-                       <div className="colum">
+                       {/* <div className="colum">
                        <i className="fas fa-users"></i> 
                        <span className="icon" style={{ paddingLeft: "10px" }}>
                          Followers
@@ -84,8 +96,8 @@ export default function Profile() {
              </div>
            </div>
            <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-           {showForm ? <EditUser userData={userData}  />:showQuiz?<div ><Quiz quizData={'quizData'} className=''/></div>
-           :( 
+           {showForm ? <EditUser userData={userData}  />:showQuiz?<div ><Quizzes quizData={'quizData'} className=''/></div>
+           :showMarkSheet?<MarkSheet/>:( 
        <div className="bg-white shadow-md p-4 rounded-lg">
          <h1 className="text-3xl font-bold mb-4">{userData?.userName}</h1>
          <p className="text-gray-600 text-sm mb-2">

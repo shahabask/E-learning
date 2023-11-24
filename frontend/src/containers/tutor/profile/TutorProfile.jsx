@@ -22,7 +22,7 @@ function TutorProfile() {
     setShowForm((prevShowForm) => !prevShowForm);
   };
   return (
-    <div style={{ height: "100vh", backgroundColor: "	#fcdad1" }}>
+    <div style={{ height: "100vh",backgroundColor:'rgba(224, 176, 255, 0.2)' }}>
       <div className="container ">
         <div className="row gutters row-with-padding">
           <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">

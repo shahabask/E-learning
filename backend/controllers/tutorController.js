@@ -7,6 +7,7 @@ import Category from '../models/categoryModel.js';
 import Course from '../models/courseModel.js';
 import Quizzes from '../models/quizModel.js';
 import QuestionBank from '../models/questionBankModel.js';
+import Live from '../models/liveModel.js';
 const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -400,21 +401,130 @@ const addQuestion=asyncHandler(async(req,res)=>{
    }
 })
 
-const updateQuestion=asyncHandler(async(req,res)=>{
-  const {question,options,correctAnswer,selectedSubcategory}=req.body
+const updateQuestion = asyncHandler(async (req, res) => {
+  const { question, options, correctAnswer, selectedSubcategory } = req.body;
   const { questionId } = req.params;
-  const updateQuestion=await QuestionBank.updateOne({_id:questionId},{question:question,
-    subCategory:selectedSubcategory,option1:options[0],option2:options[1],option3:options[2],option4:options[3],
-    answer:correctAnswer})
+  const updateQuestion = await QuestionBank.updateOne(
+    { _id: questionId },
+    {
+      question: question,
+      subCategory: selectedSubcategory,
+      option1: options[0],
+      option2: options[1],
+      option3: options[2],
+      option4: options[3],
+      answer: correctAnswer,
+    }
+  );
 
-    if(updateQuestion){
-      res.status(200).json('success')
+  if (updateQuestion) {
+    res.status(200).json("success");
+  } else {
+    res.status(500).json(`can't update`);
+  }
+});
+
+const addQuizzes=asyncHandler(async(req,res)=>{
+        const{quizName,selectedSubcategory,selectedQuestions}=req.body
+        const date=new Date()
+        const lastDate = new Date(date);
+        lastDate.setDate(date.getDate() + 7);
+        const questions=selectedQuestions.map(questionId => ({ question: questionId }))
+        const time=questions.length
+        const addQuiz=await Quizzes.create({
+          name:quizName,
+          subCategory:selectedSubcategory,
+          questions,
+          time,
+          lastDate
+        })
+
+        if(addQuiz){
+          res.status(200).json('successfull')
+        }else{
+          res.status(400).json('failed to create')
+        }
+})
+
+const createLive=asyncHandler(async(req,res)=>{
+    const { startTime, endTime, subject, name, description, roomId } = req.body;
+    const Id=req.user._id
+    const addLive=await Live.create({
+      startingTime:startTime,
+      endingTime:endTime,
+      roomId,
+      subCategory:subject,
+      name,
+      description,
+      tutor:Id
+    })
+
+    if(addLive){
+      res.status(200).json('successfully added')
     }else{
-      res.status(500).json(`can't update`)
+      res.status(400).json(`can't create live`)
     }
 })
-export {tutorAuth,registerTutor,logoutTutor,tutorForgotPassword,tutorResetPassword,
-        tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
-        loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,
-        addVideo,loadQuizDetails,loadQuestions,addQuestion,updateQuestion}
 
+const tutorLiveDetails=asyncHandler(async(req,res)=>{
+  
+  const {status}=req.params
+  const Id=req.user._id
+  const lives=await Live.find({tutor:Id,status:status})
+  const subCategories=await Tutor.find({_id:Id},{ specification: 1 })
+  if(lives){
+    res.status(200).json({lives,subCategories})
+  }else{
+    res.status(400).json(`lives not found`)
+  }
+
+})
+
+const deleteLive=asyncHandler(async(req,res)=>{
+  const {id} = req.params;
+  const deleteLive=await Live.findByIdAndDelete(id)
+  if(deleteLive){
+    res.status(200).json('delete successfull')
+  }else{
+    res.status(400).json(`can't delete`)
+  }
+})
+
+const updateLiveStatus=asyncHandler(async(req,res)=>{
+  const {id,status}=req.body
+  console.log('status',status,'id',id)
+  const updateStatus=await Live.updateOne({_id:id},{status:status})
+  console.log(updateStatus)
+  if(updateStatus){
+    res.status(200).json('successfull')
+  }else{
+    res.status(400)
+  }
+})
+export {
+  tutorAuth,
+  registerTutor,
+  logoutTutor,
+  tutorForgotPassword,
+  tutorResetPassword,
+  tutorConfirmOtp,
+  tutorOtpLoginVerifyEmail,
+  tutorOtpLogin,
+  tutorDetails,
+  loadCourseData,
+  addCourse,
+  loadCourses,
+  editCourse,
+  profileData,
+  updateProfile,
+  addVideo,
+  loadQuizDetails,
+  loadQuestions,
+  addQuestion,
+  updateQuestion,
+  addQuizzes,
+  createLive,
+  tutorLiveDetails,
+  deleteLive,
+  updateLiveStatus
+};

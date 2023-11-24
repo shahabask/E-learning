@@ -19,7 +19,7 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-function VideoModal({ isOpen, onRequestClose, videoData, onSaveVideo }) {
+function VideoModal({id, isOpen, onRequestClose, videoData, onSaveVideo }) {
   const [video, setVideo] = useState(videoData || { title: '', description: '', videoUrl: null });
   const [errors, setErrors] = useState({});
 
@@ -32,7 +32,7 @@ function VideoModal({ isOpen, onRequestClose, videoData, onSaveVideo }) {
     const isValid = validate();
 
     if (isValid) {
-      onSaveVideo(video);
+      onSaveVideo(video,id);
       onRequestClose();
     }
   };

@@ -78,7 +78,7 @@ const [isCourseAdded,setIsCourseAdded]=useState(false)
  const [edited,setEdited] =useState(false)
  const [isVideoModalOpen, setVideoModalOpen] = useState(false);
  const [videoData, setVideoData] = useState(''); 
-
+const [courseId,setCourseId]=useState('')
 
 //  const openVideoModal = (video) => {
    
@@ -94,11 +94,11 @@ const [isCourseAdded,setIsCourseAdded]=useState(false)
  };
 
 
- const onSaveVideo = async(updatedVideo) => {
+ const onSaveVideo = async(updatedVideo,id) => {
 
 try{
 
-  const response=await tutorAxiosInstance.patch('/addVideo',{updatedVideo},{
+  const response=await tutorAxiosInstance.patch('/addVideo',{...updatedVideo,id},{
     headers: {
       'Content-Type': 'multipart/form-data', 
     },})
@@ -144,7 +144,7 @@ const handleAddVideoClick=(e,id)=>{
     }
    })
    
-
+   setCourseId(id)
    setVideoData(courseToEdit[0]?.videos);
  
    
@@ -222,7 +222,7 @@ const fetchModalCourseData=async()=>{
 
 
   return (
-    <div className="container mx-auto py-6 px-4" style={{backgroundColor:'#FDF8EE'}}>
+    <div className="container mx-auto py-6 px-4" style={{backgroundColor:'rgba(224, 176, 255, 0.2)'}}>
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">Course Management</div>
         <button
@@ -258,7 +258,7 @@ const fetchModalCourseData=async()=>{
         onRequestClose={closeVideoModal}
         videoData={videoData}
         onSaveVideo={onSaveVideo}
-        
+        id={courseId} 
       />
     </div>
   );

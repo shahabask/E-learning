@@ -33,48 +33,52 @@ function AdminSidebar({ toggleSidebar }) {
       return (
         <>
           <AdminHeader/>
-      {adminInfo &&  <aside className={`admin-sidebar ${isIconsOnly ? 'icons-only' : ''}`}>
+      {adminInfo &&  <aside className={`admin-sidebar ${isIconsOnly ? 'icons-only' : ''}`} style={{backgroundColor:'#663399' ,borderRight: '2px solid grey' ,color:'white' }}>
             <div className="toggle-button" onClick={toggleIconsOnly}>
               {isIconsOnly ? '☰' : '✖'}
             </div>
             <ul>
+            <li className="tutor-heading">
+              {/* <img src={tutorSvg} style={{color:'white'}} alt="Tutor Icon" className={`tutor-icon ${isIconsOnly ? 'hidden' : ''}`} /> */}
+              <span className={`tutor-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Admin</span>
+            </li>
             <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>    <li>
-              <FaHome className="sidebar-icon" />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Dashboard</span>
+              <FaHome className="sidebar-icon text-purple-400" />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Dashboard</span>
               </li> </NavLink> 
               <NavLink to='/admin/userManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
-               <FaUser className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>User Management</span>
+               <FaUser className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>User Management</span>
               </li> </NavLink>  
               <NavLink to='/admin/tutorManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>  <li>
-               <FaChalkboardTeacher className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Tutor Management</span>
+               <FaChalkboardTeacher className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Tutor Management</span>
               </li></NavLink>
               <NavLink to='/admin/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
                 
-                <FaBook className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Courses</span>
+                <FaBook className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Courses</span>
               </li> </NavLink> 
               <NavLink to='/admin/categoryManagement' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>
   <li>
-    <MdCategory className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Category Management</span>
+    <MdCategory className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Category Management</span>
   </li>
 </NavLink>
               <NavLink to='/admin/subscription' className="active-link" style={{ textDecoration: 'none', color: 'black' }}> <li>
-                 <FaMoneyBillAlt className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Subscription</span> 
+                 <FaMoneyBillAlt className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Subscription</span> 
               </li></NavLink> 
     
               {/* New li tags with corresponding icons */}
               <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
-                <FaChartBar className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Sales Report</span> 
+                <FaChartBar className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Sales Report</span> 
               </li></NavLink> 
-              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
-                <FaEnvelope className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Messages</span>
-              </li></NavLink> 
+              {/* <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
+                <FaEnvelope className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
+                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Messages</span>
+              </li></NavLink>  */}
                <li className="logout-button" onClick={handleLogout}>
                 <FaSignOutAlt className="sidebar-icon" />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Logout</span>

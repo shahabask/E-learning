@@ -2,13 +2,15 @@ import express from 'express'
 import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassword,
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
          loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo,
-         loadQuizDetails,loadQuestions,addQuestion,updateQuestion} from '../controllers/tutorController.js'
+         loadQuizDetails,loadQuestions,addQuestion,updateQuestion, addQuizzes,createLive,
+         tutorLiveDetails,deleteLive,updateLiveStatus} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
 
 import multer from 'multer';
 import path from 'path'
+import { loadLiveDetails } from '../controllers/userController.js';
 const storage = multer.diskStorage({
 destination: (req, file, cb) => {
   cb(null, 'backend/public/images');
@@ -48,7 +50,12 @@ tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
 tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
 tutorRouter.patch('/addVideo',videoUpload.array('videoUrl'),addVideo)
 tutorRouter.get('/loadQuizDetails',loadQuizDetails)
+tutorRouter.post('/addQuiz',addQuizzes)
 tutorRouter.get('/loadQuestion',loadQuestions)
 tutorRouter.post('/addQuestion',addQuestion)
 tutorRouter.put('/updateQuestion/:questionId',updateQuestion)
+tutorRouter.post('/createLive',tutorauthcheck,createLive)
+tutorRouter.get('/loadLiveDetails/:status',tutorauthcheck,tutorLiveDetails)
+tutorRouter.delete('/deleteLive/:id',deleteLive)
+tutorRouter.patch('/updateLiveStatus',updateLiveStatus)
 export default  tutorRouter

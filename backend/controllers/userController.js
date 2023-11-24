@@ -7,6 +7,9 @@ import Category from "../models/categoryModel.js";
 import mongoose from "mongoose";
 import Plan from "../models/plansModel.js";
 import Stripe from "stripe";
+import Quizzes from "../models/quizModel.js";
+import Live from "../models/liveModel.js";
+import MarkList from "../models/markListModel.js";
 
 const stripe = new Stripe(
   "sk_test_51O9tFFSDsPPMBnLnMdMtou8UwIWhDpQJl3hXgNqJCjBwaWNDXXkDcnCvRUuvGJegH2TKKMthVMz9fNNvBasBLXGi00Bg41xYtX"
@@ -96,7 +99,7 @@ const confirmOtp = asyncHandler(async (req, res) => {
 
 const resetPassword = asyncHandler(async (req, res) => {
   const { state, password } = req.body;
-  
+
   const user = await User.findOne({ email: state });
   if (user) {
     user.password = password;
@@ -269,7 +272,7 @@ const loadCategoryDetails = asyncHandler(async (req, res) => {
 
 const loadProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  
+
   const myProfile = req.user;
   if (myProfile) {
     res.status(200).json({ myProfile });
@@ -336,17 +339,27 @@ const loadPlans = asyncHandler(async (req, res) => {
       },
     },
   ]);
- 
+
   if (plans) {
     res.status(200).json({ plans, subscription });
   } else {
     res.status(400).json(`can't find the plans`);
   }
 });
+
+
+const loadUpgradePlan= asyncHandler(async (req, res) => { 
+
+  const {currentPlan}=req.params
+
+   if(currentPlan=='Medium'){
+    const plan = await Plan.find({subscription:'Premium'})
+   }
+
+})
 const checkout = asyncHandler(async (req, res) => {
   const { subscriptionMode } = req.body;
   const plan = await Plan.findOne({ subscriptionMode: subscriptionMode });
- 
 
   const lineItem = (plan) => {
     return [
@@ -383,14 +396,13 @@ const checkout = asyncHandler(async (req, res) => {
 });
 
 const confirmPayment = asyncHandler(async (req, res) => {
-
   const { userId, mode, date } = req.body;
   const plan = await Plan.findOne({ subscriptionMode: mode });
 
   // Calculate the endDate based on the plan type
   const startDateTimestamp = new Date().getTime(); // Replace this with your actual start date timestamp
   // Replace with the actual plan type
-  
+
   let endDate;
 
   if (mode === "basic" || mode === "Basic") {
@@ -403,8 +415,6 @@ const confirmPayment = asyncHandler(async (req, res) => {
     // Premium plan, no additional end time
     endDate = startDateTimestamp + 100 * 365 * 24 * 60 * 60 * 1000;
   }
-
-
 
   const id = plan._id;
   const user = await User.findByIdAndUpdate(userId, {
@@ -421,6 +431,152 @@ const loadSubsriptionDetails = asyncHandler(async (req, res) => {
     res.status(200).json({ plan });
   }
 });
+
+const loadQuizzes = asyncHandler(async (req, res) => {
+  const allQuizzes = await Quizzes.find({});
+  const studentId = req.user._id;
+
+  const markList = await MarkList.findOne({ studentId });
+
+  const quizIdsInMarkList = markList.quiz.map((quiz) => quiz.quizId.toString());
+
+  const quizzes = allQuizzes.filter((quiz) => {
+    if (!quizIdsInMarkList.includes(quiz._id.toString())) {
+      return quiz;
+    }
+  });
+
+  if (quizzes) {
+    res.status(200).json({ quizzes });
+  } else {
+    res.status(400).json(`can't get the data`);
+  }
+});
+
+const loadLiveDetails = asyncHandler(async (req, res) => {
+  const lives = await Live.find({});
+  if (lives) {
+    res.status(200).json({ lives });
+  }
+});
+
+const loadQuizDetails = asyncHandler(async (req, res) => {
+  const { quizId } = req.params;
+
+  const quiz = await Quizzes.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(quizId) } },
+    { $unwind: "$questions" },
+    {
+      $lookup: {
+        from: "questionbanks",
+        localField: "questions.question",
+        foreignField: "_id",
+        as: "questionsDetails",
+      },
+    },
+    { $unwind: "$questionsDetails" },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        "questionsDetails._id": 1,
+        "questionsDetails.question": 1,
+        "questionsDetails.subCategory": 1,
+        "questionsDetails.option1": 1,
+        "questionsDetails.option2": 1,
+        "questionsDetails.option3": 1,
+        "questionsDetails.option4": 1,
+        "questionsDetails.answer": 1,
+      },
+    },
+    {
+      $group: {
+        _id: "$questionsDetails._id",
+        quizId: { $first: "$_id" },
+        quizName: { $first: "$name" },
+        question: { $first: "$questionsDetails.question" },
+        subCategory: { $first: "$questionsDetails.subCategory" },
+        option1: { $first: "$questionsDetails.option1" },
+        option2: { $first: "$questionsDetails.option2" },
+        option3: { $first: "$questionsDetails.option3" },
+        option4: { $first: "$questionsDetails.option4" },
+        answer: { $first: "$questionsDetails.answer" },
+      },
+    },
+  ]);
+
+  // console.log('quizDetails',quiz[0])
+
+  if (quiz) {
+    res.status(200).json({ quiz });
+  } else {
+    res.status(400).json(`can't found`);
+  }
+});
+
+const addQuizResult = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { percentage, quizId } = req.body;
+  console.log(percentage,'percentage')
+  const updateData = {
+    $push: {
+      quiz: {
+        quizId: quizId,
+        percentage: percentage,
+      },
+    },
+  };
+
+  // Perform the upsert operation
+  const result = await MarkList.updateOne({ studentId: userId }, updateData, {
+    upsert: true,
+  });
+  if (result) {
+    res.status(200).json("successfull");
+  } else {
+    res.status(400).json("failed");
+  }
+});
+
+const loadMarkSheet = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const result = await MarkList.aggregate([{ $match: {studentId: new mongoose.Types.ObjectId(userId)} },
+  {$unwind:'$quiz'} ,
+  {
+    $lookup:{
+      from:"quizzes",
+      localField:"quiz.quizId",
+      foreignField:"_id",
+      as:"quizDetails"
+    }
+  }   ,
+  {$unwind:"$quizDetails"} ,
+  {
+    $project: {
+      _id: 1,
+      quiz: 1,
+      "quizDetails.questions": 1,
+      "quizDetails.subCategory": 1,
+      "quizDetails.name": 1,
+     "quizDetails._id":1
+    },
+    
+  },
+
+  {$group:{
+    _id:"$quizDetails._id",
+    percentage:{$first:"$quiz.percentage"},
+    totalQuestions: { $sum: { $size: "$quizDetails.questions" } },
+    subCategory:{$first:"$quizDetails.subCategory"},
+    quizName:{$first:"$quizDetails.name"},
+
+  }}            
+  ]);
+
+
+})
+
+
 export {
   authUser,
   registerUser,
@@ -436,7 +592,14 @@ export {
   updateProfile,
   courseDetails,
   loadPlans,
+  loadUpgradePlan,
   checkout,
   confirmPayment,
   loadSubsriptionDetails,
+  loadQuizzes,
+  loadLiveDetails,
+  loadQuizDetails,
+  addQuizResult,
+  loadMarkSheet,
+  
 };

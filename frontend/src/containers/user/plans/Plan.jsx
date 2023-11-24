@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axios';
 import {loadStripe} from '@stripe/stripe-js';
+import { FaArrowCircleUp } from 'react-icons/fa';
+import { useSpring, animated } from 'react-spring';
 
 function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgroundColor }) {
 
@@ -51,58 +53,27 @@ function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgro
 
 function PlanContainer() {
 
-  // const plans = [
-  //   {
-  //     headerText: 'Basic',
-  //     backgroundColor: '#70df91',
-  //     price: 'Free / 1 month',
-  //     features: [
-  //       { icon: 'check', color: '#1dff1d', text: 'Watch all lessons' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Practice workouts' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Live class access' },
-  //       { icon: 'times', color: 'red', text: 'Life time access' },
-  //     ],
-  //   },
-  //   {
-  //     headerText: 'Medium',
-  //     backgroundColor: '#84ff67',
-  //     price: '₹ 999/ year',
-  //     features: [
-  //       { icon: 'check', color: '#1dff1d', text: 'Watch all lessons' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Practice workouts' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Live class access' },
-  //       { icon: 'times', color: 'red', text: 'Life time access' },
-  //     ],
-  //   },
-  //   {
-  //     headerText: 'Premium',
-  //     backgroundColor: '#d7ff74',
-  //     price: '₹ 1999/ Unlimited',
-  //     features: [
-  //       { icon: 'check', color: '#1dff1d', text: 'Watch all lessons' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Practice workouts' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Live class access' },
-  //       { icon: 'check', color: '#1dff1d', text: 'Life time access' },
-  //     ],
-  //   },
-  // ];
-  
+
 const [subscription,setSubscription]=useState([])
 const [isSubscriptionActive,setSubscriptionActive]=useState(false)
+const [currentPlan,setCurrentPlan]=useState('')
 const [endDate,setEndDate]=useState(null)
   const {userInfo}=useSelector((state)=>state.auth)
+  const navigate=useNavigate()
   useEffect(()=>{
      
     fetchPlans()
-
+  // console.log(currentPlan,'currentPlan')
   },[])
  const [plans,setPlans]=useState([])
   const fetchPlans=async()=>{
   const response =await axiosInstance.get('/loadPlans')
    setPlans([...response.data.plans])
      setSubscription([response.data.subscription[0]])
- 
+    //  console.log(response.data.subscription[0].mode)
+     setCurrentPlan(response.data.subscription[0].mode)
      const endDateISO = Date.parse(response.data.subscription[0].subscription.endDate);
+     console.log(endDateISO,'endDate')
      const endDate = new Date(endDateISO);
 
      // Format endDate as "day/month/year"
@@ -115,51 +86,74 @@ const [endDate,setEndDate]=useState(null)
      
   }
  
+  const upgradeButtonSpring = useSpring({
+    from: { transform: 'scale(1)', opacity: 1 },
+    to: async (next) => {
+      await next({ transform: 'scale(1.1)', opacity: 0.9 });
+      await next({ transform: 'scale(1)', opacity: 1 });
+    },
+    config: { tension: 300, friction: 10 },
+  });
+  
+  const handleUpgradeClick=()=>{
+
+    navigate(`/upgradePlan/${currentPlan}`)
+  }
 
   return (
     
-    <div className="plan-container">
-    {isSubscriptionActive ?  (
-      <div className="plan-container">
+    <div className="plan-container" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+ 
       {isSubscriptionActive ? (
-        <div className="flex justify-center items-center h-full">
-          <div className="bg-white rounded-lg p-8 shadow-lg">
-            <div className="text-center mb-4">
-              <p className="text-4xl text-green-600 font-semibold mb-4">Successfully Purchased</p>
-              <p className="text-2xl text-gray-600">
-                Your Subscription Details
-              </p>
-            </div>
-            <ul className="list-disc pl-6 text-lg text-gray-700">
-              {subscription[0]?.benifits?.map((benefit, index) => (
-                <li key={index} className="mb-2">{benefit}</li>
-              ))}
-            </ul>
-            <p className="text-gray-600 mt-4">
-              Purchased Mode: <span className="font-semibold text-green-600">{subscription[0].mode}</span>
-            </p>
-            <p className="text-gray-600">
-              End Date: <span className="font-semibold text-green-600">{endDate}</span>
-            </p>
-            <Link to='/courses' style={{textDecoration:'none'}} className="px-4 py-2 bg-pink-300 text-white rounded-md hover:bg-indigo-700">
-           Go to Watch Video
-         </Link>
-          </div>
+      <div className="plan-container">
+       <div className="flex justify-center items-center h-full">
+      <div className="bg-white rounded-lg p-8 shadow-lg max-w-md w-full">
+        <div className="text-center mb-6">
+          <p className="text-4xl text-purple-600 font-semibold mb-2">Premium Subscription</p>
+          <p className="text-lg text-gray-600">
+            Your Subscription Details
+          </p>
         </div>
+        <ul className="list-inside list-disc text-lg text-gray-700 mb-4">
+  {subscription[0]?.benifits?.map((benefit, index) => (
+    <li key={index} className="mb-3 flex items-start">
+      <svg className="w-5 h-5 mr-2 text-purple-600 mt-1">
+        {/* You can replace the below line with a suitable icon component or SVG */}
+        <circle cx="5" cy="5" r="4" fill="currentColor" />
+      </svg>
+      <span className="font-medium">{benefit}</span>
+    </li>
+  ))}
+</ul>
+        <p className="text-gray-600 mb-2">
+          Purchased Mode: <span className="font-semibold text-purple-600">{subscription[0].mode}</span>
+        </p>
+        <p className="text-gray-600 mb-4">
+          End Date: <span className="font-semibold text-purple-600">{endDate}</span>
+        </p>
+        <Link to='/courses' style={{ textDecoration: 'none' }} className="block w-full text-center bg-gray-600 text-white py-3 rounded-md hover:bg-purple-700">
+          Go to Watch Video
+        </Link>
+    {subscription[0].mode=='Premium' ?'':  <animated.button
+          style={upgradeButtonSpring}
+          className="mt-4 bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md transition-all duration-300 focus:outline-none"
+          onClick={() => handleUpgradeClick()}
+        >
+          <FaArrowCircleUp className="mr-2" />
+          Upgrade Plan
+        </animated.button>} 
+      </div>
+    </div>
+    </div>
       ) : (
         plans.map((plan, index) => (
           <PlanCard key={index} {...plan} userInfo={userInfo} />
         ))
+   
       )}
-    </div>
     
       
-    ):
-    (
-      plans.map((plan, index) => (
-        <PlanCard key={index} {...plan} userInfo={userInfo} />
-      ))
-    )}
+
   </div>
   );
 }

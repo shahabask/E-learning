@@ -68,7 +68,7 @@ function Subscription() {
       setAddPlanModalOpen(false);
     };
   return (
-    <div className="container mx-auto py-6 px-4" style={{ backgroundColor: '#FDF8EE' }}>
+    <div className="container mx-auto py-6 px-4" style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
     <div className="flex justify-between">
       <button
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

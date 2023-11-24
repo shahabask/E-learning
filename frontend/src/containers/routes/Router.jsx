@@ -42,10 +42,18 @@ import CourseDetails from '../user/courses/CourseDetails.jsx'
 import Subscription from '../admin/Subscription.jsx'
 import Success from '../user/plans/Success.jsx'
 import Cancel from '../user/plans/Cancel.jsx'
-import Lives from '../user/live/Lives.jsx'
+
 import TutorSchedule from '../tutor/TutorSchedule.jsx'
 import LiveManagement from '../tutor/liveClasses/LiveManagement.jsx'
 import QuizManagement from '../tutor/quiz/QuizManagement.jsx'
+import RoomPage from '../user/live/RoomPage.jsx'
+import AddLiveModal from '../tutor/liveClasses/AddLiveModal.jsx'
+import TutorLiveRoom from '../tutor/liveClasses/tutorLiveRoom.jsx'
+import Quiz from '../user/profile/quiz/Quiz.jsx'
+import AllLives from '../tutor/liveClasses/AllLives.jsx'
+import Lives from '../user/live/Lives.jsx'
+import UpgradePlan from '../user/plans/upgradePlan.jsx'
+import Playlist from '../user/courses/PlayList.jsx'
 
 
 function Router() {
@@ -60,6 +68,7 @@ function Router() {
    <Route path='/plans' element={<PlanContainer/>}/>
    <Route path="/category/:categoryId" element={<SubCategory/>} />
    <Route path='/lives' element={<Lives/>}/>
+   <Route path='/upgradePlan/:currentPlan' element={<UpgradePlan/>}/>
    <Route path='/courseDetails/:courseId' element={<CourseDetails/>}/>
          <Route path='/login' element={<UserLogin/>}/>  
          <Route path='/register' element={<Signup/>}/>
@@ -70,13 +79,13 @@ function Router() {
          <Route path='/otpLogin' element={<OtpLogin/>}/>
          <Route path='/success/:userId/:mode/:date' element={<Success/>}/>
          <Route path='/cancel' element={<Cancel/>}/>
-
+        <Route path='/userRoom/:roomId' element={<RoomPage/>}/>
+        <Route path='/quiz/:quizId'  element={<Quiz/>}/>
+        <Route path='/playlist/:courseId' element={<Playlist/>}/>
    </Route>
 
 
-    {/* <Route path='/' exact element={<UserPrivateRoute/>}>
-
-    </Route> */}
+    
 
    
    <Route path='/admin/login' exact element={<AdminLoginScreens/>}>
@@ -91,7 +100,7 @@ function Router() {
    <Route path='categoryManagement' element={<CategoryManagement/>}/>
    <Route path='courseManagement' element={<CourseManagement/>}/>
    <Route path='subscription' element={<Subscription/>}/>
-  {/* <Route path='logout' /> */}
+  
    </Route>
 
 
@@ -115,10 +124,12 @@ function Router() {
    <Route path='/tutor' exact element={<TutorPrivateRoute/>}>
    <Route path='' exact element={<TutorDashboard/>}/>
    <Route path='profile' element={<TutorProfile/>}/>  
-   <Route path='liveClasses' element={<LiveManagement/>}/>
+   <Route path='liveClasses' element={<AllLives/>}/>
    <Route path='courseManagement'  element={<CourseManagementTutor/>}/>
    <Route path='schedule'  element={<TutorSchedule/>}/>
    <Route path='quizManagement' element={<QuizManagement/>}/>
+   <Route path='tutorRoom/:roomId/:id'  element={<TutorLiveRoom/>}/>
+   
    </Route>
    <Route path="*" element={<ErrorPage/>} />
     </Routes>

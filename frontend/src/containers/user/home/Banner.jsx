@@ -9,9 +9,9 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 const images = [
  
   
-  '/public/images/aaron-burden-6jYoil2GhVk-unsplash.jpg',
-  '/public/images/annie-spratt-QckxruozjRg-unsplash.jpg',
-  '/public/images/Executives at Davos Are Eager for Automation - Truthdig.jpeg',
+  '/images/aaron-burden-6jYoil2GhVk-unsplash.jpg',
+  '/images/annie-spratt-QckxruozjRg-unsplash.jpg',
+  '/images/Executives at Davos Are Eager for Automation - Truthdig.jpeg',
   // Add more image URLs as needed
 ];
 
