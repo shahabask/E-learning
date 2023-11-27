@@ -54,6 +54,7 @@ import AllLives from '../tutor/liveClasses/AllLives.jsx'
 import Lives from '../user/live/Lives.jsx'
 import UpgradePlan from '../user/plans/upgradePlan.jsx'
 import Playlist from '../user/courses/PlayList.jsx'
+import AssignmentManagement from '../tutor/assignment/AssignmentManagement.jsx'
 
 
 function Router() {
@@ -128,6 +129,7 @@ function Router() {
    <Route path='courseManagement'  element={<CourseManagementTutor/>}/>
    <Route path='schedule'  element={<TutorSchedule/>}/>
    <Route path='quizManagement' element={<QuizManagement/>}/>
+   <Route path='assignmentManagement' element={<AssignmentManagement/>}/> 
    <Route path='tutorRoom/:roomId/:id'  element={<TutorLiveRoom/>}/>
    
    </Route>

@@ -43,9 +43,24 @@ const Playlist = () => {
       img: "https://placekitten.com/320/240"
     }
   ];
-
-  const { courseId } = useParams();
   const [selectedVideo, setSelectedVideo] = useState(videoDetails[0]);
+ const [videoDetails1,setVideoDetails]=useState([])
+  const { courseId } = useParams();
+
+  useEffect(()=>{
+   fetchVideosDetails()
+   console.log('selectedVideo',selectedVideo)
+  },[])
+  const fetchVideosDetails=async ()=>{
+     try {
+       const response=await axiosInstance.get(`/loadVideoDetails/${courseId}`)
+      //  setVideoDetails([...response.data.videos[0].videos]) 
+       setSelectedVideo(response.data.videos[0].videos)
+       console.log(response.data.videos[0].videos)
+     } catch (error) {
+      console.log('error')
+     }
+  }
 
   const handleCardClick = (video) => {
     setSelectedVideo(video);
@@ -59,16 +74,17 @@ const Playlist = () => {
       <div className="container">
         <div className="flex flex-wrap">
           {/* Dynamic rendering of the selected video */}
-          <div className="w-full lg:w-8/12 mb-15">
+          <div className="w-full lg:w-8/12 mb-15 my-2">
             <article className="article bg-white shadow-md rounded-md overflow-hidden mt-15 mb-15">
-              <div className="article-img">
-                <img
-                  src={selectedVideo.img}
-                  title={''}
-                  alt=""
-                  className="w-full"
-                />
-              </div>
+            <div className="article-img" style={{ height: "500px", overflow: "hidden" }}>
+  <img
+    src={selectedVideo.img}
+    title={''}
+    alt=""
+    className="w-full h-full object-cover"
+    style={{ objectFit: "cover" }}
+  />
+</div>
               <div className="article-title p-8">
                 <h6 className="uppercase">
                   <a href="#" className="text-blue-500">
@@ -99,7 +115,7 @@ const Playlist = () => {
           </div>
 
           {/* Dynamic rendering of video cards excluding the selected video */}
-          <div className="w-full lg:w-4/12 mb-15 px-4 lg:pl-0">
+          <div className="w-full lg:w-4/12 mb-15 px-4 lg:pl-0 mt-5">
             {dynamicVideos.map((video) => (
               <div
                 key={video.id}

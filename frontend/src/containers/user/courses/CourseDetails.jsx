@@ -15,7 +15,7 @@ const [isSubscriptionActive,setSubscriptionActive]=useState(false)
     const fetchCourseDetails=async()=>{
         try {
             let response=await axiosInstance.get(`/loadCourseDetails/${courseId}`)
-            console.log(response.data.courseDetails,'details')
+            // console.log(response.data.courseDetails,'details')
             response.data.courseDetails.image=`http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
             setCourseInfo(response.data.courseDetails)
             const endDateISO = Date.parse(response.data.plan.endDate);
@@ -54,9 +54,11 @@ const [isSubscriptionActive,setSubscriptionActive]=useState(false)
            <p className="lead text-3xl">
              {courseInfo.description}
             </p>
-            <div className="d-flex">
+            <div className="d-flex mt-5">
                 
-        {isSubscriptionActive?<div></div>:<Link to="/plans" className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+        {isSubscriptionActive?<Link to={`/playlist/${courseId}`} className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+  <i className="bi-cart-fill me-1"></i>Watch videos
+</Link>:<Link to="/plans" className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
   <i className="bi-cart-fill me-1"></i>Subscribe Now
 </Link>}    
             </div>
@@ -65,7 +67,7 @@ const [isSubscriptionActive,setSubscriptionActive]=useState(false)
       </div>
     </section>
 
-    <section className="py-5 bg-light">
+    {/* <section className="py-5 bg-light">
       <div className="container px-4 px-lg-5 mt-5">
         <h2 className="fw-bolder mb-4 text-3xl font-extrabold text-gray-900">videos</h2>
         <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -137,7 +139,7 @@ const [isSubscriptionActive,setSubscriptionActive]=useState(false)
           </div>
         </div>
       </div>
-    </section>
+    </section> */}
 
  
   </div>

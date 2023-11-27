@@ -14,7 +14,15 @@ const markListSchema = mongoose.Schema({
         type:Number,
        } }
     ],
-
+   assignment:[
+    {assignmentId:{type:mongoose.Schema.Types.ObjectId,
+     ref:'Assignment'
+    },
+    MarkScored:{
+      type:Number,
+    }},
+    
+   ]
 
 })
 

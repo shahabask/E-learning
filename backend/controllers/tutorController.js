@@ -501,6 +501,31 @@ const updateLiveStatus=asyncHandler(async(req,res)=>{
     res.status(400)
   }
 })
+
+const loadAssignment=asyncHandler(async(req,res)=>{
+  const {status}=req.params
+
+  const assignments=await find({status:status})
+     
+  if(assignments){
+     res.status(200).json({assignments})
+  }else{
+    res.status(400).json(`error`)
+  }
+})
+
+const deleteAssignment=asyncHandler(async(req,res)=>{  
+   const {id}=req.params
+
+   const deleteAssignment=await deleteOne({_id:id})
+
+   if(deleteAssignment){
+    res.status(200).json('successfully deleted')
+   }else{
+    res.status(500).json(`can't delete`)
+   }
+
+})
 export {
   tutorAuth,
   registerTutor,
@@ -526,5 +551,7 @@ export {
   createLive,
   tutorLiveDetails,
   deleteLive,
-  updateLiveStatus
+  updateLiveStatus,
+  loadAssignment,
+  deleteAssignment
 };

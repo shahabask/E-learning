@@ -517,7 +517,7 @@ const loadQuizDetails = asyncHandler(async (req, res) => {
 const addQuizResult = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { percentage, quizId } = req.body;
-  console.log(percentage,'percentage')
+ 
   const updateData = {
     $push: {
       quiz: {
@@ -576,7 +576,23 @@ const loadMarkSheet = asyncHandler(async (req, res) => {
 
 })
 
+const loadVideos=asyncHandler(async (req, res) => {
 
+  const {courseId}=req.params
+  const videos=await Course.find({_id:courseId})
+
+  if(videos){
+    res.status(200).json({videos})
+  }else{
+    res.status(400).json('Data not found')
+  }
+})
+
+
+const submitAssignment=asyncHandler(async (req, res) => {
+       
+  
+})
 export {
   authUser,
   registerUser,
@@ -601,5 +617,6 @@ export {
   loadQuizDetails,
   addQuizResult,
   loadMarkSheet,
-  
+  loadVideos,
+  submitAssignment
 };

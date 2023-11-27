@@ -139,7 +139,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faArrowLeft, faArrowRight, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faArrowLeft, faArrowRight, faCheckCircle, faTimesCircle, faQuestion, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import axiosInstance from '../../../utils/axios';
 
 const Quiz = () => {
@@ -210,6 +210,19 @@ const Quiz = () => {
     return acc;
   }, 0);
  
+   return correctAnswers 
+  // Return the score as a percentage with two decimal places
+};
+const calculatePercentage = () => {
+  const correctAnswers = quizData.reduce((acc, question) => {
+    const selectedAnswer = selectedAnswers.find((answer) => answer.id === question._id);
+    // console.log(selectedAnswer.selectedOption,'selectedOption',question.answer,'answer')
+    if (selectedAnswer && selectedAnswer.selectedOption === question.answer) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
+ 
   const scorePercentage = (correctAnswers / quizData.length) * 100;
   
   return scorePercentage.toFixed(2); // Return the score as a percentage with two decimal places
@@ -217,18 +230,27 @@ const Quiz = () => {
 
 
   const getScoreColor = () => {
-    const score = calculateScore();
-    if (score < 20) {
+    const percentage = calculatePercentage();
+    if (percentage < 20) {
       return 'text-red-500';
-    } else if (score < 50) {
+    } else if (percentage < 50) {
       return 'text-orange-500';
-    } else if (score < 70) {
+    } else if (percentage < 70) {
       return 'text-yellow-500';
     } else {
       return 'text-green-500';
     }
   };
 
+  function getScoreIcon() {
+    const userScore = calculatePercentage();
+  
+    if (userScore >= 50) {
+      return faThumbsUp; // Thumbs up icon for a passing score
+    } else {
+      return faThumbsDown; // Thumbs down icon for a failing score
+    }
+  }
  const handleGoBack=()=>{
   navigate('/profile')
  }
@@ -242,29 +264,59 @@ const Quiz = () => {
   return (
     <div className="container mx-auto mt-20 p-4 border-2 border-gray-300 rounded-lg shadow-lg mb-10" style={{ minHeight: '80vh' }}>
       {submitted ? (
-        <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">{quizData[0]?.quizName}</h1>
-        <p className={`text-xl font-bold mb-4 ${getScoreColor()}`}>Your Score: {calculateScore()}% out of {quizData.length}</p>
-        {/* <FontAwesomeIcon icon={getScoreIcon()} className={`text-5xl mb-4 ${getScoreColor()}`} /> */}
-        <button
-          onClick={handleGoBack}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Go Back
-        </button>
+      <div className="text-center border-2 border-gray-300 p-10 mt-20 rounded-md hover:border-blue-500 hover:shadow-md transition duration-300 ease-in-out">
+      <h1 className="text-2xl font-bold mb-4 ">{quizData[0]?.quizName} Quiz</h1>
+      <p className={`text-xl font-bold mb-4 ${getScoreColor()}`}>
+        Your Score: {calculateScore()} out of {quizData.length}
+      </p>
+      <div className="flex items-center justify-center mb-4">
+        <FontAwesomeIcon
+          icon={getScoreIcon()}
+          className={`text-5xl mr-2 ${getScoreColor()}`}
+        />
+        <div>
+          <p className="text-green-500">
+            Correct Answers: {calculateScore()}
+          </p>
+          <p className="text-red-500">
+            Wrong Answers: {quizData.length - calculateScore()}
+          </p>
+        </div>
       </div>
+      <button
+        onClick={handleGoBack}
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out"
+      >
+        Go Back
+      </button>
+    </div>
       ) : (
         <div>
           <div className="flex items-center justify-between mb-4 mt-20">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold">{quizData[0]?.quizName}</h1>
             </div>
-            <div className="border-2 border-blue-500 p-2 rounded-lg">
+            <div className="flex items-center text-black border-2 border-gray-400 p-4 rounded-lg">
+  <div className="flex items-center mr-4">
+    <FontAwesomeIcon icon={faQuestion} className="text-gray-500 mr-2" />
+    <p className="text-xl font-bold">
+      {`Question ${currentQuestion + 1} of ${quizData.length}`}
+    </p>
+  </div>
+  <div className="flex items-center">
+    <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 mr-2" />
+    <p className="text-xl font-bold">
+      {`Attended: ${selectedAnswers.length}`}
+    </p>
+  </div>
+</div>
+            <div className="border-2 border-gray-400 p-2 rounded-lg">
               <FontAwesomeIcon icon={faClock} className="text-blue-500 mr-2" />
               <span className="text-xl font-bold">{formatTime(timeLeft)}</span>
             </div>
+             
           </div>
-          <div className="mb-4 p-4 border-2 border-blue-500 rounded-lg shadow-md">
+          <div className="mb-4 p-4 border-2 border-gray-400 rounded-lg shadow-md">
             <p className="font-bold">{quizData[currentQuestion]?.question}</p>
             <div className="flex flex-col mt-4">
               <label key={quizData[currentQuestion]?.option1} className="mb-2">

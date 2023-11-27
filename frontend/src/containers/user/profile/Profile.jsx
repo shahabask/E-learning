@@ -5,11 +5,15 @@ import EditUser from "./EditUser.jsx";
 import Quiz from "./Quizzes.jsx";
 import Quizzes from "./Quizzes.jsx";
 import MarkSheet from "./MarkSheet.jsx";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Assignment from "./Assignment.jsx";
 export default function Profile() {
   const [userData,setUserData]=useState()
    const [showForm, setShowForm] = useState(false);
    const [showQuiz,setShowQuiz]=useState(false)
    const [showMarkSheet,setShowMarkSheet]=useState(false)
+   const [showAssignment,setShowAssignment]=useState(false)
    const [subcategories,setSubcategories]=useState('')
   useEffect(()=>{
   fetchUser()
@@ -30,15 +34,26 @@ export default function Profile() {
      setShowForm((prevShowForm) => !prevShowForm);
      setShowQuiz(false)
      setShowMarkSheet(false)
+     setShowAssignment(false)
    };
 
   const handleQuizClick=()=>{
       setShowQuiz((prevShowQuiz)=>!prevShowQuiz)
       setShowForm(false)
       setShowMarkSheet(false)
+      setShowAssignment(false)
   }
   const handleMarkSheetClick=()=>{
     setShowMarkSheet(!showMarkSheet)
+    setShowForm(false)
+    setShowQuiz(false)
+    setShowAssignment(false)
+  }
+
+  const handleAssignmentClick=()=>{
+    
+     setShowAssignment(!showAssignment)
+    setShowMarkSheet(false)
     setShowForm(false)
     setShowQuiz(false)
   }
@@ -50,45 +65,46 @@ export default function Profile() {
    return (
      <div style={{ height: "100vh", backgroundColor: "	#fcdad1" }}>
        <div className="container ">
-         <div className="row gutters row-with-padding">
+         <div className="row gutters row-with-padding ">
            <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
              <div className="card h-100">
-               <div className="card-body">
+               <div className="card-body rounded-lg shadow-lg">
                  <div className="account-settings">
                    <div className="user-profile">
-                     <div className="user-avatar  with-border">
+                     <div className="user-avatar  with-border flex justify-center">
                        <img
                          src={modifiedImagePath}
                          alt="Maxwell Admin"
                        />
                      </div>
-                     <h5 className="user-name">{userData?.firstName} {userData?.secondName}</h5>
+                     <h5 className="user-name font-semibold">{userData?.firstName} {userData?.secondName}</h5>
                      {/* <h6 className="user-email">{userData?.secondName}</h6> */}
                    </div>
                    <div className="centered-container">
                      <div className="row-container">
                        <div className="colum" onClick={handleEditClick}>
-                         <i className="fas fa-edit " style={{color:"blue"}}></i>
+                         <i className="fas fa-edit pt-1" style={{color:"purple"}}></i>
                          <span className="icon"style={{marginLeft:"10px"}}>Edit</span>
                        </div>
                         <div className="colum" onClick={handleQuizClick}>
-                        <i className="fas fa-certificate"style={{color:"gold"}}></i> 
+                        <i className="fas fa-certificate pt-1"style={{color:"purple"}}></i> 
                        <span className="icon"style={{marginLeft:"10px"}}>
                         Quiz
                        </span>
                        </div>
+                       <div className="colum" onClick={handleAssignmentClick}>
+  <FontAwesomeIcon style={{color:'purple'}}  icon={faPaperPlane} className="pt-1" />
+  <span className="icon" style={{ paddingLeft: "5px" }}>
+    Assignment
+  </span>
+</div>
                        <div className="colum" onClick={handleMarkSheetClick}>
-                       <i className="fas fa-clipboard" style={{color:'green'}}></i>
+                       <i className="fas fa-clipboard" style={{color:'purple'}}></i>
                        <span className="icon"style={{marginLeft:"10px"}}>
                           MarkSheet
                        </span>
                        </div>
-                       {/* <div className="colum">
-                       <i className="fas fa-users"></i> 
-                       <span className="icon" style={{ paddingLeft: "10px" }}>
-                         Followers
-                       </span>
-                       </div> */}
+                       
                      </div>
                    </div>
                  </div>
@@ -97,7 +113,7 @@ export default function Profile() {
            </div>
            <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
            {showForm ? <EditUser userData={userData}  />:showQuiz?<div ><Quizzes quizData={'quizData'} className=''/></div>
-           :showMarkSheet?<MarkSheet/>:( 
+           :showMarkSheet?<MarkSheet/>:showAssignment?<Assignment/> :( 
        <div className="bg-white shadow-md p-4 rounded-lg">
          <h1 className="text-3xl font-bold mb-4">{userData?.userName}</h1>
          <p className="text-gray-600 text-sm mb-2">

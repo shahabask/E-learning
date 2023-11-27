@@ -1,4 +1,4 @@
-import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar, FaEnvelope,  FaSignOutAlt, FaCertificate } from 'react-icons/fa';
+import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar, FaEnvelope,  FaSignOutAlt, FaCertificate, FaTasks } from 'react-icons/fa';
 import { RiLiveLine } from 'react-icons/ri';
 import { GrSchedulePlay } from 'react-icons/gr';
 
@@ -45,16 +45,21 @@ function TutorSidebar({ toggleSidebar }) {
             <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Live class</span>
           </li></NavLink> 
 
-          <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none'}}>  <li>
+          {/* <NavLink to='/tutor/schedule' className="active-link" style={{ textDecoration: 'none'}}>  <li>
           <GrSchedulePlay
       style={{ color: 'purple' }}
       className={`sidebar-icon ${isIconsOnly ? 'hidden' : ''}`}
     />            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Shedules</span>
-          </li></NavLink> 
+          </li></NavLink>  */}
           <NavLink to='/tutor/quizManagement' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>
   <li>
     <FaCertificate className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
     <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Quiz Management</span>
+  </li>
+</NavLink>
+<NavLink to='/tutor/assignmentManagement' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>
+  <li>
+  <FaTasks className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />    <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Assignments</span>
   </li>
 </NavLink>
           <NavLink to='/tutor/courseManagement' className="active-link" style={{ textDecoration: 'none', color: 'white' }}>  <li>
@@ -72,8 +77,8 @@ function TutorSidebar({ toggleSidebar }) {
   </li>
 </NavLink>
            <li className="logout-button" onClick={handleLogout}>
-            <FaSignOutAlt className="sidebar-icon text-purple-400" />
-            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Logout</span>
+            <FaSignOutAlt className="sidebar-icon text-red-600" />
+            <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-red-500 font-bold`}>Logout</span>
           </li>
         </ul>
       </aside> } 

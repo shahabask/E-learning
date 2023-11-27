@@ -10,10 +10,6 @@ const courseSchema = mongoose.Schema({
           type:mongoose.Schema.Types.ObjectId,
            ref: 'Category' 
       },
-   //   active:{
-   //      type:Boolean,
-   //      default:true
-   //   },
      tutor:{
         type:mongoose.Schema.Types.ObjectId,
            ref: 'Tutor' 
@@ -22,21 +18,21 @@ const courseSchema = mongoose.Schema({
       type:String,
       required:true
      },
-     videos:
+     videos:[
       {
          title:{
             type:String,
-            default:'this is title'
+            
          },
          description:{
             type:String,
-            default:'this is descrition'
+            
          },
          videoUrl:{
             type:String,
-            default:null
+            
          }
-      }
+      } ]
      ,
      description:{
       type:String,

@@ -3,23 +3,38 @@ import  {ToastContainer} from 'react-toastify';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Layout from './layout/layout';
 import 'react-toastify/dist/ReactToastify.css'
-function App() {
 
-  const initialOptions = {
-    clientId: 'AbDu3j7FOwj2ZSeEXxlQnBlIqh5gJbaWwe3LJWSgoK157FYjWAbkQpgw8nN4VcllfHi9TpftGk66z0sz',
-    currency: "USD",
-    intent: "capture",
+import { ErrorBoundary } from 'react-error-boundary';
+
+const initialOptions = {
+  clientId: 'AbDu3j7FOwj2ZSeEXxlQnBlIqh5gJbaWwe3LJWSgoK157FYjWAbkQpgw8nN4VcllfHi9TpftGk66z0sz',
+  currency: 'USD',
+  intent: 'capture',
 };
+
+// const Layout = () => {
+//   // ... Your Layout component content
+// };
+
+const AppErrorFallback = ({ error, resetErrorBoundary }) => (
+  <div>
+    <h1>Something went wrong!</h1>
+    <p>{error.message}</p>
+    <button onClick={resetErrorBoundary}>Try Again</button>
+  </div>
+);
+
+function App() {
   return (
     <>
-    <ToastContainer/>
-    <PayPalScriptProvider options={initialOptions}>
-   {/* <Container className='my-2'> */}
-    <Layout style={{backgroundColor:'#FDF8EE'}}/>
-    {/* </Container> */}
-    </PayPalScriptProvider>
+      <ToastContainer />
+      <ErrorBoundary FallbackComponent={AppErrorFallback} onReset={() => window.location.reload()}>
+        <PayPalScriptProvider options={initialOptions}>
+          <Layout style={{ backgroundColor: '#FDF8EE' }} />
+        </PayPalScriptProvider>
+      </ErrorBoundary>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

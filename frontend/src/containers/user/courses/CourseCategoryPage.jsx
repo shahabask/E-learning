@@ -11,9 +11,15 @@ function CourseCategoryPage() {
   }, []);
 
   const fetchData = async () => {
-    const response = await axiosInstance.get('/courseCategoryList');
-    setCoursesData(response.data.courses);
-    setCategoriesData(response.data.categories);
+
+    try{
+      const response = await axiosInstance.get('/courseCategoryList');
+      setCoursesData(response.data.courses);
+      setCategoriesData(response.data.categories);
+    }catch(error){
+console.log('error',error)
+    }
+   
   };
 
   const itemsPerPage = 3;

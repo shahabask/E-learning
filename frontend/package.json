@@ -26,6 +26,7 @@
     "node_module": "^0.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-modal": "^3.16.1",

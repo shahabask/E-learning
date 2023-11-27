@@ -1,8 +1,8 @@
 import express from 'express'
 import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
     courseCategoryListing,loadCategoryDetails,loadProfile,updateProfile,courseDetails,loadPlans,loadUpgradePlan,checkout,
-    confirmPayment,loadSubsriptionDetails,loadQuizzes,loadLiveDetails,loadQuizDetails,addQuizResult,
-    loadMarkSheet } from '../controllers/userController.js'
+    confirmPayment,loadSubsriptionDetails,loadQuizzes,loadLiveDetails,loadQuizDetails,addQuizResult,loadVideos,
+    loadMarkSheet,submitAssignment } from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
 
 
@@ -46,5 +46,7 @@ router.get('/getLiveDetails',loadLiveDetails)
 router.get('/quizDetails/:quizId',loadQuizDetails)
 router.post('/addQuizResult',authcheck,addQuizResult)
 router.get('/loadMarkSheet',authcheck,loadMarkSheet)
+router.get('/loadVideoDetails/:courseId',loadVideos)
+router.get('/submitAssignment',submitAssignment)
 
 export default  router

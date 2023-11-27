@@ -3,7 +3,7 @@ import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassw
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
          loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo,
          loadQuizDetails,loadQuestions,addQuestion,updateQuestion, addQuizzes,createLive,
-         tutorLiveDetails,deleteLive,updateLiveStatus} from '../controllers/tutorController.js'
+         tutorLiveDetails,deleteLive,updateLiveStatus,loadAssignment,deleteAssignment} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
@@ -58,4 +58,6 @@ tutorRouter.post('/createLive',tutorauthcheck,createLive)
 tutorRouter.get('/loadLiveDetails/:status',tutorauthcheck,tutorLiveDetails)
 tutorRouter.delete('/deleteLive/:id',deleteLive)
 tutorRouter.patch('/updateLiveStatus',updateLiveStatus)
+tutorRouter.get('/loadAssignments/:status')
+tutorRouter.delete('/deleteAssignment/:id',deleteAssignment)
 export default  tutorRouter
