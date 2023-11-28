@@ -63,20 +63,22 @@ function UpgradePlan() {
     },[])
    
     const fetchPlans=async()=>{
+      console.log('working',currentPlan)
         const response =await axiosInstance.get(`/loadUpgradePlan/${currentPlan}`)
          setPlans([...response.data.plans])
-       
+       console.log(response.data.plans,'plans')
            
         }
   return (
     <div className="plan-container" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
-<div className="plan-container">
-({
+{/* <div className="plan-container"> */}
+{
         plans.map((plan, index) => (
           <PlanCard key={index} {...plan} userInfo={userInfo} />
         ))
-    })
-    </div>
+    }
+   
+    {/* </div> */}
     </div>
   )
 }

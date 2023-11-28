@@ -1,6 +1,7 @@
 
 
 import React from 'react';
+import { FaCheckCircle } from 'react-icons/fa';
 
 function AssignmentNavbar({ onNavItemClick }) {
   return (
@@ -19,6 +20,19 @@ function AssignmentNavbar({ onNavItemClick }) {
                   <i className="fas fa-calendar-alt"></i>
                 </span>
                 Scheduled Assignments
+              </button>
+            </li>
+            <li>
+              <button
+                className="text-gray-800 hover:text-purple-600 font-medium flex items-center"
+                onClick={() => onNavItemClick('Verify Assignments')}
+              >
+                <span className="mr-2">
+                  {/* Add your icon or any other visual indicator here */}
+                  {/* Example with an icon from FontAwesome */}
+                  <FaCheckCircle className="text-black" />
+                </span>
+                Verify Assignment
               </button>
             </li>
             <li>

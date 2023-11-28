@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineReload, AiOutlineClose } from 'react-icons/ai';
-
+import socket from '../../utils/socket';
 
 function AddLiveModal({ isOpen,handleCloseModal,handleCreateSession,subjects }) {
   const [startTime, setStartTime] = useState('');
@@ -68,6 +68,7 @@ function AddLiveModal({ isOpen,handleCloseModal,handleCreateSession,subjects }) 
       setRoomId('');
 
       handleCloseModal();
+      socket.emit('live_added')
     }
   };
 

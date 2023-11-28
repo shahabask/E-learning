@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
+import socket from "../../utils/socket";
+// const socket =io.connect('http://localhost:5001')
+
 
 function Lives() {
   const [liveSessions, setLiveSessions] = useState([]);
-
+  //  const [liveUpdated,setLiveUpdated]=useState(false)
+  
   const navigate = useNavigate();
-  useEffect(() => {
-    fetchLiveDetails();
-  }, []);
+
+
+
+useEffect(()=>{
+  socket.on('track_live',()=>{
+    fetchLiveDetails()
+            // setLiveUpdated(!liveUpdated)
+          })
+
+          // fetchLiveDetails()
+},[socket])
+  
   const fetchLiveDetails = async () => {
     try {
+      
       const response = await axiosInstance.get("/getLiveDetails");
       setLiveSessions(response.data.lives);
+     
+      
     } catch (error) {
-      console.log("error");
+      console.log("error",error);
     }
   };
   const handleJoinClick = (roomId) => {
@@ -38,12 +54,26 @@ function Lives() {
     );
     return formattedDate;
   };
+
+  const renderNoLiveScheduled = () => (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-center">
+        <p className="text-2xl font-semibold text-white mb-10 pb-5">
+          No live sessions scheduled.
+        </p>
+        {/* Your additional styling and components for the theme */}
+      </div>
+    </div>
+  );
   return (
     <>
       <div style={{ height: "72px" }}></div>
       <div className="bg-gradient-to-r from-purple-400 via-purple-600 to-purple-400 min-h-screen p-8">
+      {liveSessions.length === 0 ? (
+        renderNoLiveScheduled()
+      ) : (
         <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {liveSessions.map((session) => (
+         {liveSessions.map((session) => (
             <div
               key={session.id}
               className="flex flex-col bg-purple-400 rounded-3xl p-6"
@@ -101,7 +131,7 @@ function Lives() {
               )}
             </div>
           ))}
-        </div>
+        </div>)}
       </div>
     </>
   );

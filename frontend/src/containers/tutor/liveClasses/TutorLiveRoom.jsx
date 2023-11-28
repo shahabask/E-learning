@@ -5,6 +5,7 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
 import {axiosInstance} from '../../utils/tutorAxios'
+import socket from '../../utils/socket';
 function TutorLiveRoom() {
  
   const navigate=useNavigate()
@@ -16,6 +17,7 @@ console.log(id,'id')
         const response=await axiosInstance.patch('/updateLiveStatus',{id,status:'Ended'})
         
         navigate('/tutor/liveClasses')
+        socket.emit('end_live')
     }
  
   let role_str ='Host' ||'Cohost';

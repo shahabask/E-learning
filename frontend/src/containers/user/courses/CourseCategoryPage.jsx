@@ -15,6 +15,7 @@ function CourseCategoryPage() {
     try{
       const response = await axiosInstance.get('/courseCategoryList');
       setCoursesData(response.data.courses);
+      console.log(response.data.courses,'courses')
       setCategoriesData(response.data.categories);
     }catch(error){
 console.log('error',error)
@@ -49,7 +50,7 @@ console.log('error',error)
         <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
           {currentCourses.map((course) => (
             
-            <CourseCard className='m-3 p-4' key={course?._id} {...course} />
+            <CourseCard className='m-8 p-5' key={course?._id} {...course} />
           ))}
         </div>
         {coursesData.length > itemsPerPage && (

@@ -11,6 +11,9 @@ const assignmentSchema = mongoose.Schema({
    endingDate:{
     typeof:Date
    },
+   outOf:{
+      typeof:Number
+   },
    status:{
       typeof:String,
       default:'started'

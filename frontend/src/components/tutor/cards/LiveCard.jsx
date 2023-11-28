@@ -4,9 +4,10 @@ import { axiosInstance } from '../../../containers/utils/tutorAxios';
 import { toast } from 'react-toastify';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-
+import socket from '../../../containers/utils/socket';
+// const socket =io.connect('http://localhost:5001')
 const LiveCard = ({ liveDetails, handleDelete }) => {
- 
+
   const navigate=useNavigate()
   const handleDeleteClick = async () => {
     try {
@@ -26,6 +27,8 @@ const LiveCard = ({ liveDetails, handleDelete }) => {
   const handleJoinClick=(roomId,id)=>{
     changeStatus(id)
     navigate(`/tutor/tutorRoom/${roomId}/${id}`)
+    
+    socket.emit('live_started',{id:id})
   }
   const formatToAMPM = (dateTimeString) => {
     const options = { hour: 'numeric', minute: 'numeric', hour12: true };

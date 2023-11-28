@@ -2,6 +2,7 @@ import { useState } from "react";
 import AssignmentHistory from "./AssignmentHistory";
 import AssignmentNavbar from "./AssignmentNavbar";
 import ScheduledAssignments from "./ScheduledAssignment";
+import VerifyAssignment from "./VerifyAssignment";
 
 
 function AssignmentManagement() {
@@ -14,8 +15,9 @@ function AssignmentManagement() {
     return (
       <>
         <AssignmentNavbar onNavItemClick={handleNavItemClick} />
-        <div className="" style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+        <div className="" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
           {selectedNavItem === 'Scheduled Assignments' && <ScheduledAssignments />}
+          {selectedNavItem ==='Verify Assignments' && <VerifyAssignment/>}
           {selectedNavItem === 'History' && <AssignmentHistory />}
         </div>
       </>

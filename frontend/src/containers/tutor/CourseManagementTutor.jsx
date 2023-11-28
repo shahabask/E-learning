@@ -45,7 +45,7 @@ function CourseManagementTutor() {
       headerName: 'Videos',
       field: 'videos', // The field itself doesn't matter here
       width: 130,
-      valueGetter: (params) => params.row.videos?1:0, // Get the length of the 'videos' array
+      valueGetter: (params) => params.row.videos?params.row.videos?.length:0, // Get the length of the 'videos' array
     },
     {field: 'add',
       headerName: 'Add Videos',
@@ -102,6 +102,7 @@ try{
     headers: {
       'Content-Type': 'multipart/form-data', 
     },})
+    console.log('response',response)
 toast.success('successfully added video')
 }catch(error){
 toast.error('some error')

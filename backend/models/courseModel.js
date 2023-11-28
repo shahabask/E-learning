@@ -31,7 +31,8 @@ const courseSchema = mongoose.Schema({
          videoUrl:{
             type:String,
             
-         }
+         },
+         
       } ]
      ,
      description:{
@@ -45,8 +46,16 @@ const courseSchema = mongoose.Schema({
      image:{
       type:String,
       default:null
-     }
-
+     },
+    rating:[
+      {
+         user: {type:mongoose.Schema.Types.ObjectId,
+         ref: 'User' },
+         value:{
+            type:Number
+         }
+      }
+    ]
    
     })
 

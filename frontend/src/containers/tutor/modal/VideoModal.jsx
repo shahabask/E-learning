@@ -19,8 +19,8 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-function VideoModal({id, isOpen, onRequestClose, videoData, onSaveVideo }) {
-  const [video, setVideo] = useState(videoData || { title: '', description: '', videoUrl: null });
+function VideoModal({id, isOpen, onRequestClose, onSaveVideo }) {
+  const [video, setVideo] = useState( { title: '', description: '', videoUrl: null });
   const [errors, setErrors] = useState({});
 
   const clearErrors = () => {
@@ -81,7 +81,7 @@ function VideoModal({id, isOpen, onRequestClose, videoData, onSaveVideo }) {
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
       <div className="w-96 p-6 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-4">
-          {videoData ? 'Edit Video' : 'Add Video'}
+          { 'Add Video'}
         </h2>
         <input
           type="file"

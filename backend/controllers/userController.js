@@ -10,6 +10,7 @@ import Stripe from "stripe";
 import Quizzes from "../models/quizModel.js";
 import Live from "../models/liveModel.js";
 import MarkList from "../models/markListModel.js";
+import { ObjectId } from "mongodb";
 
 const stripe = new Stripe(
   "sk_test_51O9tFFSDsPPMBnLnMdMtou8UwIWhDpQJl3hXgNqJCjBwaWNDXXkDcnCvRUuvGJegH2TKKMthVMz9fNNvBasBLXGi00Bg41xYtX"
@@ -166,6 +167,7 @@ const courseCategoryListing = asyncHandler(async (req, res) => {
         videos: 1,
         image: 1,
         description: 1,
+        rating:1,
         "categoryData._id": 1,
         "categoryData.categoryName": 1,
         "categoryData.image": 1,
@@ -191,6 +193,7 @@ const courseCategoryListing = asyncHandler(async (req, res) => {
         videos: { $first: "$videos" },
         image: { $first: "$image" },
         description: { $first: "$description" },
+        rating:{$first:"$rating"}
       },
     },
   ]);
@@ -300,8 +303,17 @@ const courseDetails = asyncHandler(async (req, res) => {
   const courseId = req.params.courseId;
   const courseDetails = await Course.findOne({ _id: courseId });
   const plan = req.user.subscription;
+
+  const rated = courseDetails.rating.some((item) => {
+    const itemUserId = item.user instanceof ObjectId ? item.user : new ObjectId(item.user);
+    const reqUserId = req.user._id instanceof ObjectId ? req.user._id : new ObjectId(req.user._id);
+  
+    return itemUserId.equals(reqUserId);
+  });
+  const totalRating = courseDetails.rating.reduce((sum, item) => sum + item.value, 0)
+  const avgRating= Math.ceil(totalRating/courseDetails.rating.length)
   if (courseDetails) {
-    res.status(200).json({ courseDetails, plan });
+    res.status(200).json({ courseDetails, plan,rated,avgRating });
   } else {
     res.status(500).json(`can't get the details`);
   }
@@ -353,8 +365,25 @@ const loadUpgradePlan= asyncHandler(async (req, res) => {
   const {currentPlan}=req.params
 
    if(currentPlan=='Medium'){
-    const plan = await Plan.find({subscription:'Premium'})
+    let plans = await Plan.find({subscriptionMode:'Premium'})
+  
+    if(plans){
+      res.status(200).json({plans})
+
+    }else{
+      res.status(500).json('not working')
+    }
+   }else{
+    let plans= await Plan.find({subscriptionMode:{$ne:'Basic'}})
+    console.log('plans',plans)
+    if(plans){
+      res.status(200).json({plans})
+    }else{
+      res.status(500).json('not working')
+    }
    }
+    
+   
 
 })
 const checkout = asyncHandler(async (req, res) => {
@@ -454,7 +483,7 @@ const loadQuizzes = asyncHandler(async (req, res) => {
 });
 
 const loadLiveDetails = asyncHandler(async (req, res) => {
-  const lives = await Live.find({});
+  const lives = await Live.find({status:{$ne:'Ended'}});
   if (lives) {
     res.status(200).json({ lives });
   }
@@ -593,6 +622,19 @@ const submitAssignment=asyncHandler(async (req, res) => {
        
   
 })
+
+const rateCourse=asyncHandler(async(req,res)=>{
+  const id=req.user._id
+const {rating,courseId}=req.body
+const user={user:id,value:rating}
+  const courseRating=await Course.updateOne({_id:courseId},{$push:{rating:user}})
+   console.log('rated')
+  if(courseRating){
+    res.status(200).json('successfull')
+  }else{
+    res.status(500).json('error')
+  }
+})
 export {
   authUser,
   registerUser,
@@ -618,5 +660,6 @@ export {
   addQuizResult,
   loadMarkSheet,
   loadVideos,
-  submitAssignment
+  submitAssignment,
+  rateCourse
 };

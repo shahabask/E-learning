@@ -20,7 +20,12 @@ const markListSchema = mongoose.Schema({
     },
     MarkScored:{
       type:Number,
-    }},
+    },
+   checked:{
+      type:Boolean,
+      default:false
+   }
+   },
     
    ]
 

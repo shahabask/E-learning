@@ -1,149 +1,247 @@
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
+// import { Link, useParams } from 'react-router-dom';
+// import axiosInstance from '../../utils/axios';
+// import { toast } from 'react-toastify';
+
+
+// function CourseDetails() {
+//   const [courseInfo, setCourseInfo] = useState('');
+//   const [isSubscriptionActive, setSubscriptionActive] = useState(false);
+
+
+//   const { courseId } = useParams();
+
+//   useEffect(() => {
+//     fetchCourseDetails();
+//   }, []);
+
+//   const fetchCourseDetails = async () => {
+//     try {
+//       let response = await axiosInstance.get(`/loadCourseDetails/${courseId}`);
+//       response.data.courseDetails.image = `http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`;
+//       setCourseInfo(response.data.courseDetails);
+
+//       const endDateISO = Date.parse(response.data.plan.endDate);
+//       const endDate = new Date(endDateISO);
+
+//       if (endDate > Date.now()) {
+//         setSubscriptionActive(true);
+//       }
+//     } catch (error) {
+//       toast.error(error?.courseDetails?.data || error.error);
+//     }
+//   };
+
+
+//   return (
+//     <div>
+//       <section className="py-5">
+//         <div className="container px-4 px-lg-5 my-5">
+//           <div style={{ height: '40px' }}></div>
+//           <div className="row gx-4 gx-lg-5 align-items-center">
+//             <div className="col-md-6">
+//               <img className="card-img-top mb-5 mb-md-0" src={courseInfo.image} alt="..." style={{ height: '400px', borderRadius: '8px', border: '1px solid black' }} />
+//             </div>
+//             <div className="col-md-6">
+//               <h1 className="text-3xl font-extrabold text-gray-900">{courseInfo.course}</h1>
+//               <p className="lead text-3xl">{courseInfo.description}</p>
+           
+//               <div className="d-flex mt-5">
+//                 {isSubscriptionActive ? (
+//                   <Link
+//                     to={`/playlist/${courseId}`}
+//                     className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+//                   >
+//                     <i className="bi-cart-fill me-1"></i>Watch videos
+//                   </Link>
+//                 ) : (
+//                   <Link
+//                     to="/plans"
+//                     className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+//                   >
+//                     <i className="bi-cart-fill me-1"></i>Subscribe Now
+//                   </Link>
+//                 )}
+
+           
+//               </div>
+
+//             </div>
+//           </div>
+//         </div>
+
+//       </section>
+
+//       {/* Course Rating Modal */}
+
+//     </div>
+//   );
+// }
+
+// export default CourseDetails;
+
+
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axios';
 import { toast } from 'react-toastify';
+import Modal from 'react-modal';
+import StarRating from 'react-star-rating-component';
+// index.js or your main stylesheet
+import '@fortawesome/fontawesome-free/css/all.css';
 
 function CourseDetails() {
-const [courseInfo,setCourseInfo]=useState('')
-const [isSubscriptionActive,setSubscriptionActive]=useState(false)
-    const { courseId } = useParams();
-    useEffect(()=>{
-        fetchCourseDetails()
-        
-    },[])
+  const [courseInfo, setCourseInfo] = useState('');
+  const [isSubscriptionActive, setSubscriptionActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [isRated,setIsRated]=useState(false)
+  const { courseId } = useParams();
+  const [error,setError]=useState({})
+  const [ratingSubmitted,setRatingSubmitted]=useState(false)
+  const [totalAverageRating,setTotalAverageRating]=useState(0)
+  useEffect(() => {
+    fetchCourseDetails();
+  }, [ratingSubmitted]);
 
-    const fetchCourseDetails=async()=>{
-        try {
-            let response=await axiosInstance.get(`/loadCourseDetails/${courseId}`)
-            // console.log(response.data.courseDetails,'details')
-            response.data.courseDetails.image=`http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
-            setCourseInfo(response.data.courseDetails)
-            const endDateISO = Date.parse(response.data.plan.endDate);
-            const endDate = new Date(endDateISO);
-              
-          
-            if(endDate> Date.now()){
-               setSubscriptionActive(true)
-               
-            }
-            
-        } catch (error) {
-            toast.error(error?.couseDetails?.data||error.error)
-        }
+  const fetchCourseDetails = async () => {
+    try {
+      let response = await axiosInstance.get(`/loadCourseDetails/${courseId}`);
+      response.data.courseDetails.image = `http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`;
+      setCourseInfo(response.data.courseDetails);
+       setIsRated(response.data.rated)
+       setTotalAverageRating(response.data?.avgRating)
+      const endDateISO = Date.parse(response.data.plan.endDate);
+      const endDate = new Date(endDateISO);
+
+      if (endDate > Date.now()) {
+        setSubscriptionActive(true);
+      }
+    } catch (error) {
+      toast.error(error?.courseDetails?.data || error.error);
     }
+  };
 
-// const imagePath=courseInfo?.image
-// console.log('IM',imagePath)
-// const modifiedImagePath=`http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
+  const handleRatingSubmit = async() => {
+    try {
+         if(rating==0){
+            setError({message:'please rate'})
+            return;
+         }
+      const response =await axiosInstance.post('/rateCourse',{rating,courseId})
+      console.log('Rating submitted:', rating);
+    setIsModalOpen(false);
+    setError({})
+    setRatingSubmitted(!ratingSubmitted)
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
 
   return (
     <div>
- 
-
-    <section className="py-5">
-      <div className="container px-4 px-lg-5 my-5">
-        <div style={{height:'40px'}}></div>
-        <div className="row gx-4 gx-lg-5 align-items-center">
-          <div className="col-md-6" >
-
-            <img className="card-img-top mb-5 mb-md-0" src={courseInfo.image} alt="..."  style={{height:'400px',borderRadius:'8px',border:'1px solid black'}}/>
-          </div>
-          <div className="col-md-6">
-            {/* <small className="mb-1">SKU: BST-498</small> */}
-            <h1 className="text-3xl font-extrabold text-gray-900">{courseInfo.course}</h1>
-           <p className="lead text-3xl">
-             {courseInfo.description}
-            </p>
-            <div className="d-flex mt-5">
-                
-        {isSubscriptionActive?<Link to={`/playlist/${courseId}`} className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-  <i className="bi-cart-fill me-1"></i>Watch videos
-</Link>:<Link to="/plans" className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-  <i className="bi-cart-fill me-1"></i>Subscribe Now
-</Link>}    
+      <section className="py-5" style={{minHeight: '100vh', backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+      <div className="container px-4 px-lg-5 my-5" >
+          <div style={{ height: '40px' }}></div>
+          <div className="row gx-4 gx-lg-5 align-items-center  pt-5">
+            <div className="col-md-6">
+              <img className="card-img-top mb-5 mb-md-0" src={courseInfo.image} alt="..." style={{ height: '400px', borderRadius: '8px', border: '1px solid black' }} />
             </div>
+
+        <div className="col-md-6">
+          <h1 className="text-3xl font-extrabold text-gray-900">{courseInfo.course}</h1>
+          <p className="lead ">{courseInfo.description}</p>
+          <div className='flex'>
+          <StarRating
+                name="totalRating"
+                starCount={5}
+                value={totalAverageRating} // Use your variable with the total average rating
+                editing={false} // Set to false to disable user interaction
+              /> <span style={{fontSize:'13px'}}>({courseInfo.rating?courseInfo.rating?.length:0})</span>
+              </div>
+          <div className="d-flex mt-5">
+            {isSubscriptionActive ? (
+              <>
+              <Link
+                to={`/playlist/${courseId}`}
+                className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+              >
+                <i className="bi-cart-fill me-1"></i>Watch videos
+              </Link>
+               {isRated?" " :<button
+                 onClick={() => setIsModalOpen(true)}
+                 className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+               >
+                 <i className="bi-star-fill me-1"></i>Rate Course
+               </button>}  </>
+            ) : (
+              <>
+                <Link
+                  to="/plans"
+                  className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                >
+                  <i className="bi-cart-fill me-1"></i>Subscribe Now
+                </Link>
+             
+              </>
+            )}
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    {/* <section className="py-5 bg-light">
-      <div className="container px-4 px-lg-5 mt-5">
-        <h2 className="fw-bolder mb-4 text-3xl font-extrabold text-gray-900">videos</h2>
-        <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-          <div className="col mb-5">
-            <div className="card h-100">
-              <img className="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-              <div className="card-body p-4 text-center">
-                <h5 className="fw-bolder">Fancy Product</h5>
-                <span>$40.00 - $80.00</span>
-              </div>
-              <div className="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
-                <a className="btn btn-outline-dark mt-auto" href="#">View options</a>
-              </div>
-            </div>
-          </div>
-          <div className="col mb-5">
-            <div className="card h-100">
-              <div className="badge bg-dark text-white position-absolute" style={{ top: "0.5rem", right: "0.5rem" }}>Sale</div>
-              <img className="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-              <div className="card-body p-4 text-center">
-                <h5 className="fw-bolder">Special Item</h5>
-                <div className="d-flex justify-content-center small text-warning mb-2">
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                </div>
-                <span className="text-muted text-decoration-line-through">$20.00</span>
-                <span>$18.00</span>
-              </div>
-              <div className="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
-                <a className="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-          <div className="col mb-5">
-            <div className="card h-100">
-              <div className="badge bg-dark text-white position-absolute" style={{ top: "0.5rem", right: "0.5rem" }}>Sale</div>
-              <img className="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-              <div className="card-body p-4 text-center">
-                <h5 className="fw-bolder">Sale Item</h5>
-                <span className="text-muted text-decoration-line-through">$50.00</span>
-                <span>$25.00</span>
-              </div>
-              <div className="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
-                <a className="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-          <div className="col mb-5">
-            <div className="card h-100">
-              <img className="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-              <div className="card-body p-4 text-center">
-                <h5 className="fw-bolder">Popular Item</h5>
-                <div className="d-flex justify-content-center small text-warning mb-2">
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                  <i className="bi-star-fill"></i>
-                </div>
-                <span>$40.00</span>
-              </div>
-              <div className="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
-                <a className="btn btn-outline-dark mt-auto" href="#">Add to cart</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> */}
-
- 
+    <Modal
+  isOpen={isModalOpen}
+  onRequestClose={() => setIsModalOpen(false)}
+  contentLabel="Rate Course Modal"
+  style={{
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      padding: '20px',
+      borderRadius: '8px',
+      maxWidth: '300px', // Adjust the width as needed
+    },
+  }}
+>
+  <h2>Rate the Course</h2>
+  <div className='flex-col'>
+  <StarRating
+    name="rating"
+    starCount={5}
+    className="text-3xl"
+    value={rating}
+    onStarClick={(value) => setRating(value)}
+  />
+  {error?<span style={{color:'red',fontSize:'14px' }}>{error.message}</span>:''}
   </div>
+  <div className="mt-4 flex justify-center space-x-4">
+  <button
+      onClick={() => setIsModalOpen(false)}
+      className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300"
+    >
+      <i className="fas fa-times"></i> {/* Font Awesome times icon */}
+    </button>
+    <button
+      onClick={() => handleRatingSubmit()}
+      className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300"
+    >
+      <i className="fas fa-check"></i> {/* Font Awesome check icon */}
+    </button>
+  </div>
+</Modal>
+
+  </section>
+</div>
 );
 }
 
-export default CourseDetails
+export default CourseDetails;

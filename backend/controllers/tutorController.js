@@ -270,12 +270,23 @@ const loadCourses=asyncHandler(async(req,res)=>{
 })
 
 const editCourse=asyncHandler(async(req,res)=>{
-  const {id,course,description,image}=req.body
+  const {id,course,description,image,deletedVideoUrls}=req.body
   let imagePath = req?.file?.path
   imagePath=imagePath?imagePath: `backend\\public\\images\\${image}`
  
-  
-  const updateCourse=await Course.updateOne({_id:id},{course:course,description:description,image:imagePath})
+  const updateCourse=await await Course.updateOne(
+    { _id: id },
+    {
+      $set: {
+        course: course,
+        description: description,
+        image: imagePath,
+      },
+      $pull: {
+        videos: { videoUrl: { $in: deletedVideoUrls } },
+      },
+    }
+  );
   if(updateCourse){
     res.status(200).json('edited successfully')
   }else{
@@ -344,8 +355,21 @@ const updateProfile=asyncHandler(async(req,res)=>{
 })
 
 const addVideo=asyncHandler(async(req,res)=>{
- 
-  res.status(200).json('it is coming')
+   const {id,title,description}=req.body
+     const videoUrl=req.files[0].filename
+  //  console.log(req.body,'req.body',req.files,'files')
+
+   const videoData={title,description,videoUrl}
+   const updateResult = await Course.updateOne(
+    { _id: id },
+    { $push: { videos: videoData } }
+  );
+console.log(updateResult)
+  if(updateResult){
+    res.status(200).json('video added')
+  }else{
+    res.status(500)
+  }
 })
 
 

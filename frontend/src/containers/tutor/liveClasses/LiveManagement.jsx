@@ -4,18 +4,22 @@ import AddLiveModal from './AddLiveModal';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../utils/tutorAxios';
 import { toast } from 'react-toastify';
+import socket from '../../utils/socket';
+
 
 function   LiveManagement() {
 
+  
   const [isAddLiveModalOpen, setAddLiveModalOpen] = useState(false);
  const [isLiveAdded,setLiveAdded]=useState(false)
  const [isLiveDeleted,setLiveDelete]=useState(false)
  const [subjects,setSubjects]=useState([])
  const [liveDetails,setLiveDetails]=useState([])
 
-
+ 
   const handleAddLive = () => {
     setAddLiveModalOpen(true);
+    
   };
  
   const handleCloseModal = () => {
@@ -28,6 +32,7 @@ function   LiveManagement() {
       const response=await axiosInstance.post('/createLive',sessionData)
       setLiveAdded(!isLiveAdded)
       
+     
         toast.success('successfully inserted')
     } catch (error) {
       toast.error('error')
@@ -37,6 +42,7 @@ function   LiveManagement() {
 
   useEffect(()=>{
     fetchLivesData()
+    
   },[isLiveAdded,isLiveDeleted])
  
   const fetchLivesData=async()=>{
@@ -44,6 +50,7 @@ function   LiveManagement() {
       const status='Not started'
       const response=await axiosInstance.get(`/loadLiveDetails/${status}`)
         setLiveDetails(response.data.lives)
+        console.log(response.data)
         setSubjects(response.data?.subCategories[0]?.specification)
         
     }catch(error){
@@ -53,6 +60,7 @@ function   LiveManagement() {
 
   const handleDeleteCard=()=>{
     setLiveDelete(!isLiveDeleted)
+    socket.emit('delete_live')
   }
   return (
     <div style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>

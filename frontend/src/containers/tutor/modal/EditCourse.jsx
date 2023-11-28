@@ -16,8 +16,23 @@ export default function EditCourse({
     const [category,setCategory]=useState('')
     const [subCategroy,setSubCategory]=useState('')
     const [formError, setFormError] = useState({});
+    // Add a new state to track deleted video URLs
+const [deletedVideoUrls, setDeletedVideoUrls] = useState([]);
+const [localVideos, setLocalVideos] = useState([]);
+
+// Function to handle video deletion
+const handleDeleteVideo = (videoUrl) => {
+  // Add the video URL to the array of deleted video URLs
+  setDeletedVideoUrls((prevUrls) => [...prevUrls, videoUrl]);
+  setLocalVideos((prevVideos) =>
+  prevVideos.filter((video) => video.videoUrl !== videoUrl)
+);
+};
+
     useEffect(()=>{
       if(courseData){
+        console.log(courseData[0],'courseData')
+      setLocalVideos(courseData[0]?.videos)
       setCategory(courseData[0]?.categoryName)
       setSubCategory(courseData[0]?.subCategory)
       setCourse(courseData[0]?.course)
@@ -26,23 +41,24 @@ export default function EditCourse({
       }
     },[courseData])
   //edit course function in modal
-  const handleEditCourse= async (e) => {
+  const handleEditCourse = async (e) => {
     e.preventDefault();
-    const errors = validate(course, description,selectedImage);
+    const errors = validate(course, description, selectedImage);
     setFormError(errors);
-   
-    const imageFileName = selectedImage instanceof File ? selectedImage: selectedImage.replace("http://localhost:5000/images/", "")
-
+  
+    const imageFileName = selectedImage instanceof File ? selectedImage : selectedImage.replace("http://localhost:5000/images/", "");
+  
     if (Object.keys(errors).length === 0) {
       try {
         const updatedCourseData = {
           id: courseData[0]._id,
           course,
           description,
-          image:imageFileName,
+          image: imageFileName,
+          deletedVideoUrls: deletedVideoUrls, // Pass the deleted video URLs
         };
         const response = await onEditCourse(updatedCourseData);
-
+  
         if (response === null) {
           setFormError({});
           setSelectedImage(null);
@@ -53,6 +69,7 @@ export default function EditCourse({
       }
     }
   };
+  
 //validate function for field
     const validate = (course, description,image) => {
       const errors = {};
@@ -154,6 +171,18 @@ export default function EditCourse({
      <span className="error-message">
           {formError?.description ? formError.description : ""}
         </span>
+
+        <div className="videos-section mt-4">
+  <h3>Videos:</h3>
+  {localVideos.map((video, index) => (
+    <div key={index} className="video-pill">
+      <span>{video.title}</span>
+      <button onClick={() => handleDeleteVideo(video.videoUrl)}>
+        <FaTrash />
+      </button>
+    </div>
+  ))}
+</div>
         {/* Buttons for Save and Cancel */}
         <div className="mt-4">
           <button

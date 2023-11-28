@@ -21,6 +21,14 @@ filename: (req, file, cb) => {
   cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
 },
 });
+const thumbnailStorage = multer.diskStorage({
+  destination: 'backend/public/thumbnails', // Adjust the destination path for thumbnail uploads
+  filename: (req, file, callback) => {
+    // Append '_thumbnail' to the original filename for thumbnails
+    const thumbnailName = file.originalname.replace(path.extname(file.originalname), '_thumbnail.jpg');
+    callback(null, thumbnailName);
+  },
+});
 const videoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'backend/public/videos');
@@ -33,6 +41,7 @@ const videoStorage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const videoUpload = multer({ storage: videoStorage });
+const thumbnailUpload = multer({ storage: thumbnailStorage });
 tutorRouter.post('/login',tutorAuth)
 tutorRouter.post('/register',registerTutor)
 tutorRouter.get('/tutorDetails',tutorDetails)
@@ -48,7 +57,7 @@ tutorRouter.get('/loadCourses',tutorauthcheck,loadCourses)
 tutorRouter.patch('/editCourse',upload.single('image'),editCourse)
 tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
 tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
-tutorRouter.patch('/addVideo',videoUpload.array('videoUrl'),addVideo)
+tutorRouter.patch('/addVideo',videoUpload.single('videoUrl'),addVideo)
 tutorRouter.get('/loadQuizDetails',loadQuizDetails)
 tutorRouter.post('/addQuiz',addQuizzes)
 tutorRouter.get('/loadQuestion',loadQuestions)
