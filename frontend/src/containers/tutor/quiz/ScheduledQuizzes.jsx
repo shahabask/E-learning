@@ -89,15 +89,15 @@ function ScheduledQuizzes() {
   };
 
   return (
-    <div style={{backgroundColor:'rgba(224, 176, 255, 0.2)',height: "100vh" ,}}>
+    <div style={{backgroundColor:'rgba(224, 176, 255, 0.2)',minHeight: "81vh" ,}}>
      
       <div className="flex justify-end mb-4">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
           onClick={handleAddQuizClick}
         >
-          <FaPlus className="mr-2" />
-          Add Quiz
+          <FaPlus className="mr-2 " />
+          <span className='hidden md:inline'>Add Quiz</span>
         </button>
       </div>
       
@@ -117,10 +117,10 @@ function ScheduledQuizzes() {
               <p className="text-gray-600 text-sm mb-2">
                 Time: {scheduledQuiz?.questions?.length} min
               </p>
-              <button className=" text-black px-2 py-1 rounded-full flex items-center hover:bg-blue-200 transition-colors">
+              {/* <button className=" text-black px-2 py-1 rounded-full flex items-center hover:bg-blue-200 transition-colors">
                 <FaEye className="mr-2" />
                 details
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

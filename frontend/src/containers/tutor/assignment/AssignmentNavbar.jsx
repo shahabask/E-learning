@@ -19,7 +19,7 @@ function AssignmentNavbar({ onNavItemClick }) {
                   {/* Example with an icon from FontAwesome */}
                   <i className="fas fa-calendar-alt"></i>
                 </span>
-                Scheduled Assignments
+                <span className='hidden md:inline'>Scheduled Assignments </span>
               </button>
             </li>
             <li>
@@ -32,7 +32,7 @@ function AssignmentNavbar({ onNavItemClick }) {
                   {/* Example with an icon from FontAwesome */}
                   <FaCheckCircle className="text-black" />
                 </span>
-                Verify Assignment
+                <span className='hidden md:inline'>Verify Assignment </span>
               </button>
             </li>
             <li>
@@ -45,7 +45,7 @@ function AssignmentNavbar({ onNavItemClick }) {
                   {/* Example with an icon from FontAwesome */}
                   <i className="fas fa-history"></i>
                 </span>
-                History
+                <span className='hidden md:inline'> History </span>
               </button>
             </li>
           </ul>

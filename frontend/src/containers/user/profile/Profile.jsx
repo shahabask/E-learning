@@ -23,7 +23,7 @@ export default function Profile() {
    try {
      const response=await axiosInstance.get('/loadProfile')
    setUserData(response.data.myProfile)
-
+   console.log('myProfile',response.data.myProfile)
 
    } catch (error) {
      console.log('error',error.response||error.error)
@@ -57,13 +57,23 @@ export default function Profile() {
     setShowForm(false)
     setShowQuiz(false)
   }
+  const formatDate = (dateString) => {
+    const options = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    };
+  
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+    return formattedDate;
+  };
    const imagePath = userData?.image
   const modifiedImagePath = imagePath
    ? `http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
    : '';
    console.log('img',modifiedImagePath)
    return (
-     <div style={{ height: "100vh", backgroundColor: "	#fcdad1" }}>
+     <div style={{ minHeight: "100vh", backgroundColor: "	#fcdad1" }}>
        <div className="container ">
          <div className="row gutters row-with-padding ">
            <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
@@ -77,7 +87,7 @@ export default function Profile() {
                          alt="Maxwell Admin"
                        />
                      </div>
-                     <h5 className="user-name font-semibold">{userData?.firstName} {userData?.secondName}</h5>
+                     <h5 className="user-name font-semibold" style={{ textTransform: 'uppercase' }}>{userData?.firstName} {userData?.secondName}</h5>
                      {/* <h6 className="user-email">{userData?.secondName}</h6> */}
                    </div>
                    <div className="centered-container">
@@ -111,31 +121,27 @@ export default function Profile() {
                </div>
              </div>
            </div>
-           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+           <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 mb-5 mt-5">
            {showForm ? <EditUser userData={userData}  />:showQuiz?<div ><Quizzes quizData={'quizData'} className=''/></div>
            :showMarkSheet?<MarkSheet/>:showAssignment?<Assignment/> :( 
-       <div className="bg-white shadow-md p-4 rounded-lg">
-         <h1 className="text-3xl font-bold mb-4">{userData?.userName}</h1>
-         <p className="text-gray-600 text-sm mb-2">
+       <div className="bg-white shadow-md p-4 rounded-lg" style={{minHeight:'50vh'}}>
+         <h1 className="text-3xl font-bold mb-4 text-purple-800" style={{ textTransform: 'uppercase' }}>{userData?.firstName}</h1>
+         {/* <p className="text-gray-600 text-sm mb-2">
            {userData?.address?.city}, {userData?.address?.state}, {userData?.address?.country}
-         </p>
-         <p className="text-gray-600 text-sm mb-2">{userData?.degree}</p>
+         </p> */}
+         <p className="text-gray-600 text-m mb-2 pt-2 font-semibold text-purple-800">Email: <span>{userData?.email}</span></p>
          <div className="mb-4">
-           <p className="text-gray-700 font-semibold">Skills:{userData?.specification?.map((item, index) => (
-   <span key={index}>
-     {item}
-     {index !== userData?.specification.length - 1 ? ', ' : ''}
-   </span>
- ))}</p>
-           <ul className="list-disc list-inside">
+           <p className="text-gray-600 text-m mb-2 pt-2 font-semibold text-purple-800">Phone:{userData?.phone}</p>
+           {/* <ul className="list-disc list-inside">
              {userData?.skills?.map((skill, index) => (
                <li key={index}>{skill}</li>
              ))}
-           </ul>
+           </ul> */}
+         {userData?.subscription? <p className="text-gray-600 text-m font-semibold mb-2 pt-2 text-purple-800">Subscription EndDate:{formatDate(userData.subscription?.endDate)}</p> :''} 
          </div>
          <div className="mb-4">
-           <p className="text-gray-700 font-semibold">About Me:</p>
-           <p className="text-gray-600">{userData?.description}</p>
+           {/* <p className="text-gray-700 font-semibold">About Me:</p> */}
+           {/* <p className="text-gray-600">{userData?.description}</p> */}
          </div>
        </div>
     
@@ -145,3 +151,5 @@ export default function Profile() {
      </div>
    );
  }
+
+

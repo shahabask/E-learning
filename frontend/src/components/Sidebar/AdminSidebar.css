@@ -2,9 +2,11 @@
 
 .admin-sidebar {
     background-color: #ffffff;
-    color: #000000;
+    color: hsl(0, 0%, 0%);
     width: 250px;
-    height: 100vh; /* Set the height to 100% of the viewport height */
+    min-height: 100vh; 
+    height: 100%;
+    /* Set the height to 100% of the viewport height */
     position: fixed;
     z-index: 1;
     display: flex;
@@ -69,13 +71,14 @@
   
   .icons-only {
     transform: translateX(-200px);
+    /* width: 50px; */
   }
   
   .icons-only .sidebar-icon.hidden {
     display: none;
   }
   
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .admin-sidebar {
       width: 50px;
     }
@@ -87,12 +90,13 @@
     .admin-sidebar ul li .sidebar-icon {
       margin-right: 0;
     }
-  }
+  } */
   
   @media (max-width: 760px) {
     .admin-sidebar {
       width: 50px;
     }
+  
   
     .admin-sidebar .menu-text {
       display: none;

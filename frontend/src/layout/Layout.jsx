@@ -9,6 +9,7 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import Footer from "../containers/user/home/Footer"
 
+
 function Layout() {
 
   const location=useLocation( )
@@ -28,6 +29,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(true);
       if (sidebarType === "admin" && admin) {
         return !prevIsSidebarOpen;
       } else if (sidebarType === "tutor" && tutor) {
+        console.log('value',prevIsSidebarOpen)
         return !prevIsSidebarOpen;
       }
       return prevIsSidebarOpen;

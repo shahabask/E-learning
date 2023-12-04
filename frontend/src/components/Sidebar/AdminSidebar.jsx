@@ -1,7 +1,7 @@
 
 
 // AdminSidebar.js
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import '../../Components/Sidebar/AdminSidebar.css';
 import { NavLink } from 'react-router-dom'
@@ -29,7 +29,22 @@ function AdminSidebar({ toggleSidebar }) {
   const handleLogout = () => {
    dispatch(adminLogout())
   };
-    
+  const updateIsIconsOnly = () => {
+    setIsIconsOnly(window.innerWidth <= 760);
+  };
+
+  useEffect(() => {
+    // Initial check on component mount
+    updateIsIconsOnly();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updateIsIconsOnly);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateIsIconsOnly);
+    };
+  }, []);
       return (
         <>
           <AdminHeader/>
@@ -40,7 +55,7 @@ function AdminSidebar({ toggleSidebar }) {
             <ul>
             <li className="tutor-heading">
               {/* <img src={tutorSvg} style={{color:'white'}} alt="Tutor Icon" className={`tutor-icon ${isIconsOnly ? 'hidden' : ''}`} /> */}
-              <span className={`tutor-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Admin</span>
+              <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Admin</span>
             </li>
             <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>    <li>
               <FaHome className="sidebar-icon text-purple-400" />
@@ -71,14 +86,11 @@ function AdminSidebar({ toggleSidebar }) {
               </li></NavLink> 
     
               {/* New li tags with corresponding icons */}
-              <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
+              <NavLink to='/admin/salesReport' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
                 <FaChartBar className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Sales Report</span> 
               </li></NavLink> 
-              {/* <NavLink to='/admin' className="active-link" style={{ textDecoration: 'none', color: 'black' }}>   <li>
-                <FaEnvelope className={`sidebar-icon text-purple-400 ${isIconsOnly ? 'hidden' : ''}`} />
-                <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`}>Messages</span>
-              </li></NavLink>  */}
+             
                <li className="logout-button" onClick={handleLogout}>
                 <FaSignOutAlt className="sidebar-icon" />
                 <span className={`menu-text ${isIconsOnly ? 'hidden' : ''}`}>Logout</span>

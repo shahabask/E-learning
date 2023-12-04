@@ -14,12 +14,13 @@ function Lives() {
 
 
 useEffect(()=>{
+  fetchLiveDetails()
   socket.on('track_live',()=>{
     fetchLiveDetails()
             // setLiveUpdated(!liveUpdated)
           })
 
-          // fetchLiveDetails()
+         
 },[socket])
   
   const fetchLiveDetails = async () => {

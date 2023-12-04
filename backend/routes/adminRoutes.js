@@ -2,7 +2,7 @@ import express from 'express'
 import { adminAuth,adminLogout,adminForgotPassword,adminConfirmOtp,adminResetPassword,
   adminOtpLoginVerifyEmail,adminOtpLogin} from '../controllers/adminController.js'
   import { loadUsers,loadTutors,blockUser,blockTutor,loadCategory ,addCategory,addCourse,validateCourse
-  ,loadCourses,blockCourse,editCategory,blockCategory, addPlan ,loadSubscribers } from '../controllers/adminMangementController.js'
+  ,loadCourses,blockCourse,editCategory,blockCategory, addPlan ,loadSubscribers,loadDashboardDetails,loadSalesReport } from '../controllers/adminMangementController.js'
   import adminauthcheck from '../middleware/adminMiddleware.js'
   const adminRouter=express.Router()
   
@@ -45,6 +45,8 @@ adminRouter.post('/editCategory',upload.single('image'),editCategory)
 adminRouter.patch('/blockUnblockCategory',blockCategory)
 adminRouter.post('/addPlan',addPlan)
 adminRouter.get('/loadSubscribers',loadSubscribers)
+adminRouter.get('/loadDashboardDetails',loadDashboardDetails)
+adminRouter.get('/loadsalesreport',loadSalesReport)
 
 
 export default  adminRouter

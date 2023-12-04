@@ -22,7 +22,7 @@ function TutorProfile() {
     setShowForm((prevShowForm) => !prevShowForm);
   };
   return (
-    <div style={{ height: "100vh",backgroundColor:'rgba(224, 176, 255, 0.2)' }}>
+    <div style={{ minHeight: "90vh",backgroundColor:'rgba(224, 176, 255, 0.2)' }}>
       <div className="container ">
         <div className="row gutters row-with-padding">
           <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
@@ -36,7 +36,7 @@ function TutorProfile() {
                         alt="Maxwell Admin"
                       />
                     </div>
-                    <h5 className="user-name">{tutorData[0]?.userName}</h5>
+                    <h5 className="user-name" style={{ textTransform: 'uppercase' }}>{tutorData[0]?.userName}</h5>
                     <h6 className="user-email">{tutorData[0]?.email}</h6>
                   </div>
                   <div className="centered-container">
@@ -50,7 +50,7 @@ function TutorProfile() {
                           Edit
                         </span>
                       </div>
-                      <div className="colum">
+                      {/* <div className="colum">
                         <i
                           className="fas fa-certificate"
                           style={{ color: "gold" }}
@@ -70,7 +70,7 @@ function TutorProfile() {
                         <span className="icon" style={{ paddingLeft: "10px" }}>
                           Followers
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -82,7 +82,7 @@ function TutorProfile() {
           ) : (
             <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
               <div className="bg-white shadow-md p-4 rounded-lg">
-                <h1 className="text-3xl font-bold mb-4">
+                <h1 className="text-3xl font-bold mb-4" style={{ textTransform: 'uppercase' }}>
                   {tutorData[0]?.userName}
                 </h1>
                 <p className="text-gray-600 text-sm mb-2">

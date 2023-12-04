@@ -102,7 +102,7 @@ try{
     headers: {
       'Content-Type': 'multipart/form-data', 
     },})
-    console.log('response',response)
+    setEdited(!edited)
 toast.success('successfully added video')
 }catch(error){
 toast.error('some error')

@@ -6,13 +6,14 @@ import axiosInstance from '../../utils/axios';
 import {loadStripe} from '@stripe/stripe-js';
 import { FaArrowCircleUp } from 'react-icons/fa';
 import { useSpring, animated } from 'react-spring';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgroundColor }) {
 
   const makePayment=async(subscriptionMode)=>{
     const stripe=await loadStripe('pk_test_51O9tFFSDsPPMBnLnKyvyumurLHFVUHzGUpmbkXp9jHCv0VgSXfHSUHhHuigLLml4DL18sxaWg3GhJNPsb7yaeQ3S00Z3qxkuvG');
-
-    const response=await axiosInstance.post('/create-checkout',{subscriptionMode})
+       const isUpgrading=false
+    const response=await axiosInstance.post('/create-checkout',{subscriptionMode,isUpgrading})
     
     const session=response.data.id
     
@@ -21,13 +22,17 @@ function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgro
     })
   }
   return (
-    <div className="columns" style={{ height: '500px' }}>
+    <>
+      
+    <div className="columns" style={{ minHeight: '500px' }}>
+    
       <ul className="price">
         <li className="header" style={{ backgroundColor }}>
           {subscriptionMode}
         </li>
         <li className="grey text-purple" style={{color:'purple',fontFamily:'sans-serif',fontSize:'30',fontWeight:'bolder'}}>₹ {price}</li>
-        <li style={{ maxHeight: '235px', overflow: 'auto' }}>
+        {/* <li style={{ maxHeight: '235px', overflow: 'auto' }}> */}
+        <Scrollbars style={{ height: '220px' }}>
           <ul>
             {benifits.map((feature, index) => (
               <li key={index}>
@@ -35,7 +40,8 @@ function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgro
               </li>
             ))}
           </ul>
-        </li>
+          </Scrollbars>
+        {/* </li> */}
         <li className="grey">
           {userInfo ? (
             <button className="button" onClick={()=>makePayment(subscriptionMode)}>Subscribe</button>
@@ -46,7 +52,9 @@ function PlanCard({ subscriptionMode, duration, price, benifits,userInfo,backgro
           )}
         </li>
       </ul>
+    
     </div>
+    </>
   );
   
 }
@@ -102,8 +110,8 @@ const [endDate,setEndDate]=useState(null)
 
   return (
     
-    <div className="plan-container" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
- 
+    <div className="plan-container lg:flex " style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)',minHeight:'100vh'}} >
+     <div style={{height:'72px'}}></div>
       {isSubscriptionActive ? (
       <div className="plan-container">
        <div className="flex justify-center items-center h-full">
@@ -152,7 +160,7 @@ const [endDate,setEndDate]=useState(null)
    
       )}
     
-      
+  
 
   </div>
   );

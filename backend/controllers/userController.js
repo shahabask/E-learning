@@ -304,16 +304,24 @@ const courseDetails = asyncHandler(async (req, res) => {
   const courseDetails = await Course.findOne({ _id: courseId });
   const plan = req.user.subscription;
 
-  const rated = courseDetails.rating.some((item) => {
+  const rating = courseDetails.rating.filter((item)=>{
+   
     const itemUserId = item.user instanceof ObjectId ? item.user : new ObjectId(item.user);
     const reqUserId = req.user._id instanceof ObjectId ? req.user._id : new ObjectId(req.user._id);
+    if (itemUserId.equals(reqUserId)) {
+      return item;
+    }
+  })
+  console.log('rating',rating)
   
-    return itemUserId.equals(reqUserId);
-  });
+  const rated= courseDetails.rating.length!=0?true:false
+  console.log('rated',rated)
+  //   return itemUserId.equals(reqUserId);
+  // });
   const totalRating = courseDetails.rating.reduce((sum, item) => sum + item.value, 0)
   const avgRating= Math.ceil(totalRating/courseDetails.rating.length)
   if (courseDetails) {
-    res.status(200).json({ courseDetails, plan,rated,avgRating });
+    res.status(200).json({ courseDetails, plan,rated,avgRating,rating });
   } else {
     res.status(500).json(`can't get the details`);
   }
@@ -375,7 +383,8 @@ const loadUpgradePlan= asyncHandler(async (req, res) => {
     }
    }else{
     let plans= await Plan.find({subscriptionMode:{$ne:'Basic'}})
-    console.log('plans',plans)
+
+    // console.log('plans',plans)  
     if(plans){
       res.status(200).json({plans})
     }else{
@@ -387,10 +396,28 @@ const loadUpgradePlan= asyncHandler(async (req, res) => {
 
 })
 const checkout = asyncHandler(async (req, res) => {
-  const { subscriptionMode } = req.body;
+  const { subscriptionMode, isUpgrading ,lastPlan} = req.body;
+
   const plan = await Plan.findOne({ subscriptionMode: subscriptionMode });
 
-  const lineItem = (plan) => {
+  const calculateDiscount = (plan, isUpgrading) => {
+    const discountPercentage = isUpgrading && subscriptionMode==='Premium'?  20 : 0; // Set the discount percentage based on isUpgrading
+ console.log(subscriptionMode,'mode')
+    // Calculate discounted price
+    const discountedPrice = isUpgrading
+      ? plan.price * (1 - discountPercentage / 100)
+      : plan.price;
+
+    return {
+      originalPrice: plan.price,
+      discountPercentage: discountPercentage,
+      discountedPrice: discountedPrice,
+    };
+  };
+
+  const discountInfo = calculateDiscount(plan, isUpgrading);
+
+  const lineItem = () => {
     return [
       {
         price_data: {
@@ -398,7 +425,7 @@ const checkout = asyncHandler(async (req, res) => {
           product_data: {
             name: plan.subscriptionMode,
           },
-          unit_amount: plan.price * 100,
+          unit_amount: discountInfo.discountedPrice * 100, // Apply discount to the price
         },
         quantity: 1, // You can adjust the quantity as needed.
       },
@@ -407,7 +434,7 @@ const checkout = asyncHandler(async (req, res) => {
 
   const userId = req.user._id;
   const mode = plan.subscriptionMode;
-  const lineItems = lineItem(plan);
+  const lineItems = lineItem();
   const date = new Date();
   const dateTimestamp = date.getTime(); // Get the timestamp of the date
   const successUrl = `http://localhost:3000/success/${userId}/${mode}/${dateTimestamp}`;
@@ -420,11 +447,16 @@ const checkout = asyncHandler(async (req, res) => {
     cancel_url: "http://localhost:3000/cancel",
   });
 
-  res.status(200).json({ id: session.id });
-  // res.status(200).json(userId)
+  res.status(200).json({
+    id: session.id,
+    originalPrice: discountInfo.originalPrice,
+    discountPercentage: discountInfo.discountPercentage,
+    discountedPrice: discountInfo.discountedPrice,
+  });
 });
 
-const confirmPayment = asyncHandler(async (req, res) => {
+
+const  confirmPayment = asyncHandler(async (req, res) => {
   const { userId, mode, date } = req.body;
   const plan = await Plan.findOne({ subscriptionMode: mode });
 
@@ -466,14 +498,17 @@ const loadQuizzes = asyncHandler(async (req, res) => {
   const studentId = req.user._id;
 
   const markList = await MarkList.findOne({ studentId });
+  var quizzes=allQuizzes
+   if(markList){
+    const quizIdsInMarkList = markList.quiz.map((quiz) => quiz.quizId.toString());
 
-  const quizIdsInMarkList = markList.quiz.map((quiz) => quiz.quizId.toString());
-
-  const quizzes = allQuizzes.filter((quiz) => {
-    if (!quizIdsInMarkList.includes(quiz._id.toString())) {
-      return quiz;
-    }
-  });
+     quizzes = allQuizzes.filter((quiz) => {
+      if (!quizIdsInMarkList.includes(quiz._id.toString())) {
+        return quiz;
+      }
+    });
+   }
+ 
 
   if (quizzes) {
     res.status(200).json({ quizzes });
@@ -545,13 +580,13 @@ const loadQuizDetails = asyncHandler(async (req, res) => {
 
 const addQuizResult = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const { percentage, quizId } = req.body;
+  const { correctAnswers, quizId } = req.body;
  
   const updateData = {
     $push: {
       quiz: {
         quizId: quizId,
-        percentage: percentage,
+        correctAnswers: correctAnswers,
       },
     },
   };
@@ -560,6 +595,7 @@ const addQuizResult = asyncHandler(async (req, res) => {
   const result = await MarkList.updateOne({ studentId: userId }, updateData, {
     upsert: true,
   });
+ 
   if (result) {
     res.status(200).json("successfull");
   } else {
@@ -594,7 +630,7 @@ const loadMarkSheet = asyncHandler(async (req, res) => {
 
   {$group:{
     _id:"$quizDetails._id",
-    percentage:{$first:"$quiz.percentage"},
+    correctAnswers:{$first:"$quiz.correctAnswers"},
     totalQuestions: { $sum: { $size: "$quizDetails.questions" } },
     subCategory:{$first:"$quizDetails.subCategory"},
     quizName:{$first:"$quizDetails.name"},
@@ -602,7 +638,11 @@ const loadMarkSheet = asyncHandler(async (req, res) => {
   }}            
   ]);
 
-
+    if(result){
+      res.status(200).json({result})
+    }else{
+      res.status(500).json(`not found`)
+    }
 })
 
 const loadVideos=asyncHandler(async (req, res) => {
@@ -625,14 +665,68 @@ const submitAssignment=asyncHandler(async (req, res) => {
 
 const rateCourse=asyncHandler(async(req,res)=>{
   const id=req.user._id
-const {rating,courseId}=req.body
-const user={user:id,value:rating}
+const {rating,courseId,review}=req.body
+const user={user:id,value:rating,review:review}
+ const removeDuplicate=await Course.updateOne({_id:courseId},{
+  $pull: {
+    rating: {
+      user: id, // Specify the condition to match the user ID
+    },
+  },})
+  // console.log('removeDuplicate',removeDuplicate)
   const courseRating=await Course.updateOne({_id:courseId},{$push:{rating:user}})
-   console.log('rated')
+
   if(courseRating){
     res.status(200).json('successfull')
   }else{
     res.status(500).json('error')
+  }
+})
+
+const loadCourseReviews=asyncHandler(async(req,res)=>{
+  const {courseId}=req.params
+// console.log(courseId)
+  // const course=await Course.findOne({_id:courseId}).select('rating')
+  
+  const reviews = await Course.aggregate([
+    {
+      $match: { _id: new mongoose.Types.ObjectId(courseId) }
+    },
+    {
+      $unwind: "$rating" // Assuming "rating" is an array of objects
+    },
+    {
+      $lookup: {
+        from: "users", // Assuming your users collection is named "users"
+        localField: "rating.user",
+        foreignField: "_id",
+        as: "userDetails"
+      }
+    },
+    {
+      $unwind: "$userDetails" // Unwind the array created by $lookup
+    },
+    {
+      $project: {
+        _id: 1, // Exclude _id from the result
+        user: {
+          firstName: "$userDetails.firstName",
+          lastName: "$userDetails.secondName"
+        },
+        value: "$rating.value",
+        review: "$rating.review"
+      }
+    }
+  ]);
+  
+  // Now, `course` will contain an array of objects, each representing a user's review with firstName, lastName, value, and review.
+  
+  // console.log(reviews)
+
+  if(reviews){
+      res.status(200).json({reviews})
+  }else{
+     res.status(500).json(`can't find`)
   }
 })
 export {
@@ -661,5 +755,6 @@ export {
   loadMarkSheet,
   loadVideos,
   submitAssignment,
-  rateCourse
+  rateCourse,
+  loadCourseReviews 
 };

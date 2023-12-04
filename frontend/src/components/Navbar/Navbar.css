@@ -5,7 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #781c9a7c;
+    background-color: #4e0b65;
+    color:#000;
     padding: 10px 80px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
     z-index: 10;
@@ -15,6 +16,7 @@
     align-items: center;
     justify-content: space-between;
     background-color:#FDF8EE;
+    
     padding: 10px 80px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
     z-index: 10;
@@ -27,7 +29,9 @@
     align-items: center;
     justify-content: center;
   }
-  
+  #navbar-home li a {
+    color: #000;
+  }
   #navbar li {
     list-style: none;
     padding: 0 20px;
@@ -38,16 +42,16 @@
     text-decoration: none;
     font-size: 1.3rem;
     font-weight: 600;
-    color: #1D1D1D;
+    color: #0a0a0a;
     transition: 0.3s ease-in-out;
   }
   
   #navbar li a:hover {
-    color: #ffffff;
+    color: #9b47c4;
   }
   
   #navbar li a.active-link {
-    color: #feffff;
+    color: #b881d4;
     /* Add any other styles for the active link */
   
     /* Underline effect */

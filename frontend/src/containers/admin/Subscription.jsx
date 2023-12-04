@@ -10,6 +10,24 @@ function Subscription() {
     const columns = [
         {field: '_id',headerName: 'User Id',width: 160,}, 
         { field: 'firstName', headerName: 'Name', width: 130},
+        {field:'mode',headerName:'Plan',width:130},
+        {
+          field: 'endDate',
+          headerName: 'EndDate',
+          width: 180,
+          renderCell: (params) => {
+            const endDateString = params.row.endDate; // Assuming endDate is a string in ISO 8601 format
+            const endDateObject = new Date(endDateString);
+      
+            const formattedEndDate = endDateObject.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            });
+      
+            return <div>{formattedEndDate}</div>;
+          },
+        },
         // { field: 'subCategory', headerName: 'Subcategory', width: 130},
         // { field: 'categoryName', headerName: 'Category', width: 130},
         // { field: 'tutor', headerName: 'Tutor', width: 130},
@@ -68,7 +86,7 @@ function Subscription() {
       setAddPlanModalOpen(false);
     };
   return (
-    <div className="container mx-auto py-6 px-4" style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+    <div className=" mx-auto py-6 px-4" style={{ minHeight: "90vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
     <div className="flex justify-between">
       <button
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -90,7 +108,7 @@ function Subscription() {
     
 
 
-    <div className='flex'>
+    <div className=' lg:flex'>
     {plans.map((plan, index) => (
   <PlanCard plan={plan} onEditClick={openEditPlanModal} key={index} />
 ))}

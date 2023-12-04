@@ -183,7 +183,40 @@ const blockCategory = asyncHandler(async (req, res) => {
   }
 });
 const loadSubscribers=asyncHandler(async (req, res) => {
-  const subscribers=await User.find({})
+  const subscribers = await User.aggregate([
+    {
+      $match: {
+        subscription: { $exists: true, $ne: null }
+      }
+    },
+    {
+      $lookup: {
+        from: 'plans', // assuming your plans collection is named 'plans'
+        localField: 'subscription.mode',
+        foreignField: '_id',
+        as: 'subscriptionPlan'
+      }
+    },
+    {
+      $unwind: '$subscriptionPlan' // unwind the array created by the lookup
+    },
+    {$project:{
+      _id:1,
+      firstName:1,
+      "subscriptionPlan.subscriptionMode":1,
+      subscription:1
+    }},
+    {
+      $group:{
+        _id:'$_id',
+        firstName:{$first:'$firstName'},
+        endDate:{$first:'$subscription.endDate'},
+        mode:{$first:"$subscriptionPlan.subscriptionMode"}
+      }
+    }
+  ]);
+
+
   const plans=await Plan.find({})
   res.status(200).json({subscribers,plans})
 })
@@ -207,6 +240,176 @@ const addPlan=asyncHandler(async (req, res) => {
 
   
 })
+const loadDashboardDetails=asyncHandler(async (req, res) => {
+
+  const users=await User.aggregate([
+    {
+      $lookup:{
+        from:'marklists',
+        localField:'_id',
+        foreignField:'studentId',
+        as:"studentMarks"
+      }
+    },
+    {$unwind: { path: '$studentMarks', preserveNullAndEmptyArrays: true }},
+    {$project:{
+      _id:1,
+      firstName:1,
+      subscription:1,
+      isBlocked:1,
+      "studentMarks.quiz":1
+    }},
+    {$group:{
+      _id:"$_id",
+      name:{$first:"$firstName"},
+     subscription:{$first:"$subscription"} ,
+     isBlocked:{$first:'$isBlocked'},
+     quizzes: { $push: "$studentMarks.quiz" }
+    }}
+
+  ])
+  // console.log('users',users)
+  const tutors = await Tutor.aggregate([
+    {
+      $lookup: {
+        from: 'courses',
+        localField: '_id',
+        foreignField: 'tutor',
+        as: 'courseDetails'
+      }
+    },
+    { $unwind: { path: '$courseDetails', preserveNullAndEmptyArrays: true } },
+    {
+      $project: {
+        _id: 1,
+        specification: 1,
+        isBlocked: 1,
+        userName:1,
+        'courseDetails.rating': 1,
+        'courseDetails.videos': 1
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        specification: { $first: '$specification' },
+        isBlocked: { $first: '$isBlocked' },
+        name: { $first: '$userName' },
+        courseRating: { $push: '$courseDetails.rating' },
+        courseVideos: { $push: '$courseDetails.videos' }
+      }
+    }
+  ]);
+  
+
+  const totalTutors = await Tutor.count({})
+
+  if(users&&tutors){
+    res.status(200).json({users,tutors,totalTutors})
+  }else{
+    res.status(500).json('not found')
+  }
+  // console.log('tutor',tutors)
+})
+
+const loadSalesReport=asyncHandler(async (req, res) => {
+    
+  const monthlySales = await User.aggregate([
+    {
+      $match: {
+        // Add any additional filters for user selection if needed
+      },
+    },
+    {
+      $lookup: {
+        from: 'plans', // Assuming your plans collection is named 'plans'
+        localField: 'subscription.mode',
+        foreignField: '_id',
+        as: 'subscriptionDetails',
+      },
+    },
+    {
+      $unwind: '$subscriptionDetails',
+    },
+    {
+      $project: {
+        month: { $month: '$subscription.startDate' }, // Extract month from the subscription start date
+        price: '$subscriptionDetails.price',
+        subscriptionMode: '$subscriptionDetails.subscriptionMode',
+        // Add any other fields you want to include in the result
+      },
+    },
+    {
+      $group: {
+        _id: { month: '$month' },
+        totalSales: { $sum: '$price' },
+        // Add any other fields you want to include in the result
+      },
+    },
+    {
+      $sort: {
+        '_id.month': 1,
+      },
+    },
+    {
+      $project: {
+        _id: 0, // Exclude the _id field from the final result
+        month: '$_id.month',
+        totalSales: 1,
+      },
+    },
+  ]);
+  
+  // Ensure all months are in the result, even if there are no sales
+  const allMonths = Array.from({ length: 12 }, (_, index) => ({
+    month: index + 1,
+    totalSales: 0,
+  }));
+  
+  const finalResult = allMonths.map((monthData) => {
+    const matchingMonth = monthlySales.find(
+      (salesData) => salesData.month === monthData.month
+    );
+    return matchingMonth || monthData;
+  });
+  
+  console.log(finalResult);
+  
+  const subscriptionCounts = await User.aggregate([
+    {
+      $match: {
+        // Add any additional filters for user selection if needed
+      },
+    },
+    {
+      $lookup: {
+        from: 'plans', // Assuming your plans collection is named 'plans'
+        localField: 'subscription.mode',
+        foreignField: '_id',
+        as: 'subscriptionDetails',
+      },
+    },
+    {
+      $unwind: '$subscriptionDetails',
+    },
+    {
+      $group: {
+        _id: '$subscriptionDetails.subscriptionMode',
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  
+  // console.log(subscriptionCounts);
+  const userCount = await User.countDocuments({});
+
+  if(monthlySales){
+    res.status(200).json({monthlySales,subscriptionCounts,userCount})
+  }else{
+     res.status(500).json('not working')
+  }
+  
+})
 
 export {
   loadUsers,
@@ -223,5 +426,6 @@ export {
   blockCategory ,
   addPlan,
   loadSubscribers,
-  
+  loadDashboardDetails,
+  loadSalesReport
 };

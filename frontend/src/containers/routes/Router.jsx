@@ -55,6 +55,8 @@ import Lives from '../user/live/Lives.jsx'
 import UpgradePlan from '../user/plans/upgradePlan.jsx'
 import Playlist from '../user/courses/PlayList.jsx'
 import AssignmentManagement from '../tutor/assignment/AssignmentManagement.jsx'
+import SalesReport from '../admin/SalesReport.jsx'
+import CourseReviews from '../user/courses/CourseReviews.jsx'
 
 
 function Router() {
@@ -83,6 +85,7 @@ function Router() {
         <Route path='/userRoom/:roomId' element={<RoomPage/>}/>
         <Route path='/quiz/:quizId'  element={<Quiz/>}/>
         <Route path='/playlist/:courseId' element={<Playlist/>}/>
+       < Route path='/review/:courseId' element={<CourseReviews/>}/>
    </Route>
 
 
@@ -101,6 +104,7 @@ function Router() {
    <Route path='categoryManagement' element={<CategoryManagement/>}/>
    <Route path='courseManagement' element={<CourseManagement/>}/>
    <Route path='subscription' element={<Subscription/>}/>
+   <Route path='salesReport' element={<SalesReport/>}/>
   
    </Route>
 

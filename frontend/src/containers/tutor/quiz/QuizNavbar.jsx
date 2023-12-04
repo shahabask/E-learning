@@ -20,7 +20,7 @@ function QuizNavbar({ onNavItemClick }) {
           <span className="mr-2">
             <i className="fas fa-calendar-alt"></i>
           </span>
-          Scheduled Quizzes
+          <span className="hidden md:inline">Scheduled Quizzes</span>
         </a>
       </li>
       <li>
@@ -32,7 +32,7 @@ function QuizNavbar({ onNavItemClick }) {
           <span className="mr-2">
             <i className="fas fa-book"></i>
           </span>
-          Question Bank
+          <span className="hidden md:inline">Question Bank</span>
         </a>
       </li>
       <li>
@@ -44,7 +44,7 @@ function QuizNavbar({ onNavItemClick }) {
           <span className="mr-2">
             <i className="fas fa-history"></i>
           </span>
-          History
+          <span className="hidden md:inline">History</span>
         </a>
       </li>
     </ul>

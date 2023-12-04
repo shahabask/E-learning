@@ -13,7 +13,7 @@ function CourseCard({_id,image,course,description,categoryName,rating}) {
       const [isSubscriptionActive,setSubscriptionActive]=useState(false)
       useEffect(()=>{
           fetchUserDetails()  
-          const AverageRating = rating.length > 0
+          const AverageRating = rating?.length > 0
           ? rating.reduce((sum, item) => sum + item.value, 0) / rating.length
           : 0;
           setTotalAverageRating(AverageRating)

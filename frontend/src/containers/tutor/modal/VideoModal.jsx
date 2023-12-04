@@ -34,6 +34,7 @@ function VideoModal({id, isOpen, onRequestClose, onSaveVideo }) {
     if (isValid) {
       onSaveVideo(video,id);
       onRequestClose();
+      setVideo({ title: '', description: '', videoUrl: null })
     }
   };
 

@@ -1,94 +1,15 @@
-// import React, { useEffect, useState } from 'react'
-// import { Link, useParams } from 'react-router-dom';
-// import axiosInstance from '../../utils/axios';
-// import { toast } from 'react-toastify';
 
-
-// function CourseDetails() {
-//   const [courseInfo, setCourseInfo] = useState('');
-//   const [isSubscriptionActive, setSubscriptionActive] = useState(false);
-
-
-//   const { courseId } = useParams();
-
-//   useEffect(() => {
-//     fetchCourseDetails();
-//   }, []);
-
-//   const fetchCourseDetails = async () => {
-//     try {
-//       let response = await axiosInstance.get(`/loadCourseDetails/${courseId}`);
-//       response.data.courseDetails.image = `http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`;
-//       setCourseInfo(response.data.courseDetails);
-
-//       const endDateISO = Date.parse(response.data.plan.endDate);
-//       const endDate = new Date(endDateISO);
-
-//       if (endDate > Date.now()) {
-//         setSubscriptionActive(true);
-//       }
-//     } catch (error) {
-//       toast.error(error?.courseDetails?.data || error.error);
-//     }
-//   };
-
-
-//   return (
-//     <div>
-//       <section className="py-5">
-//         <div className="container px-4 px-lg-5 my-5">
-//           <div style={{ height: '40px' }}></div>
-//           <div className="row gx-4 gx-lg-5 align-items-center">
-//             <div className="col-md-6">
-//               <img className="card-img-top mb-5 mb-md-0" src={courseInfo.image} alt="..." style={{ height: '400px', borderRadius: '8px', border: '1px solid black' }} />
-//             </div>
-//             <div className="col-md-6">
-//               <h1 className="text-3xl font-extrabold text-gray-900">{courseInfo.course}</h1>
-//               <p className="lead text-3xl">{courseInfo.description}</p>
-           
-//               <div className="d-flex mt-5">
-//                 {isSubscriptionActive ? (
-//                   <Link
-//                     to={`/playlist/${courseId}`}
-//                     className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-//                   >
-//                     <i className="bi-cart-fill me-1"></i>Watch videos
-//                   </Link>
-//                 ) : (
-//                   <Link
-//                     to="/plans"
-//                     className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-//                   >
-//                     <i className="bi-cart-fill me-1"></i>Subscribe Now
-//                   </Link>
-//                 )}
-
-           
-//               </div>
-
-//             </div>
-//           </div>
-//         </div>
-
-//       </section>
-
-//       {/* Course Rating Modal */}
-
-//     </div>
-//   );
-// }
-
-// export default CourseDetails;
 
 
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axios';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import StarRating from 'react-star-rating-component';
 // index.js or your main stylesheet
 import '@fortawesome/fontawesome-free/css/all.css';
+import { FaEye } from 'react-icons/fa';
 
 function CourseDetails() {
   const [courseInfo, setCourseInfo] = useState('');
@@ -100,22 +21,28 @@ function CourseDetails() {
   const [error,setError]=useState({})
   const [ratingSubmitted,setRatingSubmitted]=useState(false)
   const [totalAverageRating,setTotalAverageRating]=useState(0)
+  const [review,setReview]=useState('')
   useEffect(() => {
     fetchCourseDetails();
   }, [ratingSubmitted]);
 
+  const navigate=useNavigate()
   const fetchCourseDetails = async () => {
     try {
       let response = await axiosInstance.get(`/loadCourseDetails/${courseId}`);
+    
       response.data.courseDetails.image = `http://localhost:5000/${response.data.courseDetails.image.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`;
       setCourseInfo(response.data.courseDetails);
+      setRating(response.data.rating[0]?.value)
+      setReview(response.data.rating[0]?.review)
        setIsRated(response.data.rated)
        setTotalAverageRating(response.data?.avgRating)
       const endDateISO = Date.parse(response.data.plan.endDate);
       const endDate = new Date(endDateISO);
-
+    // console.log('endDate',response.data.plan.endDate)
       if (endDate > Date.now()) {
         setSubscriptionActive(true);
+        
       }
     } catch (error) {
       toast.error(error?.courseDetails?.data || error.error);
@@ -128,8 +55,8 @@ function CourseDetails() {
             setError({message:'please rate'})
             return;
          }
-      const response =await axiosInstance.post('/rateCourse',{rating,courseId})
-      console.log('Rating submitted:', rating);
+      const response =await axiosInstance.post('/rateCourse',{rating,review,courseId})
+      // console.log('Rating submitted:', rating);
     setIsModalOpen(false);
     setError({})
     setRatingSubmitted(!ratingSubmitted)
@@ -138,6 +65,9 @@ function CourseDetails() {
     }
     
   };
+  const handleReviewDetails=()=>{
+    navigate(`/review/${courseId}`)
+  }
 
   return (
     <div>
@@ -152,13 +82,18 @@ function CourseDetails() {
         <div className="col-md-6">
           <h1 className="text-3xl font-extrabold text-gray-900">{courseInfo.course}</h1>
           <p className="lead ">{courseInfo.description}</p>
-          <div className='flex'>
+          <div className='flex-col'>
+            <div className='flex'>
           <StarRating
                 name="totalRating"
                 starCount={5}
                 value={totalAverageRating} // Use your variable with the total average rating
                 editing={false} // Set to false to disable user interaction
-              /> <span style={{fontSize:'13px'}}>({courseInfo.rating?courseInfo.rating?.length:0})</span>
+              /> <span style={{fontSize:'13px'}}>({courseInfo.rating?courseInfo.rating?.length:0})</span></div>
+               <button className=" text-black text-sm px-4 py-2 rounded-full flex items-center hover:bg-white transition-colors" onClick={handleReviewDetails}>
+        <FaEye className="mr-2" />
+        View Reviews
+      </button>
               </div>
           <div className="d-flex mt-5">
             {isSubscriptionActive ? (
@@ -169,7 +104,12 @@ function CourseDetails() {
               >
                 <i className="bi-cart-fill me-1"></i>Watch videos
               </Link>
-               {isRated?" " :<button
+               {isRated?<button
+                 onClick={() => setIsModalOpen(true)}
+                 className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+               >
+                 <i className="bi-star-fill me-1"></i>Edit Rating
+               </button> :<button
                  onClick={() => setIsModalOpen(true)}
                  className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                >
@@ -222,6 +162,19 @@ function CourseDetails() {
     onStarClick={(value) => setRating(value)}
   />
   {error?<span style={{color:'red',fontSize:'14px' }}>{error.message}</span>:''}
+  <div className="mt-4">
+      <label htmlFor="review" className="block text-sm font-medium text-gray-700">
+        Write a Review:
+      </label>
+      <textarea
+        id="review"
+        name="review"
+        value={review}
+        onChange={(e) => setReview(e.target.value)}
+        rows={4}
+        className="mt-1 p-2 border rounded-md w-full"
+      />
+    </div>
   </div>
   <div className="mt-4 flex justify-center space-x-4">
   <button

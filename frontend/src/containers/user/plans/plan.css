@@ -2,15 +2,15 @@
     box-sizing: border-box;
   }
   .plan-container {
-    display: flex;
+    /* display: flex; */
     justify-content: center; /* Horizontal centering */
     align-items: center;     /* Vertical centering */
-    height: 100vh;           /* Adjust as needed */
+              /* Adjust as needed */
   }
   /* Create three columns of equal width */
   .columns {
-    float: left;
-    width: 22.;
+    /* float: left; */
+    /* width: 22.; */
     padding: 12px;
   }
   
@@ -92,7 +92,7 @@
       display: block; /* or any other display value suitable for small screens */
       justify-content: center; /* Horizontal centering */
       align-items: center;     /* Vertical centering */
-      height: 100vh;           /* Adjust as needed */
+      min-height: 140vh;           /* Adjust as needed */
     }
   }
   /* Large devices (laptops/desktops, 992px and up) */
@@ -100,6 +100,7 @@
     .columns {
       width: 30%; /* or any other suitable width */
     }
+   
   }
   
   /* Extra large devices (large laptops and desktops, 1200px and up) */

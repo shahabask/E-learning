@@ -63,41 +63,46 @@ function   LiveManagement() {
     socket.emit('delete_live')
   }
   return (
-    <div style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
-    <div className='container'style={{paddingTop:'2rem'}}>
-      {/* Header Row */}
-      <div className='row '>
-        <div className='col'>
-        <div className='header d-flex justify-content-between align-items-center'>
-            <div>
-              <Link to='/live' style={{textDecoration:'none'}}>Live</Link>
+    <div style={{ minHeight: "81vh", backgroundColor: 'rgba(224, 176, 255, 0.2)' }}>
+      <div className='container' style={{ paddingTop: '2rem' }}>
+        {/* Header Row */}
+        <div className='row '>
+          <div className='col'>
+            <div className='header d-flex justify-content-between align-items-center'>
+              <div>
+                <Link to='/live' style={{ textDecoration: 'none' }}>Live</Link>
+              </div>
+              <button className='btn btn-primary' onClick={handleAddLive}>Add Live</button>
             </div>
-            <button className='btn btn-primary' onClick={handleAddLive}>Add Live</button> 
           </div>
         </div>
-      </div>
-
-      {/* Cards Row */}
-     {liveDetails.length==0? <div className='text-center pt-20 mt-10'> <h1 style={{fontSize:'30px',color:'purple'}}>No live Scheduled</h1></div> : <div className='row mt-3'>
-         {liveDetails?.map((live)=>{
-          return(
-            <div className='col py-4' key={live._id} >
-           <LiveCard liveDetails={live} handleDelete={handleDeleteCard}/>
+  
+        {/* Cards Row */}
+        {liveDetails.length === 0 ? (
+          <div className='text-center pt-20 mt-10'>
+            <h1 style={{ fontSize: '30px', color: 'purple' }}>No live Scheduled</h1>
           </div>
-          )
-        })} 
-        {/* <div className='col'></div> */}
-    
-      </div>}
-    </div>
-    <AddLiveModal
+        ) : (
+          <div className='row mt-3'>
+            {liveDetails?.map((live) => {
+              return (
+                <div className='col-lg-4 col-md-12 col-sm-12 py-4' key={live._id}>
+                  <LiveCard liveDetails={live} handleDelete={handleDeleteCard} />
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <AddLiveModal
         isOpen={isAddLiveModalOpen}
         handleCloseModal={handleCloseModal}
         handleCreateSession={handleCreateSession}
         subjects={subjects}
       />
     </div>
-  )
+  );
+  
 }
 
 export default LiveManagement

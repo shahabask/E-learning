@@ -9,16 +9,15 @@ export function getUrlParams(url = window.location.href) {
 }
 
 function RoomPage() {
-  // Extract the roomId parameter from the URL
+
   const { roomId } = useParams();
   useEffect(()=>{
     startMeeting()
   },[])
-  // Get the role from the URL parameters or default to 'Audience'
-  // let role_str = 'Audience';
+
   const role = ZegoUIKitPrebuilt.Audience;
 
-  // Prepare an array of shared links based on the role
+  
   // let sharedLinks = [];
   // if (role === ZegoUIKitPrebuilt.Audience || role === ZegoUIKitPrebuilt.Audience) {
   //   sharedLinks.push({
@@ -56,7 +55,6 @@ function RoomPage() {
     'shahabas'
   );
 
-  // Start the call only for the audience
   let startMeeting = async (element) => {
     const zp = ZegoUIKitPrebuilt.create(kitToken);
 
@@ -69,23 +67,26 @@ function RoomPage() {
             role,
           },
         },
-        // sharedLinks,
+       
       });
+      const { layout } = zp;
+    
+    // Modify layout
+    layout.setStyle({
+     outerWidth:'500px'
+       
+    });
+
     }
   };
 
   return (
-    <div className="room-page min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-400 to-purple-600 text-white">
-    <div className="mb-8 text-3xl font-bold">Audience View</div>
-    {/* Add a stylish container for the live streaming (adjust the height as needed) */}
-    <div className="w-full h-96 rounded-lg shadow-lg overflow-hidden" ref={startMeeting} />
+    <div className="room-page flex flex-col items-center justify-center bg-gradient-to-r from-purple-400 to-purple-600 text-white">
 
-    {/* Additional content for the audience view */}
-    <div className="mt-8 text-lg text-center">
-      <p>Join the live streaming session and enjoy the content!</p>
-      <p className="mt-4">The show will begin shortly...</p>
-    </div>
+    <div className="md:w-full s:w-3/6 h-screen rounded-lg shadow-lg overflow-hidden" ref={startMeeting} />
+  
   </div>
+  
   );
 }
 

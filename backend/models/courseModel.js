@@ -53,6 +53,10 @@ const courseSchema = mongoose.Schema({
          ref: 'User' },
          value:{
             type:Number
+         },
+         review:{
+            type:String,
+            
          }
       }
     ]

@@ -67,7 +67,7 @@ const AssignmentHistory = () => {
     }
    }
   return (
-    <div>
+    <div style={{minHeight:'81vh'}}>
       <h2 className="text-2xl font-bold mb-4 px-5 text-center">Assignment History</h2>
 
       <div className="flex flex-wrap justify-center gap-4 px-5">

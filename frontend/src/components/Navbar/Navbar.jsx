@@ -25,7 +25,7 @@ const Navbar = () => {
     { id: 4, text: 'Lives', path: '/lives' },
     { id: 3, text: 'Courses', path: '/courses' },
     { id: 2, text: 'Plans', path: '/plans' },
-    { id: 5, text: 'Contact', path: '/contact' },
+    
   ];
 
   const handleMobileMenuClick = () => {
@@ -123,7 +123,7 @@ const Navbar = () => {
             <i
               id="bar"
               className={mobileMenuOpen ? 'fas fa-times' : 'fas fa-bars'}
-            >{'☰'}</i>
+            ></i>
           </div>
         </div>
       </nav>

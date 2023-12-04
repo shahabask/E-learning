@@ -6,7 +6,7 @@ function QuizHistory() {
 
 
 
-<div style={{backgroundColor:'rgba(224, 176, 255, 0.2)'}}>
+<div style={{backgroundColor:'rgba(224, 176, 255, 0.2)',minHeight: "81vh" }}>
 <h1 className="text-2xl font-bold mb-4 text-center">History</h1>
 <div className="flex flex-wrap justify-between px-5">
   {/* Repeat this block for other quiz history cards */}

@@ -3,7 +3,7 @@ import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassw
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
          loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo,
          loadQuizDetails,loadQuestions,addQuestion,updateQuestion, addQuizzes,createLive,
-         tutorLiveDetails,deleteLive,updateLiveStatus,loadAssignment,deleteAssignment} from '../controllers/tutorController.js'
+         tutorLiveDetails,deleteLive,updateLiveStatus,loadAssignment,deleteAssignment,loadTutorDashboard} from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
@@ -57,9 +57,9 @@ tutorRouter.get('/loadCourses',tutorauthcheck,loadCourses)
 tutorRouter.patch('/editCourse',upload.single('image'),editCourse)
 tutorRouter.get('/loadProfile',tutorauthcheck,profileData)
 tutorRouter.post('/updateTutorProfile',tutorauthcheck,upload.single('image'),updateProfile)
-tutorRouter.patch('/addVideo',videoUpload.single('videoUrl'),addVideo)
+tutorRouter.patch('/addVideo',videoUpload.array('videoUrl'),addVideo)
 tutorRouter.get('/loadQuizDetails',loadQuizDetails)
-tutorRouter.post('/addQuiz',addQuizzes)
+tutorRouter.post('/addQuiz',tutorauthcheck,addQuizzes)
 tutorRouter.get('/loadQuestion',loadQuestions)
 tutorRouter.post('/addQuestion',addQuestion)
 tutorRouter.put('/updateQuestion/:questionId',updateQuestion)
@@ -69,4 +69,5 @@ tutorRouter.delete('/deleteLive/:id',deleteLive)
 tutorRouter.patch('/updateLiveStatus',updateLiveStatus)
 tutorRouter.get('/loadAssignments/:status')
 tutorRouter.delete('/deleteAssignment/:id',deleteAssignment)
+tutorRouter.get('/loadTutorDashboard',tutorauthcheck,loadTutorDashboard)
 export default  tutorRouter

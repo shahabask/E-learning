@@ -13,3 +13,9 @@
     position:fixed;
     top:0;
 }
+
+@media (max-width: 760px) {
+  .content-container{
+    padding-left:50px
+  }
+}

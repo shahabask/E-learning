@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css'; // Font Awesome
 
 function LiveNavbar({ onNavItemClick }) {
   return (
-    <nav className="bg-gray-100 p-4" style={{ backgroundColor: 'white' }}>
+    <nav className="bg-white p-4" >
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           <ul className="flex space-x-4">
@@ -17,7 +17,7 @@ function LiveNavbar({ onNavItemClick }) {
                 <span className="mr-2">
                   <i className="fas fa-calendar-alt"></i>
                 </span>
-                Scheduled Live
+                <span className='hidden md:inline'> Scheduled Live</span>
               </a>
             </li>
             <li>
@@ -29,7 +29,7 @@ function LiveNavbar({ onNavItemClick }) {
                 <span className="mr-2">
                   <i className="fas fa-play"></i>
                 </span>
-                Ongoing
+              <span className='hidden md:inline'> Ongoing</span> 
               </a>
             </li>
             <li>
@@ -41,7 +41,7 @@ function LiveNavbar({ onNavItemClick }) {
                 <span className="mr-2">
                   <i className="fas fa-history"></i>
                 </span>
-                History
+                <span className='hidden md:inline'> History</span>
               </a>
             </li>
           </ul>

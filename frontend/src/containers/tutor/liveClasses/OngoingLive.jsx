@@ -37,7 +37,7 @@ function OngoingLive() {
        setLiveDelete(!isLiveDeleted)
      }
      return (
-       <div style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+       <div style={{ minHeight: "81vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
        <div className='container'style={{paddingTop:'2rem'}}>
          {/* Header Row */}
          <div className='row '>

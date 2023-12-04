@@ -30,7 +30,7 @@ const VerifyAssignment = () => {
   };
 
   return (
-    <div key={key} className="container mx-auto p-8">
+    <div key={key} className="container mx-auto p-8" style={{minHeight:'81vh'}}>
       <h2 className="text-3xl font-bold mb-4 text-center">Verify Assignment</h2>
 
       <div className="flex flex-col space-y-4">

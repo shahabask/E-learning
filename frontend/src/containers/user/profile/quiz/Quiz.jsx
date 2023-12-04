@@ -196,8 +196,8 @@ const Quiz = () => {
   const handleSubmit = async() => {
     
     setSubmitted(true);
-    const percentage=calculateScore()
-    const response=await axiosInstance.post('/addQuizResult',{percentage,quizId})
+    const correctAnswers=calculateScore()
+    const response=await axiosInstance.post('/addQuizResult',{correctAnswers,quizId})
   };
 
   const calculateScore = () => {

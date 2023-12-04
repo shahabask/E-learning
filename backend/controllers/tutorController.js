@@ -8,6 +8,8 @@ import Course from '../models/courseModel.js';
 import Quizzes from '../models/quizModel.js';
 import QuestionBank from '../models/questionBankModel.js';
 import Live from '../models/liveModel.js';
+import mongoose from 'mongoose';
+import MarkList from '../models/markListModel.js';
 const tutorAuth=asyncHandler(async(req,res)=>{
     const {email,password}=req.body
 
@@ -357,7 +359,8 @@ const updateProfile=asyncHandler(async(req,res)=>{
 const addVideo=asyncHandler(async(req,res)=>{
    const {id,title,description}=req.body
      const videoUrl=req.files[0].filename
-  //  console.log(req.body,'req.body',req.files,'files')
+
+   console.log(videoUrl)
 
    const videoData={title,description,videoUrl}
    const updateResult = await Course.updateOne(
@@ -450,6 +453,7 @@ const updateQuestion = asyncHandler(async (req, res) => {
 
 const addQuizzes=asyncHandler(async(req,res)=>{
         const{quizName,selectedSubcategory,selectedQuestions}=req.body
+        const tutorId=req.user._id
         const date=new Date()
         const lastDate = new Date(date);
         lastDate.setDate(date.getDate() + 7);
@@ -460,7 +464,8 @@ const addQuizzes=asyncHandler(async(req,res)=>{
           subCategory:selectedSubcategory,
           questions,
           time,
-          lastDate
+          lastDate,
+          tutor:tutorId
         })
 
         if(addQuiz){
@@ -516,9 +521,9 @@ const deleteLive=asyncHandler(async(req,res)=>{
 
 const updateLiveStatus=asyncHandler(async(req,res)=>{
   const {id,status}=req.body
-  console.log('status',status,'id',id)
+
   const updateStatus=await Live.updateOne({_id:id},{status:status})
-  console.log(updateStatus)
+
   if(updateStatus){
     res.status(200).json('successfull')
   }else{
@@ -550,6 +555,68 @@ const deleteAssignment=asyncHandler(async(req,res)=>{
    }
 
 })
+
+const loadTutorDashboard=asyncHandler(async(req,res)=>{ 
+   
+  const tutorId=req.user._id
+  
+  
+  const quizzes=await Quizzes.find({tutor:tutorId})
+  const quizCount=quizzes.length
+  const course=await Course.aggregate([
+   {$match:{tutor:new mongoose.Types.ObjectId(tutorId)} } ,
+   {$project:{
+    _id:1,
+    videos:1
+   }}
+  ])
+  const videoCount = course.reduce((acc, course) => {
+    if (course.videos) {
+      return acc + course.videos.length;
+    } else {
+      return acc;
+    }
+  }, 0);
+ 
+  const courseCount=course.length
+  const topUsers = await MarkList.aggregate([
+    {
+      $group: {
+        _id: "$studentId",
+        totalQuizzesSolved: { $sum: { $size: "$quiz" } },
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Assuming your users collection is named "users"
+        localField: "_id",
+        foreignField: "_id",
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails", // Unwind to get a flat result
+    },
+    {
+      $project: {
+        _id: 1,
+        totalQuizzesSolved: 1,
+        firstName: "$userDetails.firstName",
+      },
+    },
+    {
+      $sort: { totalQuizzesSolved: -1 },
+    },
+    {
+      $limit: 3,
+    },
+  ]);
+
+   
+  if(quizzes){
+    res.status(200).json({quizCount,courseCount,videoCount,topUsers})
+  }
+})
 export {
   tutorAuth,
   registerTutor,
@@ -577,5 +644,6 @@ export {
   deleteLive,
   updateLiveStatus,
   loadAssignment,
-  deleteAssignment
+  deleteAssignment,
+  loadTutorDashboard
 };

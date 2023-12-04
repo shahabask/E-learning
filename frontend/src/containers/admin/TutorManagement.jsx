@@ -86,9 +86,9 @@ function TutorManagement() {
   }, [blocked])
 
   return (
-    <div className="container mx-auto p-4" style={{ height: "100vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
+    <div className="container mx-auto p-4" style={{ height: "90vh", backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
       <div className="bg-white shadow-lg rounded">
-        <DataGrid style={{ maxHeight: '300px'}}
+        <DataGrid style={{ minHeight: '500px'}}
           rows={rows}
           columns={columns}
           getRowId={(row) => row._id}

@@ -10,12 +10,13 @@ const markListSchema = mongoose.Schema({
         {quizId:{type:mongoose.Schema.Types.ObjectId,
             ref: 'Quizze' },
         
-       percentage:{
+       correctAnswers:{
         type:Number,
        } }
     ],
    assignment:[
-    {assignmentId:{type:mongoose.Schema.Types.ObjectId,
+    {
+      assignmentId:{type:mongoose.Schema.Types.ObjectId,
      ref:'Assignment'
     },
     MarkScored:{

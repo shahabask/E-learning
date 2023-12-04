@@ -22,6 +22,10 @@ const quizSchema = mongoose.Schema({
     type:Boolean,
     default:false
    },
+   tutor:{
+    type:mongoose.Schema.Types.ObjectId,
+            ref: 'Tutor'
+   }
    
 })
 

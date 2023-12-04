@@ -60,11 +60,11 @@ console.log(id,'id')
 
   return (
     <div className="room-page h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-100 to-purple-100 text-black">
-    <div className="mb-8 text-3xl font-bold">Live Streaming Room</div>
+    {/* <div className="mb-8 text-3xl font-bold">Live Streaming Room</div> */}
     {/* Add a stylish container for the live streaming */}
     {role === ZegoUIKitPrebuilt.Host && (
       <div
-        className="w-full h-96 rounded-lg shadow-lg overflow-hidden"
+        className="w-full rounded-lg shadow-lg" style={{height:'90vh'}}
         ref={startMeeting}
       />
     )}

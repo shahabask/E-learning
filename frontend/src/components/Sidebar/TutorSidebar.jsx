@@ -2,13 +2,13 @@ import { FaHome, FaUser, FaChalkboardTeacher, FaBook, FaMoneyBillAlt, FaChartBar
 import { RiLiveLine } from 'react-icons/ri';
 import { GrSchedulePlay } from 'react-icons/gr';
 
-import  { useState } from 'react';
-import '../../Components/Sidebar/TutorSidebar.css';
+import  { useEffect, useState } from 'react';
+import '../../Components/Sidebar/AdminSidebar.css';
 import TutorHeader from '../Header/TutorHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { TutorLogout } from '../../slices/tutorSlice/tutorAuthSlice';
 import { NavLink } from 'react-router-dom';
-import tutorSvg from '../../assets/tutor.svg'
+// import tutorSvg from '../../assets/tutor.svg'
 
 
 function TutorSidebar({ toggleSidebar }) {
@@ -23,7 +23,22 @@ function TutorSidebar({ toggleSidebar }) {
   const handleLogout = () => {
     dispatch(TutorLogout())
    };
-  
+   const updateIsIconsOnly = () => {
+    setIsIconsOnly(window.innerWidth <= 768);
+  };
+
+  useEffect(() => {
+    // Initial check on component mount
+    updateIsIconsOnly();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', updateIsIconsOnly);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateIsIconsOnly);
+    };
+  }, []);
   return (
     <>
      <TutorHeader />
@@ -34,7 +49,7 @@ function TutorSidebar({ toggleSidebar }) {
         <ul>
         <li className="tutor-heading">
               {/* <img src={tutorSvg} style={{color:'white'}} alt="Tutor Icon" className={`tutor-icon ${isIconsOnly ? 'hidden' : ''}`} /> */}
-              <span className={`tutor-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Tutor</span>
+              <span className={`menu-text ${isIconsOnly ? 'hidden' : ''} text-purple-400 font-bold`} style={{fontSize:'23px'}}>Tutor</span>
             </li>
         <NavLink to='/tutor' className="active-link" style={{ textDecoration: 'none', color: 'white' }}> <li>
             <FaHome className="sidebar-icon text-purple-400" />

@@ -4,8 +4,9 @@ import axiosInstance from '../../utils/axios';
 const assignments = [
   { id: 1, name: 'Assignment 1', details: 'Details for Assignment 1' ,endDate:'01-01-2024'},
   { id: 2, name: 'Assignment 2', details: 'Details for Assignment 2' ,endDate:'02-01-2024'},
-  // Add more assignments as needed
-];
+ 
+]
+
 
 function Assignment() {
   const [selectedAssignment, setSelectedAssignment] = useState(assignments[0]);
@@ -23,7 +24,6 @@ function Assignment() {
   };
 
   const handleSubmit = async() => {
-    // Add your submission logic here, e.g., send the file to a server
 
     if (selectedFile) {
 
@@ -33,9 +33,8 @@ function Assignment() {
         },
       })
       console.log(`Submitting ${selectedAssignment.name}: ${selectedFile.name}`);
-      // Add your logic to handle the file submission for the selected assignment
     } else {
-      console.error('No file selected for submission');
+      console.log('No file selected for submission');
     }
   };
 
