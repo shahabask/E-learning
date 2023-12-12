@@ -5,16 +5,20 @@ import EditUser from "./EditUser.jsx";
 import Quiz from "./Quizzes.jsx";
 import Quizzes from "./Quizzes.jsx";
 import MarkSheet from "./MarkSheet.jsx";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faHistory, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Assignment from "./Assignment.jsx";
+import WatchHistory from "./WatchHistory.jsx";
+// import Assignment from "./Assignment.jsx";
 export default function Profile() {
   const [userData,setUserData]=useState()
    const [showForm, setShowForm] = useState(false);
    const [showQuiz,setShowQuiz]=useState(false)
    const [showMarkSheet,setShowMarkSheet]=useState(false)
    const [showAssignment,setShowAssignment]=useState(false)
+   const [showWatchHistory,setShowWatchHistory]=useState(false)
    const [subcategories,setSubcategories]=useState('')
+
   useEffect(()=>{
   fetchUser()
  
@@ -23,7 +27,7 @@ export default function Profile() {
    try {
      const response=await axiosInstance.get('/loadProfile')
    setUserData(response.data.myProfile)
-   console.log('myProfile',response.data.myProfile)
+   console.log('myProfile',response.data.myProfile.sub)
 
    } catch (error) {
      console.log('error',error.response||error.error)
@@ -35,6 +39,7 @@ export default function Profile() {
      setShowQuiz(false)
      setShowMarkSheet(false)
      setShowAssignment(false)
+     setShowWatchHistory(false)
    };
 
   const handleQuizClick=()=>{
@@ -42,12 +47,14 @@ export default function Profile() {
       setShowForm(false)
       setShowMarkSheet(false)
       setShowAssignment(false)
+      setShowWatchHistory(false)
   }
   const handleMarkSheetClick=()=>{
     setShowMarkSheet(!showMarkSheet)
     setShowForm(false)
     setShowQuiz(false)
     setShowAssignment(false)
+    setShowWatchHistory(false)
   }
 
   const handleAssignmentClick=()=>{
@@ -56,6 +63,16 @@ export default function Profile() {
     setShowMarkSheet(false)
     setShowForm(false)
     setShowQuiz(false)
+    setShowWatchHistory(false)
+  }
+
+  const handleWatchHistoryClick=()=>{
+
+    setShowWatchHistory(!showWatchHistory)
+    setShowMarkSheet(false)
+    setShowForm(false)
+    setShowQuiz(false)
+    setShowAssignment(false)
   }
   const formatDate = (dateString) => {
     const options = {
@@ -71,7 +88,7 @@ export default function Profile() {
   const modifiedImagePath = imagePath
    ? `http://localhost:5000/${imagePath.replace(/\\/g, '/').replace(/^backend\/public\//, '')}`
    : '';
-   console.log('img',modifiedImagePath)
+  //  console.log('img',modifiedImagePath)
    return (
      <div style={{ minHeight: "100vh", backgroundColor: "	#fcdad1" }}>
        <div className="container ">
@@ -96,6 +113,12 @@ export default function Profile() {
                          <i className="fas fa-edit pt-1" style={{color:"purple"}}></i>
                          <span className="icon"style={{marginLeft:"10px"}}>Edit</span>
                        </div>
+                       <div className="colum flex" onClick={handleWatchHistoryClick}>
+      <FontAwesomeIcon style={{ color: 'purple' }} icon={faHistory} className=" pt-1" />
+      <span className="icon" style={{ paddingLeft: '5px' }}>
+      Watch History
+      </span>
+    </div>
                         <div className="colum" onClick={handleQuizClick}>
                         <i className="fas fa-certificate pt-1"style={{color:"purple"}}></i> 
                        <span className="icon"style={{marginLeft:"10px"}}>
@@ -123,7 +146,7 @@ export default function Profile() {
            </div>
            <div className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 mb-5 mt-5">
            {showForm ? <EditUser userData={userData}  />:showQuiz?<div ><Quizzes quizData={'quizData'} className=''/></div>
-           :showMarkSheet?<MarkSheet/>:showAssignment?<Assignment/> :( 
+           :showMarkSheet?<MarkSheet/>:showAssignment?<Assignment/> :showWatchHistory?<WatchHistory/>:( 
        <div className="bg-white shadow-md p-4 rounded-lg" style={{minHeight:'50vh'}}>
          <h1 className="text-3xl font-bold mb-4 text-purple-800" style={{ textTransform: 'uppercase' }}>{userData?.firstName}</h1>
          {/* <p className="text-gray-600 text-sm mb-2">
@@ -137,7 +160,7 @@ export default function Profile() {
                <li key={index}>{skill}</li>
              ))}
            </ul> */}
-         {userData?.subscription? <p className="text-gray-600 text-m font-semibold mb-2 pt-2 text-purple-800">Subscription EndDate:{formatDate(userData.subscription?.endDate)}</p> :''} 
+         {userData?.subscription?.endDate? <p className="text-gray-600 text-m font-semibold mb-2 pt-2 text-purple-800">Subscription EndDate:{formatDate(userData.subscription?.endDate)}</p> :''} 
          </div>
          <div className="mb-4">
            {/* <p className="text-gray-700 font-semibold">About Me:</p> */}

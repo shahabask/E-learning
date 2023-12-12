@@ -7,22 +7,14 @@ function MarkSheet() {
   const [quizzes, setQuizzes] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
-  const quizResults = [
-    { quizName: 'Quiz 1', numQuestions: 10, totalScore: 8 },
-    { quizName: 'Quiz 2', numQuestions: 15, totalScore: 12 },
-    { quizName: 'Quiz 3', numQuestions: 12, totalScore: 10 },
-  ];
+
 
 
   // Calculate total average for quizzes
   const quizAverage =
     (quizzes.reduce((acc, quiz) => acc + (quiz.correctAnswers / quiz.totalQuestions), 0) / quizzes.length) * 100;
 
-  // Calculate total average for assignments
-  // const assignmentAverage = (assignmentResults.reduce((acc, assignment) => acc + assignment.totalScore, 0) / assignmentResults.length);
-
-  // Calculate total average for both quizzes and assignments
-  // const totalAverage = ((quizAverage + assignmentAverage) / 2).toFixed(2);
+  
 
   useEffect(() => {
     fetchMarkSheet();
@@ -34,12 +26,27 @@ function MarkSheet() {
       const response = await axiosInstance.get('/loadMarkSheet');
       // const assignmentResponse = await axiosInstance.get('/loadAssignmentResults');
          console.log(response.data.result)
-      setQuizzes(response.data.result);
-      // setAssignments(response.data);
+         const quizzesData = response.data.result;
+
+         // Sort quizzes based on the 'time' field in descending order
+         const sortedQuizzes = [...quizzesData].sort((a, b) => {
+           const timeA = new Date(a.time).getTime(); // Convert time to milliseconds
+           const timeB = new Date(b.time).getTime();
+           return timeB - timeA; // Sort in descending order
+         });
+         
+         setQuizzes(sortedQuizzes);
+      setAssignments(response.data.assignments);
     } catch (error) {
       console.error('Error fetching mark sheet data:', error);
     }
   };
+
+  function formatStandardDate(dateString) {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleString('en-US', options);
+    return formattedDate;
+  }
 
   return (
     <div className="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg" style={{minHeight:'50vh'}}>
@@ -47,18 +54,20 @@ function MarkSheet() {
 
 
   {/* Table of Assignment Results */}
- {assignments.length!=0 ?<table className="min-w-full bg-white mb-6">
+ {assignments.length!=0 ?<table className=" bg-white mb-6">
         <thead>
           <tr>
             <th className="py-2 px-4">Assignment Name</th>
+            <th className="py-2 px-4">Subject</th>
             <th className="py-2 px-4">Total Score</th>
           </tr>
         </thead>
         <tbody>
           {assignments.map((assignment, index) => (
             <tr key={index} className={index % 2 === 0 ? 'bg-purple-100' : ''}>
-              <td className="py-2 px-4">{assignment.assignmentName}</td>
-              <td className="py-2 px-4">{assignment.totalScore}</td>
+              <td className="py-2 px-4">{assignment.name}</td>
+              <td className="py-2 px-4">{assignment.subject}</td>
+              <td className="py-2 px-4">{assignment.markScored}</td>
             </tr>
           ))}
         </tbody>
@@ -74,6 +83,7 @@ function MarkSheet() {
             <th className="py-2 px-4">Number of Questions</th>
             <th className="py-2 px-4">Total Score</th>
             <th className="py-2 px-4">Wrong Answers</th>
+            <th className="py-2 px-4 ">Submission Date</th>
           </tr>
         </thead>
         <tbody>
@@ -84,6 +94,7 @@ function MarkSheet() {
               <td className="py-2 px-4">{quiz.totalQuestions}</td>
               <td className="py-2 px-4">{quiz.correctAnswers}</td>
               <td className="py-2 px-4">{quiz.totalQuestions-quiz.correctAnswers}</td>
+              <td className="py-2 px-4">{formatStandardDate(quiz?.time)}</td>
             </tr>
           ))}
         </tbody>

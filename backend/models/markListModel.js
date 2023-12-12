@@ -12,23 +12,32 @@ const markListSchema = mongoose.Schema({
         
        correctAnswers:{
         type:Number,
-       } }
+       },
+      submissionTime:{
+         type:Date,
+         
+      } }
     ],
-   assignment:[
-    {
-      assignmentId:{type:mongoose.Schema.Types.ObjectId,
-     ref:'Assignment'
-    },
-    MarkScored:{
-      type:Number,
-    },
-   checked:{
-      type:Boolean,
-      default:false
-   }
-   },
-    
-   ]
+      assignment:[
+      {
+         assignmentId:{type:mongoose.Schema.Types.ObjectId,
+      ref:'Assignments'
+      },
+      MarkScored:{
+         type:Number,
+         default:null
+      },
+      
+      checked:{
+         type:Boolean,
+         default:false
+      },
+      pdf:{
+         type:String
+      }
+      },
+      
+      ]
 
 })
 

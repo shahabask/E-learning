@@ -3,14 +3,16 @@ import { tutorAuth,logoutTutor,registerTutor,tutorForgotPassword,tutorResetPassw
          tutorConfirmOtp,tutorOtpLoginVerifyEmail,tutorOtpLogin,tutorDetails,
          loadCourseData,addCourse,loadCourses,editCourse,profileData,updateProfile,addVideo,
          loadQuizDetails,loadQuestions,addQuestion,updateQuestion, addQuizzes,createLive,
-         tutorLiveDetails,deleteLive,updateLiveStatus,loadAssignment,deleteAssignment,loadTutorDashboard} from '../controllers/tutorController.js'
+         tutorLiveDetails,deleteLive,updateLiveStatus,loadAssignment,deleteAssignment,loadTutorDashboard,
+         addAssignment,loadAssignmentData,evalutedAssignment
+        } from '../controllers/tutorController.js'
  import tutorauthcheck  from '../middleware/tutorMiddleware.js'
 const tutorRouter=express.Router()
 
 
 import multer from 'multer';
 import path from 'path'
-import { loadLiveDetails } from '../controllers/userController.js';
+import { loadLiveDetails} from '../controllers/userController.js';
 const storage = multer.diskStorage({
 destination: (req, file, cb) => {
   cb(null, 'backend/public/images');
@@ -67,7 +69,10 @@ tutorRouter.post('/createLive',tutorauthcheck,createLive)
 tutorRouter.get('/loadLiveDetails/:status',tutorauthcheck,tutorLiveDetails)
 tutorRouter.delete('/deleteLive/:id',deleteLive)
 tutorRouter.patch('/updateLiveStatus',updateLiveStatus)
-tutorRouter.get('/loadAssignments/:status')
-tutorRouter.delete('/deleteAssignment/:id',deleteAssignment)
+tutorRouter.get('/loadassignments/:status',tutorauthcheck,loadAssignment)
+tutorRouter.post('/addassignment',tutorauthcheck,addAssignment)
+tutorRouter.delete('/deleteassignment/:id',deleteAssignment)
 tutorRouter.get('/loadTutorDashboard',tutorauthcheck,loadTutorDashboard)
+tutorRouter.get('/loadAssignmentData',tutorauthcheck,loadAssignmentData)
+tutorRouter.post('/evalutedAssignment',tutorauthcheck,evalutedAssignment)
 export default  tutorRouter

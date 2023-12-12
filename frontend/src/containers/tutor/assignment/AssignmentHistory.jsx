@@ -7,40 +7,35 @@ import { axiosInstance } from '../../utils/tutorAxios';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 const AssignmentHistory = () => {
-  
+   
     const [deleted,setDeleted]=useState(false)
     const [assignmentHistory,setAssignmentHistory]=useState([])
-    const assignmentHistory1=[{
-        name:'assignment 1',
-        constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
-        endDate:'1-10-2023',
-        subject:'physics'
-      },
-    //   {
+    // const assignmentHistory1=[{
     //     name:'assignment 1',
-    //     constraints:'this is assignment 1 this is assignment 1 this is assignment 1 this is assignment 1 this is assignment 1',
+    //     constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
     //     endDate:'1-10-2023',
     //     subject:'physics'
     //   },
-      {
-        name:'assignment 1',
-        constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
-        endDate:'1-10-2023',
-        subject:'physics'
-      },
-      {
-        name:'assignment 1',
-        constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
-        endDate:'1-10-2023',
-        subject:'physics'
-      },
-      {
-        name:'assignment 1',
-        constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
-        endDate:'1-10-2023',
-        subject:'physics'
-      }
-    ]
+   
+    //   {
+    //     name:'assignment 1',
+    //     constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
+    //     endDate:'1-10-2023',
+    //     subject:'physics'
+    //   },
+    //   {
+    //     name:'assignment 1',
+    //     constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
+    //     endDate:'1-10-2023',
+    //     subject:'physics'
+    //   },
+    //   {
+    //     name:'assignment 1',
+    //     constraints:['this is assignment 1','this is assignment 1','this is assignment 1'],
+    //     endDate:'1-10-2023',
+    //     subject:'physics'
+    //   }
+    // ]
 
 
     useEffect(()=>{
@@ -50,9 +45,9 @@ const AssignmentHistory = () => {
     const fetchAssignmentHistory=async()=>{
         try {
             const status='ended'
-            const response =await axiosInstance.get(`/loadAssignments/${status}`)
+            const response =await axiosInstance.get(`/loadassignments/${status}`)
       
-            setAssignmentHistory(response.data.assignments)
+            setAssignmentHistory(response.data.assignment)  
         } catch (error) {
             console.log('error',error)
         }
@@ -71,7 +66,7 @@ const AssignmentHistory = () => {
       <h2 className="text-2xl font-bold mb-4 px-5 text-center">Assignment History</h2>
 
       <div className="flex flex-wrap justify-center gap-4 px-5">
-        {assignmentHistory1?.map((historyItem, index) => (
+       {assignmentHistory.length!=0? assignmentHistory?.map((historyItem, index) => (
           <div
             className="bg-purple-200 rounded-md overflow-hidden shadow-md w-64 max-w-xs cursor-pointer transition-transform duration-300 hover:scale-105"
             key={index}
@@ -101,7 +96,8 @@ const AssignmentHistory = () => {
               </button>
             </div>
           </div>
-        ))}
+        )) : <div style={{paddingTop:'100px', fontSize:'28px',}}> <h1 >No History</h1></div>
+        }
       </div>
     </div>
   );

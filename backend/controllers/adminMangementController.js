@@ -373,7 +373,6 @@ const loadSalesReport=asyncHandler(async (req, res) => {
     return matchingMonth || monthData;
   });
   
-  console.log(finalResult);
   
   const subscriptionCounts = await User.aggregate([
     {
@@ -404,7 +403,7 @@ const loadSalesReport=asyncHandler(async (req, res) => {
   const userCount = await User.countDocuments({});
 
   if(monthlySales){
-    res.status(200).json({monthlySales,subscriptionCounts,userCount})
+    res.status(200).json({finalResult,subscriptionCounts,userCount})
   }else{
      res.status(500).json('not working')
   }

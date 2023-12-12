@@ -1,160 +1,148 @@
-import React, { useState } from 'react';
-import { FaPlus, FaMinus } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+// import { Document, Page } from 'react-pdf';
+import PDFViewer from 'react-pdf-js'
+import {axiosInstance} from '../../utils/tutorAxios'
 
-const VerifyAssignment = () => {
+
+
+function VerifyAssignment() {
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [assignmentType, setAssignmentType] = useState(null);
-  const [selectedAssignmentTitle, setSelectedAssignmentTitle] = useState('');
-  const [score, setScore] = useState(0);
-  const [key, setKey] = useState(0); // Add a key for dynamic remounting
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [selectedStudentData,setSelectedStudentData]=useState([])
+  const [mark, setMark] = useState('');
+  const [studentsData,setStudentsData]=useState([])
+  const [selectedAssignmentData,setSelectedAssignmentData]=useState({})
+  const [submitted,setSubmitted]=useState(false)
+  // Placeholder for the pdfFile state
+  const [pdfFile, setPdfFile] = useState(null);
 
-  const students = ['Student1', 'Student2', 'Student3'];
-  const assignmentTypes = ['Corrected', 'Not Corrected'];
-  const assignments = [
-    { id: 1, title: 'Assignment 1', pdfUrl: '/path/to/pdf1.pdf', isCorrected: true, score: 80, outOf: 100, student: { name: 'Student1', rollNumber: '123' } },
-    { id: 2, title: 'Assignment 2', pdfUrl: '/path/to/pdf2.pdf', isCorrected: false, score: null, outOf: 100, student: { name: 'Student2', rollNumber: '456' } },
-  ];
-
-  const selectedAssignment = assignments.find(a => a.title === selectedAssignmentTitle);
-
-  const handleScoreChange = (value) => {
-    setScore((prevScore) => Math.max(0, Math.min(prevScore + value, selectedAssignment?.outOf || 100)));
+  const handleStudentChange = (event) => {
+    setSelectedStudent(event.target.value);
+    const selectedStudent = studentsData.filter((student) => student._id === event.target.value)
+    setSelectedStudentData(selectedStudent[0].assignments)
+   
   };
 
-  const handleRefresh = () => {
-    setSelectedStudent(null);
-    setAssignmentType(null);
-    setSelectedAssignmentTitle('');
-    setScore(0);
-    setKey((prevKey) => prevKey + 1); // Increment the key for remounting
+ useEffect(()=>{
+  fetchStudentsData()
+ },[submitted])
+
+ const fetchStudentsData=async()=>{
+   
+  try {
+    const response=await axiosInstance.get('/loadAssignmentData')
+  //  console.log('do',response.data.assignments)
+    setStudentsData(response.data.assignments)
+  } catch (error) {
+    console.log(error)
+  }
+ }
+ const handleAssignmentChange = (event) => {
+  const selectedAssignmentId = event.target.value;
+  
+  setSelectedAssignment(selectedAssignmentId);
+  // Find the selected assignment in the student data
+  const selectedAssignment = selectedStudentData.find(
+    (assignment) => assignment.assignmentId === selectedAssignmentId
+  );
+  setSelectedAssignmentData(selectedAssignment)
+
+  // Set the PDF file based on the found assignment
+  if (selectedAssignment) {
+    setPdfFile(selectedAssignment.pdf);
+  } else {
+    setPdfFile(null); // Set to null if no matching assignment is found
+  }
+
+};
+
+  const handleMarkChange = (event) => {
+    setMark(event.target.value);
   };
+
+  const handleEvaluate = async(e) => {
+    e.preventDefault()
+   try {
+
+    console.log('coming')
+       const response=await axiosInstance.post('/evalutedAssignment',{selectedStudent,selectedAssignment,mark})
+       
+       
+         setSubmitted(!submitted)
+       
+   } catch (error) {
+    console.log('is error is there',error)
+   }
+  };
+
+  // const onDocumentLoadSuccess = ({ numPages }) => {
+  //   setNumPages(numPages);
+  // };
 
   return (
-    <div key={key} className="container mx-auto p-8" style={{minHeight:'81vh'}}>
-      <h2 className="text-3xl font-bold mb-4 text-center">Verify Assignment</h2>
-
-      <div className="flex flex-col space-y-4">
-        <div className="flex space-x-4">
-          <label htmlFor="studentDropdown" className="text-lg">Select Student:</label>
-          <select
-            id="studentDropdown"
-            onChange={(e) => setSelectedStudent(e.target.value)}
-            value={selectedStudent}
-            className="border p-2 rounded-md"
-          >
-            <option value="" disabled>Select Student</option>
-            {students.map((student) => (
-              <option key={student} value={student}>{student}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex space-x-4">
-          <label htmlFor="assignmentTypeDropdown" className="text-lg">Select Assignment Type:</label>
-          <select
-            id="assignmentTypeDropdown"
-            onChange={(e) => setAssignmentType(e.target.value)}
-            value={assignmentType}
-            className="border p-2 rounded-md"
-          >
-            <option value="" disabled>Select Assignment Type</option>
-            {assignmentTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-        </div>
-
-        {selectedStudent && assignmentType && (
-          <div className="flex space-x-4">
-            <label htmlFor="assignmentTitleDropdown" className="text-lg">Select Assignment Title:</label>
-            <select
-              id="assignmentTitleDropdown"
-              onChange={(e) => setSelectedAssignmentTitle(e.target.value)}
-              value={selectedAssignmentTitle}
-              className="border p-2 rounded-md"
-            >
-              <option value="" disabled>Select Assignment Title</option>
-              {assignments
-                .filter(a => a.student.name === selectedStudent && (assignmentType === 'Corrected' ? a.isCorrected : !a.isCorrected))
-                .map((assignment) => (
-                  <option key={assignment.title} value={assignment.title}>{assignment.title}</option>
-                ))}
-            </select>
-          </div>
-        )}
+    <>
+  {  studentsData.length!=0 ? <div className="container mx-auto" style={{ minHeight: '92vh' }}>
+      <div className="mb-4">
+        <label className=" text-sm font-medium text-gray-600">Select Student:</label>
+        <select onChange={handleStudentChange} className="mt-1 p-2 border rounded-md w-full">
+          <option value="">Select a student</option>
+          {studentsData.map((student) => (
+            <option key={student._id} value={student._id}>
+              {student.studentFirstName}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {selectedAssignment && (
-        <div className="mt-8">
-          <h3 className="text-2xl font-bold mb-4">{selectedAssignment.title}</h3>
+      <div className="mb-4">
+        <label className=" text-sm font-medium text-gray-600">Select Assignment:</label>
+        <select onChange={handleAssignmentChange} className="mt-1 p-2 border rounded-md w-full">
+          <option value="">Select an assignment</option>
+          {selectedStudentData?.map((assignment) => (
+            <option key={assignment.assignmentId} value={assignment.assignmentId}>
+             {assignment.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          <p>Submitted by: {selectedAssignment.student.name} ({selectedAssignment.student.rollNumber})</p>
+      {pdfFile ? (
+        <div className="mb-4 flex" >
+          <div className='border rounded-md overflow-hidden shadow-lg'>
+          <PDFViewer file={`http://localhost:5000/backend/public/pdf/${encodeURIComponent(pdfFile)}`} />
 
-          {selectedAssignment.isCorrected ? (
-            <div className="flex flex-col items-center mt-4">
-              <div className="relative w-32 h-16">
-                <div className="absolute top-0 w-full h-1/2 bg-green-500 flex justify-center items-end">
-                  <div className="text-white">{selectedAssignment.score}</div>
-                </div>
-                <div className="absolute bottom-0 w-full h-1/2 bg-gray-300 flex justify-center items-start">
-                  <div className="text-gray-500">{selectedAssignment.outOf}</div>
-                </div>
-              </div>
-
-              <div className="mt-8 bg-white p-4 rounded-md shadow-md">
-                {/* Improved PDF display */}
-                <iframe title="PDF Viewer" src={selectedAssignment.pdfUrl} width="100%" height="500px"></iframe>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-8 bg-white p-4 rounded-md shadow-md">
-              {/* Display PDF */}
-              <iframe title="PDF Viewer" src={selectedAssignment.pdfUrl} width="100%" height="500px"></iframe>
-
-              <div className="flex flex-col space-y-4 mt-4">
-                <label htmlFor="scoreField" className="text-lg">Score:</label>
-                <div className="flex space-x-4">
-                  <button
-                    onClick={() => handleScoreChange(-1)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md"
-                  >
-                    <FaMinus />
-                  </button>
-                  <span id="scoreField" className="border p-2 rounded-md">{score}</span>
-                  <button
-                    onClick={() => handleScoreChange(1)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-md"
-                  >
-                    <FaPlus />
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-col space-y-4 mt-4">
-                <label htmlFor="manualScoreField" className="text-lg">Manual Score:</label>
-                <input
-                  type="number"
-                  id="manualScoreField"
-                  value={score}
-                  onChange={(e) => setScore(Math.max(0, Math.min(parseInt(e.target.value) || 0, selectedAssignment.outOf || 100)))}
-                  className="border p-2 rounded-md"
-                />
-              </div>
-
-              <div className="mt-4">
-                <button
-                  onClick={() => console.log('Submit Mark')}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                >
-                  Submit Mark
-                </button>
-              </div>
-            </div>
-          )}
+          </div>
+          <div className="flex-1 mb-4 ml-4 p-4 border rounded-md bg-white">
+          <h2 className="text-lg font-medium text-gray-800">Assignment Details</h2>
+          <p>Total Marks: {selectedAssignmentData.totalMark}</p>
+          <p>Constraints:</p>
+          <ul className="list-disc pl-4">
+            {selectedAssignmentData.constraints.map((constraint, index) => (
+              <li key={index}>{constraint}</li>
+            ))}
+          </ul>
+        </div>
+        </div>
+      ) : (
+        <div className="mb-4 p-4 border rounded-md bg-gray-100">
+          <p className="text-gray-500">Please select an assignment to view the PDF.</p>
         </div>
       )}
-    </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-600">Enter Mark:</label>
+        <input
+          type="text"
+          value={mark}
+          onChange={handleMarkChange}
+          className="mt-1 p-2 border rounded-md w-full"
+        />
+      </div>
+
+      <button onClick={(e)=>handleEvaluate(e)} className="bg-blue-500 text-white px-2 py-1 rounded-md" >
+  Evaluate Assignment
+</button>
+    </div> : <div className='text-center' style={{paddingTop:'140px', fontSize:'28px',minHeight:'81vh'}}> <h1 >Nothing For Correction</h1></div> }</>
   );
-};
+}
 
 export default VerifyAssignment;

@@ -8,6 +8,7 @@ function TutorDashboard() {
 
   const [userData,setUserData]=useState([])
   const [myData,setMyData]=useState({})
+  const [isLoaded,setIsLoaded]=useState(false)
   const chartRef = useRef(null);
 
   const chartInstance = useRef(null);
@@ -57,13 +58,13 @@ function TutorDashboard() {
     
     };
   
-  }, []);
+  }, [isLoaded]);
 
   const fetchDashboardDetails=async()=>{
     try {
       const response= await axiosInstance.get('/loadTutorDashboard')
       setUserData(response.data.topUsers)
-    
+      setIsLoaded(true)
       const count={course:response.data.courseCount, quiz:response.data.quizCount, videos:response.data.videoCount}
       setMyData(count)
       // console.log('response',count)

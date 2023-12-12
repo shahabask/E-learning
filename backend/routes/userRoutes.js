@@ -2,7 +2,8 @@ import express from 'express'
 import {authUser,registerUser,logoutUser,verifyEmail,confirmOtp,resetPassword,otpLoginVerifyEmail,otpLogin,
     courseCategoryListing,loadCategoryDetails,loadProfile,updateProfile,courseDetails,loadPlans,loadUpgradePlan,checkout,
     confirmPayment,loadSubsriptionDetails,loadQuizzes,loadLiveDetails,loadQuizDetails,addQuizResult,loadVideos,
-    loadMarkSheet,submitAssignment,rateCourse,loadCourseReviews } from '../controllers/userController.js'
+    loadMarkSheet,submitAssignment,rateCourse,loadCourseReviews,loadAssignmentData ,loadWatchHistory,deleteHistory
+  ,addToHistory} from '../controllers/userController.js'
 import  authcheck  from '../middleware/userMiddleware.js'
 
 
@@ -20,6 +21,19 @@ filename: (req, file, cb) => {
 });
 
 const upload = multer({ storage: storage });
+
+const storageForPDF = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'backend/public/pdf');
+    // console.log(' file comming')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const uploadPDF = multer({ storage: storageForPDF });
+
 
 const router=express.Router()
 
@@ -47,7 +61,11 @@ router.get('/quizDetails/:quizId',loadQuizDetails)
 router.post('/addQuizResult',authcheck,addQuizResult)
 router.get('/loadMarkSheet',authcheck,loadMarkSheet)
 router.get('/loadVideoDetails/:courseId',loadVideos)
-router.get('/submitAssignment',submitAssignment)
+router.post('/submitassignment',uploadPDF.single('selectedFile'),authcheck,submitAssignment)
+router.get('/loadAssignmentsData',authcheck,loadAssignmentData)
 router.post('/rateCourse',authcheck,rateCourse)
 router.get('/loadCourseReviews/:courseId',loadCourseReviews)
+router.get('/loadWatchHistory',authcheck,loadWatchHistory)
+router.delete('/deleteHistory/:items/:videoUrl',authcheck,deleteHistory)
+router.post("/addToWatchHistory",authcheck,addToHistory)
 export default  router

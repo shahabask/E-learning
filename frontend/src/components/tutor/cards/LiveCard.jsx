@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { axiosInstance } from '../../../containers/utils/tutorAxios';
 import { toast } from 'react-toastify';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiFillDelete, AiOutlineDelete } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import socket from '../../../containers/utils/socket';
 // const socket =io.connect('http://localhost:5001')
@@ -49,7 +49,7 @@ const LiveCard = ({ liveDetails, handleDelete }) => {
         onClick={handleDeleteClick}
         style={{ position: 'absolute', top: '0', right: '0', padding: '8px', cursor: 'pointer' }}
       >
-        <AiOutlineDelete size={20} />
+       <AiFillDelete size={20} />
       </Button>
       <Card.Body>
         <Card.Title className="fw-bold">{liveDetails?.name}</Card.Title>

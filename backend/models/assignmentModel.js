@@ -1,22 +1,34 @@
 
-import { ObjectId } from "mongodb";
+// import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 const assignmentSchema = mongoose.Schema({ 
    name:{
-    typeof:String,
+    type:String, 
    },
    constraints:[
     
    ],
+   startingDate:{
+      type:Date
+   },
    endingDate:{
-    typeof:Date
+    type:Date
    },
    outOf:{
-      typeof:Number
+      type:Number
    },
    status:{
-      typeof:String,
+      type:String,
       default:'started'
+      
+   },
+   tutorId:{
+    type:mongoose.Schema.Types.ObjectId,
+         ref: 'Tutor'
+   },
+
+   subject:{
+      type:String
    }
 })
 

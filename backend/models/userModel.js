@@ -45,7 +45,8 @@ const userSchema = mongoose.Schema({
        },
        endDate:{
         type:Date
-       }
+       },
+       watchHistory:[]
       }
     },
    

@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-
+import { saveAs } from 'file-saver'
 import Chart from "chart.js/auto";
 import React from "react";
 import { axiosInstance } from "../utils/adminAxios";
@@ -22,39 +22,42 @@ function SalesReport() {
    const [basicCount,setBasicCount]=useState(0)
    const [mediumCount,setMediumCount]=useState(0)
    const [premiumCount,setPremiumCount]=useState(0)
+   const [isLoaded,setIsLoaded]=useState(false)
+
+   const fetchData=async()=>{
+    try {
+        const response=await axiosInstance.get('/loadsalesreport')
+         setMonthlySales(response.data.finalResult)  
+
+        response.data?.subscriptionCounts.forEach(({ _id, count }) => {
+          // Set counts based on subscription mode
+          switch (_id) {
+            case 'Basic':
+              setBasicCount(count);
+              break;
+            case 'Medium':
+              setMediumCount(count);
+              break;
+            case 'Premium':
+              setPremiumCount(count);
+              break;
+            // Add more cases if needed for other subscription modes
+            default:
+              break;
+          }
+        });
+        // setSalesCount(response?.data?.subscriptionCounts)
+        setUserCount(response?.data?.userCount)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
     useEffect(() => {
     
         fetchData();
       }, []);
-    const fetchData=async()=>{
-        try {
-            const response=await axiosInstance.get('/loadsalesreport')
-               
-
-            // setMonthlySales(response?.data?.monthlySales)
-            response.data?.subscriptionCounts.forEach(({ _id, count }) => {
-              // Set counts based on subscription mode
-              switch (_id) {
-                case 'Basic':
-                  setBasicCount(count);
-                  break;
-                case 'Medium':
-                  setMediumCount(count);
-                  break;
-                case 'Premium':
-                  setPremiumCount(count);
-                  break;
-                // Add more cases if needed for other subscription modes
-                default:
-                  break;
-              }
-            });
-            // setSalesCount(response?.data?.subscriptionCounts)
-            setUserCount(response?.data?.userCount)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+   
       const style = {
         margin: "10px", 
         padding: "20px", 
@@ -71,9 +74,10 @@ function SalesReport() {
     
       const labels = monthlySales?.map(item => {
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        return monthNames[item._id.month - 1]; 
+        return monthNames[item.month - 1] || "Unknown Month";
       });
-      const data = monthlySales?.map(item => item?.totalSales);
+       
+      const data = monthlySales?.map(item => item?.totalSales || 0);
       
       const transformedData = {
         labels:labels,
@@ -122,8 +126,39 @@ function SalesReport() {
             myChart.destroy();
           }
         };
-      }, []);
-    
+      }, [monthlySales]);
+
+
+      const downloadSalesReport = () => {
+        // Check if monthlySales is defined and has data
+        if (!monthlySales || monthlySales.length === 0) {
+          console.error("No data available for download.");
+          return;
+        }
+      
+        // Convert data to CSV format
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      
+        // Create a header row for the table
+        const headerRow = "Month,Total Sales";
+      
+        // Create rows for each month's data
+        const dataRows = monthlySales.map(item => `${monthNames[item.month - 1] || "Unknown Month"},${item.totalSales || 0}`);
+      
+        // Combine header and data rows
+        const csvContent = `${headerRow}\n${dataRows.join("\n")}`;
+      
+        // Create a Blob from the CSV content
+        const blob = new Blob([csvContent], { type: "text/csv" });
+      
+        // Use file-saver to save the Blob as a file
+        saveAs(blob, 'sales_report.csv');
+      };
+      
+      
+      
+      
+      
   return (
     <Container style={{ minHeight: "100vh" }}>
       <Row className="justify-content-md-center">
@@ -168,15 +203,31 @@ function SalesReport() {
       <div
         style={{
           display: "flex",
-          justifyContent: "right",
-          alignItems: "right",
-          marginLeft: "150px",
-          height: "500px",
-          width: "1000px",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "10px",
         }}
       >
-        <canvas ref={chartRef}></canvas>
+        <button onClick={downloadSalesReport} className="btn btn-primary">
+          Download Sales Report
+        </button>
       </div>
+      <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "500px",
+  }}
+>
+  <canvas
+    ref={chartRef}
+    style={{
+      maxWidth: "100%", // Set the maximum width to ensure responsiveness
+      height: "auto",   // Automatically adjust the height to maintain aspect ratio
+    }}
+  ></canvas>
+</div>
     </Container>
   );
 }

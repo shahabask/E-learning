@@ -11,11 +11,31 @@ import Quizzes from "../models/quizModel.js";
 import Live from "../models/liveModel.js";
 import MarkList from "../models/markListModel.js";
 import { ObjectId } from "mongodb";
+import Assignments from "../models/assignmentModel.js";
+import cron from 'node-cron'
 
 const stripe = new Stripe(
   "sk_test_51O9tFFSDsPPMBnLnMdMtou8UwIWhDpQJl3hXgNqJCjBwaWNDXXkDcnCvRUuvGJegH2TKKMthVMz9fNNvBasBLXGi00Bg41xYtX"
 );
 
+const checkSubscriptionExpiry=asyncHandler(async (req, res) => { 
+  const currentTime = new Date();
+ const updateUser= await User.updateMany(
+    { 'subscription.endDate': { $lt: currentTime } },
+    { $unset: { subscription: '' } }
+  );
+  if(updateUser){
+
+    console.log('Expired subscriptions removed successfully.');
+  }else{
+    console.log('Error removing expired subscriptions:')
+  }
+})
+
+  
+
+
+cron.schedule('0 0 * * *',checkSubscriptionExpiry)
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -312,10 +332,10 @@ const courseDetails = asyncHandler(async (req, res) => {
       return item;
     }
   })
-  console.log('rating',rating)
+ 
   
   const rated= courseDetails.rating.length!=0?true:false
-  console.log('rated',rated)
+ 
   //   return itemUserId.equals(reqUserId);
   // });
   const totalRating = courseDetails.rating.reduce((sum, item) => sum + item.value, 0)
@@ -581,12 +601,13 @@ const loadQuizDetails = asyncHandler(async (req, res) => {
 const addQuizResult = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { correctAnswers, quizId } = req.body;
- 
+ const time=new Date()
   const updateData = {
     $push: {
       quiz: {
         quizId: quizId,
         correctAnswers: correctAnswers,
+        submissionTime:time
       },
     },
   };
@@ -632,14 +653,47 @@ const loadMarkSheet = asyncHandler(async (req, res) => {
     _id:"$quizDetails._id",
     correctAnswers:{$first:"$quiz.correctAnswers"},
     totalQuestions: { $sum: { $size: "$quizDetails.questions" } },
+    time:{$first:"$quiz.submissionTime"},
     subCategory:{$first:"$quizDetails.subCategory"},
     quizName:{$first:"$quizDetails.name"},
 
   }}            
   ]);
 
+  const assignments=await MarkList.aggregate([{ $match: {studentId: new mongoose.Types.ObjectId(userId)} },
+    {$unwind:'$assignment'} ,
+    {
+      $lookup:{
+        from:"assignments",
+        localField:"assignment.assignmentId",
+        foreignField:"_id",
+        as:"assignmentDetails"
+      }
+    }   ,
+    {$unwind:"$assignmentDetails"} ,
+    {
+      $project: {
+        _id: 1,
+        assignment:1,
+        "assignmentDetails.name": 1,
+        "assignmentDetails._id": 1,
+        "assignmentDetails.subject":1
+      },
+      
+    },
+  
+    {$group:{
+      _id:"$assignmentDetails._id",
+      markScored:{$first:"$assignment.MarkScored"},
+      name:{$first:"$assignmentDetails.name"},
+      subject:{$first:"$assignmentDetails.subject"},
+      
+  
+    }}            
+    ]);
+
     if(result){
-      res.status(200).json({result})
+      res.status(200).json({result,assignments})
     }else{
       res.status(500).json(`not found`)
     }
@@ -656,11 +710,44 @@ const loadVideos=asyncHandler(async (req, res) => {
     res.status(400).json('Data not found')
   }
 })
+const loadAssignmentData=asyncHandler(async (req, res) => {
+   
+  // const assignments=await Assignments.aggregate([])
+  const studentId=req.user._id
+  const markList = await MarkList.findOne({studentId:studentId}); // Assuming markListSchema is your Mongoose model
 
+
+  const assignmentIds = markList.assignment.map(assignment => assignment.assignmentId);
+  const pendingAssignment = await Assignments.find({
+    _id: { $nin: assignmentIds }
+});
+if(pendingAssignment){
+  res.status(200).json({pendingAssignment})
+}else{
+  res.status(500).json(`server error`)
+}
+
+})
 
 const submitAssignment=asyncHandler(async (req, res) => {
-       
+    
+  const {selectedAssignment}=req.body
+  // console.log(selectedAssignment._id)
+  const pdf=req.file.filename
+  // res.status(200).json('successfull')
+  const submit = await MarkList.updateOne(
+    { studentId: req.user._id },
+    {
+      $push: {
+        assignment: {
+          assignmentId: selectedAssignment._id,
+          pdf: pdf,
+        },
+      },
+    }
+  );
   
+  res.status(200).json(`it is working`)
 })
 
 const rateCourse=asyncHandler(async(req,res)=>{
@@ -719,9 +806,7 @@ const loadCourseReviews=asyncHandler(async(req,res)=>{
     }
   ]);
   
-  // Now, `course` will contain an array of objects, each representing a user's review with firstName, lastName, value, and review.
-  
-  // console.log(reviews)
+
 
   if(reviews){
       res.status(200).json({reviews})
@@ -729,6 +814,96 @@ const loadCourseReviews=asyncHandler(async(req,res)=>{
      res.status(500).json(`can't find`)
   }
 })
+
+const loadWatchHistory=asyncHandler(async(req,res)=>{
+    
+  const user=req.user
+
+  const watchedVideos=user?.subscription?.watchHistory
+   
+
+  if(watchedVideos.length==0){
+    res.status(200).json('No History')
+  }else{
+    const videoDetails = await Course.aggregate([
+      {
+        $unwind: '$videos',
+      },
+      {
+        $match: {
+          'videos.videoUrl': { $in: watchedVideos },
+        },
+      },
+      {
+        $group: {
+          _id: '$videos.videoUrl',
+          
+              courseId: {$first:'$_id'},
+              courseName:{$first:"$course"},
+              title: {$first:'$videos.title'},
+              description:{$first: '$videos.description'},
+              thumbnail:{$first:'$image'}
+           
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          videoUrl: '$_id',
+          courseId: 1,
+          courseName:1,
+          thumbnail: {
+            $arrayElemAt: [
+              { $split: ['$thumbnail', '\\'] }, // Split the path based on backslash
+              -1 // Get the last element (filename)
+            ]
+          },
+          title: 1,
+          description:1,
+        },
+      },
+    ]);
+    
+
+    res.status(200).json({videoDetails})
+  }
+})
+const deleteHistory=asyncHandler(async(req,res)=>{
+   const user=req.user
+
+   const {items,videoUrl}=req.params
+   let updateQuery;
+  
+   if (items === 'all') {
+     // Remove all items from watchHistory
+     updateQuery = { $set: { 'subscription.watchHistory': [] } };
+   } else {
+     // Remove a single item that matches the videoUrl
+     updateQuery = { $pull: { 'subscription.watchHistory': videoUrl } };
+   }
+
+   const updatedUser = await User.findByIdAndUpdate(user._id, updateQuery, { new: true });
+   if(updatedUser){
+
+     res.status(200).json('deleted');
+   }else{
+    console.log(`can't delete`)
+   }
+})
+
+const addToHistory=asyncHandler(async(req,res)=>{ 
+
+  const userId=req.user._id
+  const {videoUrl}=req.body
+  const user=await User.findByIdAndUpdate(userId,{$addToSet:{'subscription.watchHistory':videoUrl}})
+  // console.log('i am here',user)
+   if(user){
+    res.status(200).json(`success`)
+   }else{
+    res.status(500).json(`server error`)
+   }
+  
+ })
 export {
   authUser,
   registerUser,
@@ -754,7 +929,11 @@ export {
   addQuizResult,
   loadMarkSheet,
   loadVideos,
+  loadAssignmentData,
   submitAssignment,
   rateCourse,
-  loadCourseReviews 
+  loadCourseReviews ,
+  loadWatchHistory,
+  deleteHistory,
+  addToHistory
 };

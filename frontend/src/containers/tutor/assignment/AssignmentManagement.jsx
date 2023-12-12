@@ -16,9 +16,9 @@ function AssignmentManagement() {
       <>
         <AssignmentNavbar onNavItemClick={handleNavItemClick} />
         <div className="" style={{ backgroundColor: 'rgba(224, 176, 255, 0.2)'}}>
-          {selectedNavItem === 'Scheduled Assignments' && <ScheduledAssignments />}
+          {selectedNavItem === 'Scheduled Assignments' && <ScheduledAssignments/>}
           {selectedNavItem ==='Verify Assignments' && <VerifyAssignment/>}
-          {selectedNavItem === 'History' && <AssignmentHistory />}
+          {selectedNavItem === 'History' && <AssignmentHistory/>}
         </div>
       </>
     );

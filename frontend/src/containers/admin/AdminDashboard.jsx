@@ -11,6 +11,7 @@ function AdminDashboard() {
   const [noOfUsers,setNoOfUsers]=useState({})
   const [tutorData,setTutorData]=useState([])
   const [isDataArrived,setIsDataArrived]=useState(false)
+  const [isLoaded,setIsLoaded]=useState(false)
   useEffect(() => {
     fetchDashboardDetails()
     // Get the context of the canvas element for the first chart (Doughnut Chart)
@@ -58,13 +59,13 @@ function AdminDashboard() {
       // }
     };
     
-  }, []);
+  }, [isLoaded]);
 
   const fetchDashboardDetails=async()=>{
 try {
   const response=await axiosInstance.get('/loadDashboardDetails')
   const users = response.data.users;
- 
+  setIsLoaded(true)
 const subscribersCount = users.filter(user => user.subscription !== null && user.subscription !== undefined).length;
 
 const result = {
@@ -74,7 +75,7 @@ const result = {
 };
   setNoOfUsers(result)
   const tutors=response.data.tutors
-  console.log()
+
   const tutorsWithCounts = tutors.map((tutor) => ({
     name: tutor.name,
     videoCount: tutor.courseVideos.reduce((acc, videos) => acc + videos.length, 0),

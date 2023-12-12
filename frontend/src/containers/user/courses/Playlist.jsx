@@ -37,6 +37,20 @@ console.log('image', imageName);
   const handleCardClick = (video) => {
     setSelectedVideo(video);
   };
+  const handleVideoPlay = async() => {
+    // Send a request using Axios when the video is played
+    try {
+     
+      if (selectedVideo) {
+        
+        const response=  await axiosInstance.post('/addToWatchHistory', { videoUrl: selectedVideo.videoUrl })
+            
+         }
+    } catch (error) {
+      console.log(`error`,error)
+    }
+   
+  };
 
   // Filter out the selected video from the dynamic videos
   const dynamicVideos = videoDetails.filter((video) => video?.videoUrl !== selectedVideo?.videoUrl);
@@ -54,6 +68,7 @@ console.log('image', imageName);
           controls
           width="100%"
           height="100%"
+          onPlay={handleVideoPlay}
         />
       </div>
       <div className="article-title p-8">
