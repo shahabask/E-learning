@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser'
 import connectDB from './config/db.js'
 import Stripe from 'stripe'
 import { Server, Socket } from 'socket.io'
+import path from 'path'
 const stripe = new Stripe('sk_test_51O9tFFSDsPPMBnLnMdMtou8UwIWhDpQJl3hXgNqJCjBwaWNDXXkDcnCvRUuvGJegH2TKKMthVMz9fNNvBasBLXGi00Bg41xYtX');
 const app = express()
 
@@ -27,7 +28,13 @@ app.use('/api',userRoutes)
 app.use('/api/tutor',tutorRoutes)
 app.use('/api/admin',adminRoutes)
 
-
+if(process.env.NODE_ENV == 'production'){
+    const __dirname=path.resolve()
+    app.use(express.static(path.join(__dirname,'frontend/dist')))
+    app.get('*',(req,res)=>res.sendFile(path.resolve(__dirname,'frontend','dist','index.html')))
+}else{
+   app.get('/',(req,res)=>res.send('server is ready'))  
+}
 
 
 const server=app.listen(port,()=>{console.log('server is running')})
