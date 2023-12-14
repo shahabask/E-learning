@@ -34,7 +34,7 @@ app.use('/api/admin',adminRoutes)
     app.get('*',(req,res)=>res.sendFile(path.resolve(__dirname,'frontend','dist','index.html')))
 // }else{
 //    app.get('/',(req,res)=>res.send('server is ready'))  
-// }
+// } 
 
 
 const server=app.listen(port,()=>{console.log('server is running')})
