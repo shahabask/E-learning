@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import socket from "../../utils/socket";
-// const socket =io.connect('http://localhost:5001')
+
 
 
 function Lives() {
