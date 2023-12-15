@@ -45,8 +45,8 @@ function RoomPage() {
   // });
 
   // Generate Kit Token for authentication
-  const appID = 829795951;
-  const serverSecret = 'cdf7ddca93bc802a02dc2a9cf1929a38';
+  const appID = 1795365148;
+  const serverSecret = '56de0e4dac7e86851b37e9584ffee39a';
   const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
     appID,
     serverSecret,

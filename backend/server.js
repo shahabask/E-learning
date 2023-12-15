@@ -42,7 +42,7 @@ const server=app.listen(port,()=>{console.log('server is running')})
 const io=new Server(server,{
     pingTimeout:1000,
     cors:{
-        origin:'http://localhost:3000',
+        origin:'http://13.200.150.95:3000',
     },
 })
 
